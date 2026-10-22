@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-type RetroWindowProps = {
+export type RetroWindowProps = {
   title: string
   children: ReactNode
   menu?: ReactNode

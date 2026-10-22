@@ -113,15 +113,24 @@ function winDefs(): ItemDef[] {
         { name: 'title', type: 'string', description: 'Text in the title bar.' },
         { name: 'menu', type: 'ReactNode', description: 'Rendered below the title bar, usually a RetroMenubar.' },
         { name: 'status', type: 'ReactNode', description: 'Rendered in the status bar at the bottom.' },
-        { name: 'onClose', type: '() => void', description: 'Enables the close button when provided.' },
-        { name: 'titleAs', type: "'h2' | 'h3' | 'p'", defaultValue: "'h2'", description: 'Heading level of the title.' },
-        { name: 'bodyClassName', type: 'string', description: 'Classes for the content area.' },
+  { name: 'onClose', type: '() => void', description: 'Enables the close button when provided.' },
+  { name: 'resizable', type: 'boolean', defaultValue: 'true', description: 'Allows resizing the window from its bottom-right corner.' },
+  { name: 'maximizable', type: 'boolean', defaultValue: 'true', description: 'Shows the maximize and restore control.' },
+  { name: 'minimizable', type: 'boolean', defaultValue: 'true', description: 'Shows the minimize and restore control.' },
+  { name: 'defaultMaximized', type: 'boolean', defaultValue: 'false', description: 'Starts the window maximized.' },
+  { name: 'defaultMinimized', type: 'boolean', defaultValue: 'false', description: 'Starts the window minimized with its body hidden.' },
+  { name: 'className', type: 'string', description: 'Classes for the outer window. Set width and height here.' },
+  { name: 'titleAs', type: "'h2' | 'h3' | 'p'", defaultValue: "'h2'", description: 'Heading level of the title.' },
+  { name: 'bodyClassName', type: 'string', description: 'Classes for the content area.' },
       ],
       usage: `<RetroWindow
   title="README.TXT"
   menu={<RetroMenubar items={['File', 'Edit', 'Help']} />}
   status={<span>Ln 1, Col 1</span>}
->
+  resizable
+  maximizable
+  minimizable
+  >
   <p className="p-3">Hello from 1992.</p>
 </RetroWindow>`,
       sources: [WIN_SOURCES.window],
