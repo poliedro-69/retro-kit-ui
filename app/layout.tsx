@@ -16,9 +16,9 @@ const plexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Retro UI - Componentes Tailwind estilo Windows 3.1',
+  title: 'RetroKit - Free retro UI kits for React and Tailwind CSS',
   description:
-    'Librería de componentes React + Tailwind con estructura de Windows 3.1 y acabado moderno: ventanas, botones, formularios, pestañas, diálogos y tarjetas de producto.',
+    'Download free Windows 3.1 and Mac System 7 inspired UI kits. React + Tailwind CSS components with classic bevels and title bars, finished with modern focus states and smooth gradients.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -50,7 +50,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={`${plexSans.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${plexSans.variable} ${plexMono.variable}`}>
       <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}

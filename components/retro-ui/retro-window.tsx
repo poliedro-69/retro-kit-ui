@@ -9,6 +9,7 @@ type RetroWindowProps = {
   onClose?: () => void
   className?: string
   bodyClassName?: string
+  titleAs?: 'h2' | 'h3' | 'p'
 }
 
 function TitleGlyph({ kind }: { kind: 'min' | 'max' }) {
@@ -27,6 +28,7 @@ export function RetroWindow({
   onClose,
   className,
   bodyClassName,
+  titleAs: Title = 'h2',
 }: RetroWindowProps) {
   const boxClass =
     'rt-raised flex size-5.5 shrink-0 items-center justify-center text-rt-ink'
@@ -45,7 +47,7 @@ export function RetroWindow({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Cerrar ventana"
+            aria-label="Close window"
             className={cn(
               boxClass,
               'transition-colors hover:bg-white active:rt-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent',
@@ -58,9 +60,9 @@ export function RetroWindow({
             <span className="block h-0.75 w-3 rounded-[1px] border border-rt-line bg-white" />
           </span>
         )}
-        <h2 className="rt-title flex h-5.5 min-w-0 flex-1 items-center truncate rounded-[2px] px-2.5 font-mono text-[11px] font-semibold tracking-widest uppercase">
+        <Title className="rt-title flex h-5.5 min-w-0 flex-1 items-center truncate rounded-[2px] px-2.5 font-mono text-[11px] font-semibold tracking-widest uppercase">
           {title}
-        </h2>
+        </Title>
         <span aria-hidden="true" className={boxClass}>
           <TitleGlyph kind="min" />
         </span>

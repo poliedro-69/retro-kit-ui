@@ -1,5 +1,5 @@
 export { RetroWindow } from './retro-window'
-export { RetroButton } from './retro-button'
+export { RetroButton, RetroLinkButton } from './retro-button'
 export { RetroInput, RetroSelect, RetroCheckbox, RetroRadio, RetroGroup } from './retro-fields'
 export { RetroMenubar } from './retro-menubar'
 export { RetroTabs, type RetroTab } from './retro-tabs'
