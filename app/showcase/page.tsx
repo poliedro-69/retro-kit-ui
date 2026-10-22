@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { RetroLinkButton } from '@/components/retro-ui'
 import { ComponentExplorer } from '@/components/showcase/explorer/component-explorer'
 import { getExplorerData } from '@/components/showcase/explorer/registry'
+import { InstallPanel } from '@/components/showcase/install-panel'
 import { ShowcaseThemeShell } from '@/components/showcase/showcase-theme'
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default async function Page() {
             </RetroLinkButton>
           </div>
           <ComponentExplorer data={data} />
+          <InstallPanel />
         </div>
       </ShowcaseThemeShell>
     </main>

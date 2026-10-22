@@ -42,6 +42,11 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
+                <a href="/docs" className={linkClass}>
+                  Installation docs
+                </a>
+              </li>
+              <li>
                 <a href="/#faq" className={linkClass}>
                   FAQ
                 </a>

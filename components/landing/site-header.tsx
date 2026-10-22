@@ -4,6 +4,7 @@ const links = [
   { href: '/#kits', label: 'Kits' },
   { href: '/#faq', label: 'FAQ' },
   { href: '/showcase', label: 'Components' },
+  { href: '/docs', label: 'Docs' },
   { href: '/license', label: 'License' },
 ]
 
