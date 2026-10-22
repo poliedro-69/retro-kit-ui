@@ -52,6 +52,7 @@ import {
   RetroWindow,
 } from '@/components/retro-ui'
 import { RetroProductCard } from '@/components/retro-ui/blocks/retro-product-card'
+import { RetroImageGallery } from '@/components/retro-ui/blocks/retro-image-gallery'
 import type { RetroTableColumn } from '@/components/retro-ui/retro-table'
 import type { RetroTreeNode } from '@/components/retro-ui/retro-tree'
 import { products } from '../products'
@@ -431,6 +432,7 @@ export const winPreviews = {
     </div>
   ),
   productCard: <RetroProductCard product={products[0]} />,
+  imageGallery: <RetroImageGallery />,
 }
 
 export const macPreviews = {

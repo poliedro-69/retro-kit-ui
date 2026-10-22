@@ -51,6 +51,7 @@ const WIN_SOURCES = {
   breadcrumb: 'components/retro-ui/retro-breadcrumb.tsx',
   pagination: 'components/retro-ui/retro-pagination.tsx',
   card: 'components/retro-ui/blocks/retro-product-card.tsx',
+  gallery: 'components/retro-ui/blocks/retro-image-gallery.tsx',
 }
 
 const MAC_SOURCES = {
@@ -614,6 +615,23 @@ function winDefs(): ItemDef[] {
       sources: [WIN_SOURCES.pagination],
     },
     {
+      id: 'win-image-gallery',
+      name: 'Image Gallery',
+      description: 'A Windows 3.1 photo gallery with filters, thumbnails and an Unsplash-powered preview pane.',
+      exports: ['RetroImageGallery', 'RetroGalleryImage'],
+      from: '@/components/retro-ui/blocks/retro-image-gallery',
+      preview: winPreviews.imageGallery,
+      props: [
+        { name: 'images', type: 'RetroGalleryImage[]', description: 'Optional images with src, alt, title and category.' },
+      ],
+      usage: `<RetroImageGallery
+  images={[
+    { src: 'https://images.unsplash.com/...', alt: 'Mountain lake', title: 'Lakeview.jpg', category: 'Nature' },
+  ]}
+/>`,
+      sources: [WIN_SOURCES.gallery],
+    },
+    {
       id: 'win-product-card',
       name: 'Product Card',
       description: 'Ecommerce card: image, specs, options, quantity stepper and live total.',
@@ -1103,7 +1121,7 @@ const winGroups: [string, string, string[]][] = [
     ['win-menubar', 'win-dropdown', 'win-tabs', 'win-scroll', 'win-accordion', 'win-breadcrumb', 'win-pagination'],
   ],
   ['feedback', 'Feedback', ['win-progress', 'win-badge', 'win-tooltip', 'win-toast']],
-  ['blocks', 'Blocks', ['win-product-card']],
+  ['blocks', 'Blocks', ['win-image-gallery', 'win-product-card']],
 ]
 
 const macGroups: [string, string, string[]][] = [
