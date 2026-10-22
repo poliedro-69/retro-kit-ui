@@ -19,6 +19,16 @@
           "target": "components/retro-ui/index.ts"
         },
         {
+          "path": "components/retro-ui/retro-accordion.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-accordion.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-breadcrumb.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-breadcrumb.tsx"
+        },
+        {
           "path": "components/retro-ui/retro-button.tsx",
           "type": "registry:component",
           "target": "components/retro-ui/retro-button.tsx"
@@ -44,6 +54,11 @@
           "target": "components/retro-ui/retro-fields.tsx"
         },
         {
+          "path": "components/retro-ui/retro-label.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-label.tsx"
+        },
+        {
           "path": "components/retro-ui/retro-listbox.tsx",
           "type": "registry:component",
           "target": "components/retro-ui/retro-listbox.tsx"
@@ -52,6 +67,11 @@
           "path": "components/retro-ui/retro-menubar.tsx",
           "type": "registry:component",
           "target": "components/retro-ui/retro-menubar.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-pagination.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-pagination.tsx"
         },
         {
           "path": "components/retro-ui/retro-scroll.tsx",
@@ -64,6 +84,11 @@
           "target": "components/retro-ui/retro-slider.tsx"
         },
         {
+          "path": "components/retro-ui/retro-table.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-table.tsx"
+        },
+        {
           "path": "components/retro-ui/retro-tabs.tsx",
           "type": "registry:component",
           "target": "components/retro-ui/retro-tabs.tsx"
@@ -72,6 +97,21 @@
           "path": "components/retro-ui/retro-theme.tsx",
           "type": "registry:component",
           "target": "components/retro-ui/retro-theme.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-toast.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-toast.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-tooltip.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-tooltip.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-tree.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-tree.tsx"
         },
         {
           "path": "components/retro-ui/retro-window.tsx",
@@ -280,6 +320,16 @@
           "target": "components/mac-ui/index.ts"
         },
         {
+          "path": "components/mac-ui/mac-accordion.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-accordion.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-breadcrumb.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-breadcrumb.tsx"
+        },
+        {
           "path": "components/mac-ui/mac-button.tsx",
           "type": "registry:component",
           "target": "components/mac-ui/mac-button.tsx"
@@ -300,6 +350,11 @@
           "target": "components/mac-ui/mac-fields.tsx"
         },
         {
+          "path": "components/mac-ui/mac-label.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-label.tsx"
+        },
+        {
           "path": "components/mac-ui/mac-listbox.tsx",
           "type": "registry:component",
           "target": "components/mac-ui/mac-listbox.tsx"
@@ -310,6 +365,11 @@
           "target": "components/mac-ui/mac-menubar.tsx"
         },
         {
+          "path": "components/mac-ui/mac-pagination.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-pagination.tsx"
+        },
+        {
           "path": "components/mac-ui/mac-scroll.tsx",
           "type": "registry:component",
           "target": "components/mac-ui/mac-scroll.tsx"
@@ -318,6 +378,26 @@
           "path": "components/mac-ui/mac-slider.tsx",
           "type": "registry:component",
           "target": "components/mac-ui/mac-slider.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-table.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-table.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-toast.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-toast.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-tooltip.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-tooltip.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-tree.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-tree.tsx"
         },
         {
           "path": "components/mac-ui/mac-window.tsx",

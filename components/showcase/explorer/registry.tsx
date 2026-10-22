@@ -42,6 +42,14 @@ const WIN_SOURCES = {
   menubar: 'components/retro-ui/retro-menubar.tsx',
   tabs: 'components/retro-ui/retro-tabs.tsx',
   feedback: 'components/retro-ui/retro-feedback.tsx',
+  label: 'components/retro-ui/retro-label.tsx',
+  tooltip: 'components/retro-ui/retro-tooltip.tsx',
+  toast: 'components/retro-ui/retro-toast.tsx',
+  table: 'components/retro-ui/retro-table.tsx',
+  tree: 'components/retro-ui/retro-tree.tsx',
+  accordion: 'components/retro-ui/retro-accordion.tsx',
+  breadcrumb: 'components/retro-ui/retro-breadcrumb.tsx',
+  pagination: 'components/retro-ui/retro-pagination.tsx',
   card: 'components/retro-ui/blocks/retro-product-card.tsx',
 }
 
@@ -55,6 +63,14 @@ const MAC_SOURCES = {
   dropdown: 'components/mac-ui/mac-dropdown.tsx',
   menubar: 'components/mac-ui/mac-menubar.tsx',
   feedback: 'components/mac-ui/mac-feedback.tsx',
+  label: 'components/mac-ui/mac-label.tsx',
+  tooltip: 'components/mac-ui/mac-tooltip.tsx',
+  toast: 'components/mac-ui/mac-toast.tsx',
+  table: 'components/mac-ui/mac-table.tsx',
+  tree: 'components/mac-ui/mac-tree.tsx',
+  accordion: 'components/mac-ui/mac-accordion.tsx',
+  breadcrumb: 'components/mac-ui/mac-breadcrumb.tsx',
+  pagination: 'components/mac-ui/mac-pagination.tsx',
 }
 
 const toggleProps: PropDoc[] = [
@@ -409,6 +425,195 @@ function winDefs(): ItemDef[] {
       sources: [WIN_SOURCES.feedback],
     },
     {
+      id: 'win-label',
+      name: 'Label',
+      description: 'Standalone form label with an optional required marker.',
+      exports: ['RetroLabel'],
+      from,
+      preview: winPreviews.label,
+      props: [
+        { name: 'required', type: 'boolean', description: 'Shows a red asterisk (hidden from screen readers).' },
+        { name: '...label', type: 'LabelHTMLAttributes', description: 'Any native label attribute, such as htmlFor.' },
+      ],
+      usage: `<RetroLabel htmlFor="user" required>User name</RetroLabel>
+<input id="user" className="rt-sunken bg-rt-paper px-2 py-1" />`,
+      sources: [WIN_SOURCES.label],
+    },
+    {
+      id: 'win-separator',
+      name: 'Separator',
+      description: 'Etched horizontal or vertical divider line.',
+      exports: ['RetroSeparator'],
+      from,
+      preview: winPreviews.separator,
+      props: [
+        { name: 'orientation', type: "'horizontal' | 'vertical'", defaultValue: "'horizontal'", description: 'Direction of the line.' },
+        { name: 'decorative', type: 'boolean', defaultValue: 'false', description: 'Removes the separator role when it has no meaning.' },
+      ],
+      usage: `<RetroSeparator className="my-2" />
+
+<div className="flex h-6 items-center gap-3">
+  <span>Cut</span>
+  <RetroSeparator orientation="vertical" />
+  <span>Copy</span>
+</div>`,
+      sources: [WIN_SOURCES.label],
+    },
+    {
+      id: 'win-tooltip',
+      name: 'Tooltip',
+      description: 'Pale yellow hint shown on hover or keyboard focus. Escape dismisses it.',
+      exports: ['RetroTooltip', 'RetroButton'],
+      from,
+      preview: winPreviews.tooltip,
+      props: [
+        { name: 'content', type: 'ReactNode', description: 'Text shown in the tooltip.' },
+        { name: 'children', type: 'ReactElement', description: 'The single element that triggers the tooltip. It receives aria-describedby.' },
+        { name: 'side', type: "'top' | 'bottom'", defaultValue: "'top'", description: 'Where the tooltip appears.' },
+        { name: 'delay', type: 'number', defaultValue: '400', description: 'Hover delay in milliseconds. Focus shows it instantly.' },
+      ],
+      usage: `<RetroTooltip content="Save the current file">
+  <RetroButton>Save</RetroButton>
+</RetroTooltip>`,
+      sources: [WIN_SOURCES.tooltip],
+    },
+    {
+      id: 'win-toast',
+      name: 'Toast',
+      description: 'Small non-modal window for notifications. Auto-dismisses and pauses on hover or focus.',
+      exports: ['RetroToast', 'RetroToastRegion'],
+      from,
+      preview: winPreviews.toast,
+      props: [
+        { name: 'title', type: 'string', description: 'Text in the title bar.' },
+        { name: 'tone', type: "'info' | 'ok' | 'warn' | 'danger'", defaultValue: "'info'", description: 'Title bar color. danger uses role="alert".' },
+        { name: 'duration', type: 'number', defaultValue: '0', description: 'Milliseconds before onClose is called. 0 keeps it open.' },
+        { name: 'onClose', type: '() => void', description: 'Shows the close button and runs on dismiss.' },
+      ],
+      usage: `const [open, setOpen] = useState(true)
+
+<RetroToastRegion className="fixed right-4 bottom-4">
+  {open && (
+    <RetroToast title="File copied" tone="ok" duration={5000} onClose={() => setOpen(false)}>
+      README.TXT was copied to A:\\.
+    </RetroToast>
+  )}
+</RetroToastRegion>`,
+      sources: [WIN_SOURCES.toast],
+    },
+    {
+      id: 'win-table',
+      name: 'Table',
+      description: 'Data table with bevelled sortable headers and a selectable row.',
+      exports: ['RetroTable'],
+      from,
+      preview: winPreviews.table,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible caption.' },
+        { name: 'columns', type: 'RetroTableColumn<T>[]', description: 'key, header, align, sortable, render and sortValue.' },
+        { name: 'rows', type: 'T[]', description: 'Row data.' },
+        { name: 'getRowId', type: '(row: T) => string', defaultValue: 'row.id', description: 'Unique id for each row.' },
+        { name: 'selectedId', type: 'string | null', description: 'Controlled selection. Use defaultSelectedId for uncontrolled.' },
+        { name: 'onSelectedChange', type: '(id: string | null) => void', description: 'Called when a row is selected.' },
+      ],
+      usage: `const columns: RetroTableColumn<FileRow>[] = [
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'size', header: 'Size', align: 'right', sortable: true },
+]
+
+<RetroTable label="Files" columns={columns} rows={files} className="max-h-56" />`,
+      sources: [WIN_SOURCES.table],
+    },
+    {
+      id: 'win-tree',
+      name: 'Tree View',
+      description: 'File Manager style tree with drive, folder and file icons and full keyboard support.',
+      exports: ['RetroTreeView'],
+      from,
+      preview: winPreviews.tree,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible name of the tree.' },
+        { name: 'nodes', type: 'RetroTreeNode[]', description: 'id, label, icon and children.' },
+        { name: 'defaultExpanded', type: 'string[]', description: 'Ids of the folders open on first render.' },
+        { name: 'value', type: 'string', description: 'Controlled selected node. Use defaultValue for uncontrolled.' },
+        { name: 'onValueChange', type: '(id: string) => void', description: 'Called when a node is selected.' },
+      ],
+      usage: `<RetroTreeView
+  label="File Manager"
+  className="h-56"
+  defaultExpanded={['c']}
+  nodes={[
+    {
+      id: 'c',
+      label: 'C:\\\\',
+      icon: 'drive',
+      children: [
+        { id: 'dos', label: 'DOS', children: [{ id: 'edit', label: 'EDIT.COM' }] },
+        { id: 'autoexec', label: 'AUTOEXEC.BAT' },
+      ],
+    },
+  ]}
+/>`,
+      sources: [WIN_SOURCES.tree],
+    },
+    {
+      id: 'win-accordion',
+      name: 'Accordion',
+      description: 'Stacked bevelled headers that reveal sunken panels. Arrow keys move between headers.',
+      exports: ['RetroAccordion'],
+      from,
+      preview: winPreviews.accordion,
+      props: [
+        { name: 'items', type: 'RetroAccordionItem[]', description: 'id, title, content and disabled.' },
+        { name: 'type', type: "'single' | 'multiple'", defaultValue: "'single'", description: 'Allow one or several open panels.' },
+        { name: 'defaultValue', type: 'string[]', description: 'Ids of the panels open on first render.' },
+      ],
+      usage: `<RetroAccordion
+  defaultValue={['display']}
+  items={[
+    { id: 'display', title: 'Display', content: <p>640 x 480, 16 colors.</p> },
+    { id: 'sound', title: 'Sound', content: <p>Sound Blaster 16.</p> },
+  ]}
+/>`,
+      sources: [WIN_SOURCES.accordion],
+    },
+    {
+      id: 'win-breadcrumb',
+      name: 'Breadcrumb',
+      description: 'Path trail with backslash separators. The last item is the current page.',
+      exports: ['RetroBreadcrumb'],
+      from,
+      preview: winPreviews.breadcrumb,
+      props: [
+        { name: 'items', type: 'RetroBreadcrumbItem[]', description: 'label and optional href.' },
+        { name: 'label', type: 'string', defaultValue: "'Breadcrumb'", description: 'Accessible name of the nav.' },
+      ],
+      usage: `<RetroBreadcrumb
+  items={[
+    { label: 'C:', href: '#' },
+    { label: 'WINDOWS', href: '#' },
+    { label: 'SYSTEM' },
+  ]}
+/>`,
+      sources: [WIN_SOURCES.breadcrumb],
+    },
+    {
+      id: 'win-pagination',
+      name: 'Pagination',
+      description: 'Page buttons with ellipsis, previous and next. Works controlled or uncontrolled.',
+      exports: ['RetroPagination'],
+      from,
+      preview: winPreviews.pagination,
+      props: [
+        { name: 'pageCount', type: 'number', description: 'Total number of pages.' },
+        { name: 'page', type: 'number', description: 'Controlled current page. Use defaultPage for uncontrolled.' },
+        { name: 'onPageChange', type: '(page: number) => void', description: 'Called with the new page.' },
+        { name: 'siblings', type: 'number', defaultValue: '1', description: 'Pages shown on each side of the current one.' },
+      ],
+      usage: `<RetroPagination pageCount={12} defaultPage={5} />`,
+      sources: [WIN_SOURCES.pagination],
+    },
+    {
       id: 'win-product-card',
       name: 'Product Card',
       description: 'Ecommerce card: image, specs, options, quantity stepper and live total.',
@@ -684,30 +889,239 @@ function macDefs(): ItemDef[] {
       usage: `<MacProgress value={60} label="Copy progress" />`,
       sources: [MAC_SOURCES.feedback],
     },
+    {
+      id: 'mac-label',
+      name: 'Label',
+      description: 'Standalone form label in Monaco with an optional required marker.',
+      exports: ['MacLabel'],
+      from,
+      preview: macPreviews.label,
+      props: [
+        { name: 'required', type: 'boolean', description: 'Shows an asterisk (hidden from screen readers).' },
+        { name: '...label', type: 'LabelHTMLAttributes', description: 'Any native label attribute, such as htmlFor.' },
+      ],
+      usage: `<MacLabel htmlFor="user" required>Name</MacLabel>
+<input id="user" className="border-2 border-mac-ink px-2 py-0.5" />`,
+      sources: [MAC_SOURCES.label],
+    },
+    {
+      id: 'mac-separator',
+      name: 'Separator',
+      description: 'Solid or dashed 2px divider, horizontal or vertical.',
+      exports: ['MacSeparator'],
+      from,
+      preview: macPreviews.separator,
+      props: [
+        { name: 'orientation', type: "'horizontal' | 'vertical'", defaultValue: "'horizontal'", description: 'Direction of the line.' },
+        { name: 'variant', type: "'solid' | 'dashed'", defaultValue: "'solid'", description: 'Line style.' },
+        { name: 'decorative', type: 'boolean', defaultValue: 'false', description: 'Removes the separator role when it has no meaning.' },
+      ],
+      usage: `<MacSeparator className="my-2" />
+<MacSeparator variant="dashed" className="my-2" />`,
+      sources: [MAC_SOURCES.label],
+    },
+    {
+      id: 'mac-tooltip',
+      name: 'Balloon Help',
+      description: 'Rounded balloon shown on hover or keyboard focus, like System 7 Balloon Help.',
+      exports: ['MacTooltip', 'MacButton'],
+      from,
+      preview: macPreviews.tooltip,
+      props: [
+        { name: 'content', type: 'ReactNode', description: 'Text shown in the balloon.' },
+        { name: 'children', type: 'ReactElement', description: 'The single element that triggers the balloon. It receives aria-describedby.' },
+        { name: 'side', type: "'top' | 'bottom'", defaultValue: "'top'", description: 'Where the balloon appears.' },
+        { name: 'delay', type: 'number', defaultValue: '400', description: 'Hover delay in milliseconds. Focus shows it instantly.' },
+      ],
+      usage: `<MacTooltip content="Save the current document">
+  <MacButton>Save</MacButton>
+</MacTooltip>`,
+      sources: [MAC_SOURCES.tooltip],
+    },
+    {
+      id: 'mac-toast',
+      name: 'Notification',
+      description: 'Small non-modal window with a close box. Auto-dismisses and pauses on hover or focus.',
+      exports: ['MacToast', 'MacToastRegion'],
+      from,
+      preview: macPreviews.toast,
+      props: [
+        { name: 'title', type: 'string', description: 'Text in the title bar.' },
+        { name: 'urgent', type: 'boolean', defaultValue: 'false', description: 'Uses role="alert" instead of role="status".' },
+        { name: 'duration', type: 'number', defaultValue: '0', description: 'Milliseconds before onClose is called. 0 keeps it open.' },
+        { name: 'onClose', type: '() => void', description: 'Shows the close box and runs on dismiss.' },
+      ],
+      usage: `const [open, setOpen] = useState(true)
+
+<MacToastRegion className="fixed right-4 bottom-4">
+  {open && (
+    <MacToast title="Finder" duration={5000} onClose={() => setOpen(false)}>
+      Copy finished.
+    </MacToast>
+  )}
+</MacToastRegion>`,
+      sources: [MAC_SOURCES.toast],
+    },
+    {
+      id: 'mac-table',
+      name: 'Table',
+      description: 'List view with sortable headers; the selected row is inverted.',
+      exports: ['MacTable'],
+      from,
+      preview: macPreviews.table,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible caption.' },
+        { name: 'columns', type: 'MacTableColumn<T>[]', description: 'key, header, align, sortable, render and sortValue.' },
+        { name: 'rows', type: 'T[]', description: 'Row data.' },
+        { name: 'getRowId', type: '(row: T) => string', defaultValue: 'row.id', description: 'Unique id for each row.' },
+        { name: 'selectedId', type: 'string | null', description: 'Controlled selection. Use defaultSelectedId for uncontrolled.' },
+        { name: 'onSelectedChange', type: '(id: string | null) => void', description: 'Called when a row is selected.' },
+      ],
+      usage: `const columns: MacTableColumn<FileRow>[] = [
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'size', header: 'Size', align: 'right', sortable: true },
+]
+
+<MacTable label="Files" columns={columns} rows={files} className="max-h-56" />`,
+      sources: [MAC_SOURCES.table],
+    },
+    {
+      id: 'mac-tree',
+      name: 'Tree View',
+      description: 'Finder list view with disclosure triangles and full keyboard support.',
+      exports: ['MacTreeView'],
+      from,
+      preview: macPreviews.tree,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible name of the tree.' },
+        { name: 'nodes', type: 'MacTreeNode[]', description: 'id, label, icon and children.' },
+        { name: 'defaultExpanded', type: 'string[]', description: 'Ids of the folders open on first render.' },
+        { name: 'value', type: 'string', description: 'Controlled selected node. Use defaultValue for uncontrolled.' },
+        { name: 'onValueChange', type: '(id: string) => void', description: 'Called when a node is selected.' },
+      ],
+      usage: `<MacTreeView
+  label="Finder"
+  className="h-56"
+  defaultExpanded={['hd']}
+  nodes={[
+    {
+      id: 'hd',
+      label: 'Macintosh HD',
+      icon: 'drive',
+      children: [
+        { id: 'system', label: 'System Folder', children: [{ id: 'finder', label: 'Finder' }] },
+        { id: 'readme', label: 'Read Me' },
+      ],
+    },
+  ]}
+/>`,
+      sources: [MAC_SOURCES.tree],
+    },
+    {
+      id: 'mac-accordion',
+      name: 'Disclosure',
+      description: 'Outlined headers with a disclosure triangle. Arrow keys move between headers.',
+      exports: ['MacAccordion'],
+      from,
+      preview: macPreviews.accordion,
+      props: [
+        { name: 'items', type: 'MacAccordionItem[]', description: 'id, title, content and disabled.' },
+        { name: 'type', type: "'single' | 'multiple'", defaultValue: "'single'", description: 'Allow one or several open panels.' },
+        { name: 'defaultValue', type: 'string[]', description: 'Ids of the panels open on first render.' },
+      ],
+      usage: `<MacAccordion
+  defaultValue={['general']}
+  items={[
+    { id: 'general', title: 'General', content: <p>Macintosh Plus, 4 MB.</p> },
+    { id: 'memory', title: 'Memory', content: <p>Disk cache: 32K.</p> },
+  ]}
+/>`,
+      sources: [MAC_SOURCES.accordion],
+    },
+    {
+      id: 'mac-breadcrumb',
+      name: 'Breadcrumb',
+      description: 'Classic Mac path with colon separators. The last item is the current page.',
+      exports: ['MacBreadcrumb'],
+      from,
+      preview: macPreviews.breadcrumb,
+      props: [
+        { name: 'items', type: 'MacBreadcrumbItem[]', description: 'label and optional href.' },
+        { name: 'label', type: 'string', defaultValue: "'Breadcrumb'", description: 'Accessible name of the nav.' },
+      ],
+      usage: `<MacBreadcrumb
+  items={[
+    { label: 'Macintosh HD', href: '#' },
+    { label: 'System Folder', href: '#' },
+    { label: 'Fonts' },
+  ]}
+/>`,
+      sources: [MAC_SOURCES.breadcrumb],
+    },
+    {
+      id: 'mac-pagination',
+      name: 'Pagination',
+      description: 'Rounded page buttons with ellipsis, previous and next. Works controlled or uncontrolled.',
+      exports: ['MacPagination'],
+      from,
+      preview: macPreviews.pagination,
+      props: [
+        { name: 'pageCount', type: 'number', description: 'Total number of pages.' },
+        { name: 'page', type: 'number', description: 'Controlled current page. Use defaultPage for uncontrolled.' },
+        { name: 'onPageChange', type: '(page: number) => void', description: 'Called with the new page.' },
+        { name: 'siblings', type: 'number', defaultValue: '1', description: 'Pages shown on each side of the current one.' },
+      ],
+      usage: `<MacPagination pageCount={12} defaultPage={5} />`,
+      sources: [MAC_SOURCES.pagination],
+    },
   ]
 }
 
 const winGroups: [string, string, string[]][] = [
-  ['foundations', 'Foundations', ['win-tokens']],
+  ['foundations', 'Foundations', ['win-tokens', 'win-separator']],
   ['containers', 'Containers', ['win-window', 'win-dialog']],
   ['actions', 'Actions', ['win-button', 'win-link-button']],
   [
     'forms',
     'Forms',
-    ['win-input', 'win-textarea', 'win-select', 'win-listbox', 'win-slider', 'win-checkbox', 'win-radio', 'win-group'],
+    [
+      'win-label',
+      'win-input',
+      'win-textarea',
+      'win-select',
+      'win-listbox',
+      'win-slider',
+      'win-checkbox',
+      'win-radio',
+      'win-group',
+    ],
   ],
-  ['navigation', 'Navigation', ['win-menubar', 'win-dropdown', 'win-tabs', 'win-scroll']],
-  ['feedback', 'Feedback', ['win-progress', 'win-badge']],
+  ['data', 'Data Display', ['win-table', 'win-tree']],
+  [
+    'navigation',
+    'Navigation',
+    ['win-menubar', 'win-dropdown', 'win-tabs', 'win-scroll', 'win-accordion', 'win-breadcrumb', 'win-pagination'],
+  ],
+  ['feedback', 'Feedback', ['win-progress', 'win-badge', 'win-tooltip', 'win-toast']],
   ['blocks', 'Blocks', ['win-product-card']],
 ]
 
 const macGroups: [string, string, string[]][] = [
-  ['foundations', 'Foundations', ['mac-dither']],
+  ['foundations', 'Foundations', ['mac-dither', 'mac-separator']],
   ['containers', 'Containers', ['mac-window', 'mac-alert']],
   ['actions', 'Actions', ['mac-button']],
-  ['forms', 'Forms', ['mac-input', 'mac-textarea', 'mac-listbox', 'mac-slider', 'mac-checkbox', 'mac-radio', 'mac-group']],
-  ['navigation', 'Navigation', ['mac-menubar', 'mac-dropdown', 'mac-scroll']],
-  ['feedback', 'Feedback', ['mac-progress']],
+  [
+    'forms',
+    'Forms',
+    ['mac-label', 'mac-input', 'mac-textarea', 'mac-listbox', 'mac-slider', 'mac-checkbox', 'mac-radio', 'mac-group'],
+  ],
+  ['data', 'Data Display', ['mac-table', 'mac-tree']],
+  [
+    'navigation',
+    'Navigation',
+    ['mac-menubar', 'mac-dropdown', 'mac-scroll', 'mac-accordion', 'mac-breadcrumb', 'mac-pagination'],
+  ],
+  ['feedback', 'Feedback', ['mac-progress', 'mac-tooltip', 'mac-toast']],
 ]
 
 async function buildCategories(

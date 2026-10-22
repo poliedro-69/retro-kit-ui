@@ -1,41 +1,62 @@
 import {
+  MacAccordion,
   MacAlert,
+  MacBreadcrumb,
   MacButton,
   MacCheckbox,
   MacDropdownMenu,
   MacGroup,
   MacInput,
+  MacLabel,
   MacListbox,
   MacMenubar,
+  MacPagination,
   MacRadio,
   MacProgress,
   MacScrollArea,
+  MacSeparator,
   MacSlider,
+  MacTable,
   MacTextarea,
+  MacTooltip,
+  MacTreeView,
   MacWindow,
   macDither,
 } from '@/components/mac-ui'
+import type { MacTableColumn } from '@/components/mac-ui/mac-table'
+import type { MacTreeNode } from '@/components/mac-ui/mac-tree'
 import {
+  RetroAccordion,
   RetroBadge,
+  RetroBreadcrumb,
   RetroButton,
   RetroCheckbox,
   RetroDropdownMenu,
   RetroGroup,
   RetroInput,
+  RetroLabel,
   RetroListbox,
   RetroMenubar,
+  RetroPagination,
   RetroProgress,
   RetroRadio,
   RetroScrollArea,
   RetroSelect,
+  RetroSeparator,
   RetroSlider,
+  RetroTable,
   RetroTabs,
   RetroTextarea,
+  RetroTooltip,
+  RetroTreeView,
   RetroWindow,
 } from '@/components/retro-ui'
 import { RetroProductCard } from '@/components/retro-ui/blocks/retro-product-card'
+import type { RetroTableColumn } from '@/components/retro-ui/retro-table'
+import type { RetroTreeNode } from '@/components/retro-ui/retro-tree'
 import { products } from '../products'
 import { DialogDemo, LinkButtonDemo, MacProgressDemo, ProgressDemo } from './demos'
+import { MacToastDemo, ToastDemo } from './toast-demos'
 
 const swatches = [
   { name: 'face', className: 'bg-rt-face' },
@@ -61,6 +82,89 @@ const fileOptions = [
 ]
 
 const loremLines = Array.from({ length: 14 }, (_, index) => `Line ${index + 1}: The quick brown fox jumps over the lazy dog.`)
+
+type FileRow = { id: string; name: string; kind: string; size: string; modified: string }
+
+const winFiles: FileRow[] = [
+  { id: 'autoexec', name: 'AUTOEXEC.BAT', kind: 'Batch file', size: '1 KB', modified: '03/10/92' },
+  { id: 'config', name: 'CONFIG.SYS', kind: 'System file', size: '2 KB', modified: '03/10/92' },
+  { id: 'command', name: 'COMMAND.COM', kind: 'Application', size: '52 KB', modified: '09/30/93' },
+  { id: 'win', name: 'WIN.INI', kind: 'Configuration', size: '8 KB', modified: '04/06/92' },
+  { id: 'system', name: 'SYSTEM.INI', kind: 'Configuration', size: '3 KB', modified: '04/06/92' },
+  { id: 'readme', name: 'README.TXT', kind: 'Text document', size: '12 KB', modified: '05/21/93' },
+]
+
+const winColumns: RetroTableColumn<FileRow>[] = [
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'kind', header: 'Type', sortable: true },
+  { key: 'size', header: 'Size', align: 'right', sortable: true },
+  { key: 'modified', header: 'Modified', sortable: true },
+]
+
+const macFiles: FileRow[] = [
+  { id: 'readme', name: 'Read Me', kind: 'SimpleText document', size: '4K', modified: 'Mon, Jun 3, 1991' },
+  { id: 'finder', name: 'Finder', kind: 'application', size: '168K', modified: 'Wed, May 15, 1991' },
+  { id: 'system', name: 'System', kind: 'System file', size: '1,024K', modified: 'Wed, May 15, 1991' },
+  { id: 'trash', name: 'Trash', kind: 'folder', size: '--', modified: 'Fri, Jun 14, 1991' },
+  { id: 'clock', name: 'Alarm Clock', kind: 'desk accessory', size: '12K', modified: 'Tue, Apr 2, 1991' },
+]
+
+const macColumns: MacTableColumn<FileRow>[] = [
+  { key: 'name', header: 'Name', sortable: true },
+  { key: 'kind', header: 'Kind', sortable: true },
+  { key: 'size', header: 'Size', align: 'right', sortable: true },
+  { key: 'modified', header: 'Last Modified', sortable: true },
+]
+
+const winTree: RetroTreeNode[] = [
+  {
+    id: 'c',
+    label: 'C:\\',
+    icon: 'drive',
+    children: [
+      {
+        id: 'dos',
+        label: 'DOS',
+        children: [
+          { id: 'format', label: 'FORMAT.COM' },
+          { id: 'edit', label: 'EDIT.COM' },
+        ],
+      },
+      {
+        id: 'windows',
+        label: 'WINDOWS',
+        children: [
+          { id: 'system-dir', label: 'SYSTEM', children: [{ id: 'vga', label: 'VGA.DRV' }] },
+          { id: 'win-ini', label: 'WIN.INI' },
+        ],
+      },
+      { id: 'autoexec', label: 'AUTOEXEC.BAT' },
+    ],
+  },
+  { id: 'a', label: 'A:\\', icon: 'drive' },
+]
+
+const macTree: MacTreeNode[] = [
+  {
+    id: 'hd',
+    label: 'Macintosh HD',
+    icon: 'drive',
+    children: [
+      {
+        id: 'system-folder',
+        label: 'System Folder',
+        children: [
+          { id: 'finder', label: 'Finder' },
+          { id: 'system', label: 'System' },
+          { id: 'fonts', label: 'Fonts', children: [{ id: 'chicago', label: 'Chicago' }] },
+        ],
+      },
+      { id: 'documents', label: 'Documents', children: [{ id: 'letter', label: 'Letter' }] },
+      { id: 'readme', label: 'Read Me' },
+    ],
+  },
+  { id: 'floppy', label: 'Untitled', icon: 'drive' },
+]
 
 export const winPreviews = {
   tokens: (
@@ -177,6 +281,85 @@ export const winPreviews = {
           { label: 'Exit', shortcut: 'Alt+F4' },
         ]}
       />
+    </div>
+  ),
+  label: (
+    <div className="rt-raised flex w-full max-w-xs flex-col gap-1 p-3">
+      <RetroLabel htmlFor="rt-label-demo" required>
+        User name
+      </RetroLabel>
+      <input
+        id="rt-label-demo"
+        type="text"
+        defaultValue="Administrator"
+        className="rt-sunken bg-rt-paper px-2 py-1 text-[13px] text-rt-ink outline-none"
+      />
+    </div>
+  ),
+  separator: (
+    <div className="rt-raised flex w-full max-w-xs flex-col gap-2 p-3 text-[13px] text-rt-ink">
+      <span>Program Manager</span>
+      <RetroSeparator />
+      <div className="flex h-6 items-center gap-3">
+        <span>Cut</span>
+        <RetroSeparator orientation="vertical" />
+        <span>Copy</span>
+        <RetroSeparator orientation="vertical" />
+        <span>Paste</span>
+      </div>
+    </div>
+  ),
+  tooltip: (
+    <div className="rt-raised flex min-h-40 w-full max-w-sm flex-wrap items-center justify-center gap-4 p-3">
+      <RetroTooltip content="Save the current file">
+        <RetroButton>Save</RetroButton>
+      </RetroTooltip>
+      <RetroTooltip content="Open the file manager" side="bottom">
+        <RetroButton>Open</RetroButton>
+      </RetroTooltip>
+    </div>
+  ),
+  toast: <ToastDemo />,
+  table: (
+    <div className="w-full max-w-lg">
+      <RetroTable label="Files" columns={winColumns} rows={winFiles} defaultSelectedId="win" className="max-h-56" />
+    </div>
+  ),
+  tree: (
+    <RetroTreeView
+      label="File Manager"
+      nodes={winTree}
+      defaultExpanded={['c', 'windows']}
+      defaultValue="win-ini"
+      className="h-56 w-full max-w-xs"
+    />
+  ),
+  accordion: (
+    <div className="w-full max-w-sm">
+      <RetroAccordion
+        defaultValue={['display']}
+        items={[
+          { id: 'display', title: 'Display', content: <p>640 x 480, 16 colors. Super VGA driver.</p> },
+          { id: 'sound', title: 'Sound', content: <p>Sound Blaster 16 on IRQ 5.</p> },
+          { id: 'network', title: 'Network', content: <p>Not installed.</p>, disabled: true },
+        ]}
+      />
+    </div>
+  ),
+  breadcrumb: (
+    <div className="rt-raised p-3">
+      <RetroBreadcrumb
+        items={[
+          { label: 'C:', href: '#' },
+          { label: 'WINDOWS', href: '#' },
+          { label: 'SYSTEM' },
+        ]}
+      />
+    </div>
+  ),
+  pagination: (
+    <div className="rt-raised p-3">
+      <RetroPagination pageCount={12} defaultPage={5} />
     </div>
   ),
   checkbox: (
@@ -345,6 +528,85 @@ export const macPreviews = {
           { label: 'Quit', shortcut: 'Cmd+Q' },
         ]}
       />
+    </div>
+  ),
+  label: (
+    <div className="flex w-full max-w-xs flex-col gap-1 border-2 border-mac-ink bg-mac-paper p-3">
+      <MacLabel htmlFor="mac-label-demo" required>
+        Name
+      </MacLabel>
+      <input
+        id="mac-label-demo"
+        type="text"
+        defaultValue="Startup Disk"
+        className="border-2 border-mac-ink bg-mac-paper px-2 py-0.5 text-[13px] text-mac-ink outline-none"
+      />
+    </div>
+  ),
+  separator: (
+    <div className="flex w-full max-w-xs flex-col gap-2 border-2 border-mac-ink bg-mac-paper p-3 text-[13px] text-mac-ink">
+      <span>Finder</span>
+      <MacSeparator />
+      <span>Special</span>
+      <MacSeparator variant="dashed" />
+      <div className="flex h-6 items-center gap-3">
+        <span>Cut</span>
+        <MacSeparator orientation="vertical" />
+        <span>Copy</span>
+      </div>
+    </div>
+  ),
+  tooltip: (
+    <div className="flex min-h-40 w-full max-w-sm flex-wrap items-center justify-center gap-4 border-2 border-mac-ink bg-mac-paper p-3">
+      <MacTooltip content="Save the current document">
+        <MacButton>Save</MacButton>
+      </MacTooltip>
+      <MacTooltip content="Open a document" side="bottom">
+        <MacButton>Open</MacButton>
+      </MacTooltip>
+    </div>
+  ),
+  toast: <MacToastDemo />,
+  table: (
+    <div className="w-full max-w-lg">
+      <MacTable label="Files" columns={macColumns} rows={macFiles} defaultSelectedId="finder" className="max-h-56" />
+    </div>
+  ),
+  tree: (
+    <MacTreeView
+      label="Finder"
+      nodes={macTree}
+      defaultExpanded={['hd', 'system-folder']}
+      defaultValue="finder"
+      className="h-56 w-full max-w-xs"
+    />
+  ),
+  accordion: (
+    <div className="w-full max-w-sm">
+      <MacAccordion
+        defaultValue={['general']}
+        items={[
+          { id: 'general', title: 'General', content: <p>Macintosh Plus, 4 MB of memory.</p> },
+          { id: 'memory', title: 'Memory', content: <p>Disk cache: 32K.</p> },
+          { id: 'sharing', title: 'Sharing', content: <p>File sharing is off.</p>, disabled: true },
+        ]}
+      />
+    </div>
+  ),
+  breadcrumb: (
+    <div className="border-2 border-mac-ink bg-mac-paper p-3">
+      <MacBreadcrumb
+        items={[
+          { label: 'Macintosh HD', href: '#' },
+          { label: 'System Folder', href: '#' },
+          { label: 'Fonts' },
+        ]}
+      />
+    </div>
+  ),
+  pagination: (
+    <div className="border-2 border-mac-ink bg-mac-paper p-3">
+      <MacPagination pageCount={12} defaultPage={5} />
     </div>
   ),
   checkbox: (
