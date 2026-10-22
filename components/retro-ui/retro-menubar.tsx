@@ -9,7 +9,7 @@ type RetroMenubarProps = {
   onSelect?: (item: string) => void
 }
 
-export function RetroMenubar({ items, label = 'Menú', className, onSelect }: RetroMenubarProps) {
+export function RetroMenubar({ items, label = 'Menu', className, onSelect }: RetroMenubarProps) {
   return (
     <nav aria-label={label} className={cn('flex gap-0.5 px-0.5', className)}>
       {items.map((item) => (

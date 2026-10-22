@@ -1,7 +1,7 @@
 import { Calculator, Clock, FolderOpen, Palette } from 'lucide-react'
 import { RetroButton, RetroProgress, RetroWindow } from '@/components/retro-ui'
 import { cn } from '@/lib/utils'
-import { MacButton, MacWindow, macDither } from './mac-ui'
+import { MacButton, MacWindow, macDither } from '@/components/mac-ui'
 
 const programs = [
   { Icon: FolderOpen, label: 'Main' },

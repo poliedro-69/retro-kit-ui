@@ -6,10 +6,24 @@ import { cn } from '@/lib/utils'
 
 export type RetroTab = { id: string; label: string; content: ReactNode }
 
-export function RetroTabs({ tabs, className }: { tabs: RetroTab[]; className?: string }) {
+type RetroTabsProps = {
+  tabs: RetroTab[]
+  value?: string
+  onValueChange?: (id: string) => void
+  className?: string
+  panelClassName?: string
+}
+
+export function RetroTabs({ tabs, value, onValueChange, className, panelClassName }: RetroTabsProps) {
   const baseId = useId()
-  const [active, setActive] = useState(tabs[0]?.id)
+  const [inner, setInner] = useState(tabs[0]?.id)
+  const active = value ?? inner
   const buttons = useRef<Record<string, HTMLButtonElement | null>>({})
+
+  function setActive(id: string) {
+    setInner(id)
+    onValueChange?.(id)
+  }
 
   function onKeyDown(event: KeyboardEvent, index: number) {
     const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0
@@ -57,7 +71,7 @@ export function RetroTabs({ tabs, className }: { tabs: RetroTab[]; className?: s
           role="tabpanel"
           aria-labelledby={`${baseId}-tab-${tab.id}`}
           hidden={tab.id !== active}
-          className="rt-raised rounded-[3px] p-3"
+          className={panelClassName ?? 'rt-raised rounded-[3px] p-3'}
         >
           {tab.content}
         </div>

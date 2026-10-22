@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Check, Download, FileArchive } from 'lucide-react'
 import { RetroBadge, RetroButton, RetroDialog, RetroProgress, RetroWindow } from '@/components/retro-ui'
-import { MacButton, MacWindow } from './mac-ui'
+import { MacButton, MacWindow } from '@/components/mac-ui'
 import { MacPreview, Win31Preview } from './kit-previews'
 
 type Kit = {

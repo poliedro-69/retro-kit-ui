@@ -23,7 +23,7 @@ export type RetroProduct = {
   options: string[]
 }
 
-const formatter = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })
+const formatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 const GIFT_PRICE = 2.5
 
 export function RetroProductCard({ product }: { product: RetroProduct }) {
@@ -39,18 +39,14 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
     <RetroWindow
       title={product.fileName}
       className="w-full max-w-sm"
-      menu={<RetroMenubar items={['Archivo', 'Edición', 'Ver', 'Ayuda']} />}
+      menu={<RetroMenubar items={['File', 'Edit', 'View', 'Help']} />}
       status={
         <>
           <span className="flex-1 truncate">
-            {added > 0
-              ? `${added} art. en el carrito`
-              : soldOut
-                ? 'Agotado'
-                : `Quedan ${product.stock} uds.`}
+            {added > 0 ? `${added} in cart` : soldOut ? 'Sold out' : `${product.stock} left in stock`}
           </span>
           <span aria-hidden="true" className="font-mono text-[11px] text-rt-shadow">
-            F1=Ayuda
+            F1=Help
           </span>
         </>
       }
@@ -66,12 +62,12 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
           />
           {product.oldPrice ? (
             <RetroBadge tone="warn" className="absolute top-2 left-2">
-              Oferta
+              Sale
             </RetroBadge>
           ) : null}
           {soldOut ? (
             <RetroBadge tone="danger" className="absolute top-2 right-2">
-              Agotado
+              Sold out
             </RetroBadge>
           ) : null}
         </div>
@@ -79,7 +75,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
         <div>
           <h3 className="text-[16px] font-semibold">{product.name}</h3>
           <p className="mt-0.5 leading-snug text-rt-ink/80">{product.description}</p>
-          <p className="mt-1.5 flex items-center gap-1.5 text-[12px]" aria-label={`Valoración ${product.rating} de 5`}>
+          <p className="mt-1.5 flex items-center gap-1.5 text-[12px]" aria-label={`Rated ${product.rating} out of 5`}>
             <span aria-hidden="true" className="flex gap-0.5">
               {Array.from({ length: 5 }, (_, i) => (
                 <span
@@ -92,7 +88,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
           </p>
         </div>
 
-        <RetroGroup legend="Características">
+        <RetroGroup legend="Specs">
           <dl className="rt-sunken grid grid-cols-[auto_1fr] gap-x-3 px-2 py-1.5 text-[12px]">
             {product.specs.map((spec) => (
               <div key={spec.label} className="col-span-2 grid grid-cols-subgrid">
@@ -106,17 +102,11 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
         <RetroGroup legend={product.optionsLabel}>
           <div role="radiogroup" aria-label={product.optionsLabel} className="flex flex-wrap gap-x-4">
             {product.options.map((value, index) => (
-              <RetroRadio
-                key={value}
-                name={groupName}
-                value={value}
-                label={value}
-                defaultChecked={index === 0}
-              />
+              <RetroRadio key={value} name={groupName} value={value} label={value} defaultChecked={index === 0} />
             ))}
           </div>
           <RetroCheckbox
-            label={`Envolver para regalo (+${formatter.format(GIFT_PRICE)})`}
+            label={`Gift wrap (+${formatter.format(GIFT_PRICE)})`}
             checked={gift}
             onChange={(event) => setGift(event.target.checked)}
           />
@@ -125,7 +115,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
         <div className="flex items-stretch gap-2">
           <div className="flex items-center gap-1.5">
             <label htmlFor={`${groupName}-qty`} className="font-medium">
-              Cantidad
+              Quantity
             </label>
             <input
               id={`${groupName}-qty`}
@@ -136,7 +126,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
             <div className="flex flex-col gap-px">
               <RetroButton
                 size="sm"
-                aria-label="Aumentar cantidad"
+                aria-label="Increase quantity"
                 className="h-3 min-h-0 w-5 px-0 text-[7px] leading-none"
                 disabled={quantity >= Math.max(product.stock, 1)}
                 onClick={() => setQuantity((q) => q + 1)}
@@ -145,7 +135,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
               </RetroButton>
               <RetroButton
                 size="sm"
-                aria-label="Disminuir cantidad"
+                aria-label="Decrease quantity"
                 className="h-3 min-h-0 w-5 px-0 text-[7px] leading-none"
                 disabled={quantity <= 1}
                 onClick={() => setQuantity((q) => q - 1)}
@@ -175,9 +165,9 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
             disabled={soldOut}
             onClick={() => setAdded((n) => n + quantity)}
           >
-            Añadir al carrito
+            Add to cart
           </RetroButton>
-          <RetroButton disabled={soldOut}>Comprar</RetroButton>
+          <RetroButton disabled={soldOut}>Buy now</RetroButton>
         </div>
       </div>
     </RetroWindow>

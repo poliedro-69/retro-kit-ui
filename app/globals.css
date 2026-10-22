@@ -239,3 +239,35 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Syntax-highlighted code (shiki output) inside the component explorer */
+.rt-code pre {
+  margin: 0;
+  padding: 0.75rem 0;
+  overflow-x: auto;
+  background: transparent !important;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.rt-code code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  counter-reset: step;
+  counter-increment: step 0;
+}
+
+.rt-code .line::before {
+  content: counter(step);
+  counter-increment: step;
+  display: inline-block;
+  width: 2.25rem;
+  margin-right: 1rem;
+  padding-right: 0.5rem;
+  text-align: right;
+  color: var(--color-rt-shadow);
+  border-right: 1px solid #e3e5ea;
+  user-select: none;
+}
