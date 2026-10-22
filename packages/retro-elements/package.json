@@ -1,0 +1,61 @@
+{
+  "name": "@your-scope/retrokit-elements",
+  "version": "0.1.0",
+  "description": "Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js, Vue, Svelte and plain HTML. Built with RetroKit by Your Name.",
+  "keywords": [
+    "web-components",
+    "custom-elements",
+    "vue",
+    "svelte",
+    "nextjs",
+    "retro",
+    "windows-3.1",
+    "system-7"
+  ],
+  "license": "SEE LICENSE IN LICENSE",
+  "type": "module",
+  "sideEffects": true,
+  "files": [
+    "dist",
+    "types",
+    "themes.css",
+    "LICENSE",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./windows": {
+      "types": "./dist/windows.d.ts",
+      "default": "./dist/windows.js"
+    },
+    "./mac": {
+      "types": "./dist/mac.d.ts",
+      "default": "./dist/mac.js"
+    },
+    "./react": {
+      "types": "./types/react.d.ts"
+    },
+    "./svelte": {
+      "types": "./types/svelte.d.ts"
+    },
+    "./themes.css": "./themes.css"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Poliedro69 <poliedro69@gmail.com> (https://machinetix.com)",
+  "homepage": "https://machinetix.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-name/retrokit.git",
+    "directory": "packages/retro-elements"
+  }
+}

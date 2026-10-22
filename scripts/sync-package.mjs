@@ -101,3 +101,30 @@ write(join(root, 'LICENSE'), license)
 write(join(pkgDir, 'LICENSE'), license)
 
 console.log(`Synced ${author.packageName} -> packages/retro-ui`)
+
+// Web Components + framework wrappers share the author data, license and themes.
+const siblings = [
+  { dir: 'retro-elements', suffix: 'elements' },
+  { dir: 'retro-vue', suffix: 'vue' },
+]
+for (const { dir, suffix } of siblings) {
+  const target = join(root, 'packages', dir)
+  const file = join(target, 'package.json')
+  const manifest = JSON.parse(readFileSync(file, 'utf8'))
+  const elementsName = `${author.packageName}-elements`
+  manifest.name = `${author.packageName}-${suffix}`
+  manifest.author = `${author.name} <${author.email}> (${author.url})`
+  manifest.homepage = author.siteUrl
+  manifest.repository = { type: 'git', url: `git+${author.repository}.git`, directory: `packages/${dir}` }
+  if (manifest.dependencies?.['@your-scope/retrokit-elements']) {
+    delete manifest.dependencies['@your-scope/retrokit-elements']
+    manifest.dependencies[elementsName] = 'workspace:*'
+  }
+  write(file, `${JSON.stringify(manifest, null, 2)}\n`)
+  write(join(target, 'LICENSE'), license)
+}
+write(
+  join(root, 'packages/retro-elements/themes.css'),
+  readFileSync(join(pkgDir, 'themes.css'), 'utf8'),
+)
+console.log('Synced elements + vue manifests, LICENSE and themes.css')
