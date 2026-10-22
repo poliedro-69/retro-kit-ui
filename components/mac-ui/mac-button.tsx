@@ -8,11 +8,11 @@ export function MacButton({ isDefault, className, children, type = 'button', ...
     <button
       type={type}
       className={cn(
-        'rounded-[10px] border-2 border-black bg-white px-4 py-0.5 font-mono text-[12px] font-semibold text-black',
-        'transition-colors hover:bg-neutral-100 active:bg-black active:text-white',
-        'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black',
-        'disabled:cursor-not-allowed disabled:border-dashed disabled:text-neutral-500 disabled:hover:bg-white',
-        isDefault && 'shadow-[0_0_0_2px_#fff,0_0_0_4px_#000]',
+        'rounded-[10px] border-2 border-mac-ink bg-mac-paper px-4 py-0.5 font-rt-mono text-[12px] font-semibold text-mac-ink',
+        'transition-colors hover:bg-mac-hover active:bg-mac-ink active:text-mac-paper',
+        'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-mac-ink',
+        'disabled:cursor-not-allowed disabled:border-dashed disabled:text-mac-dim disabled:hover:bg-mac-paper',
+        isDefault && 'shadow-[0_0_0_2px_var(--color-mac-paper),0_0_0_4px_var(--color-mac-ink)]',
         className,
       )}
       {...props}

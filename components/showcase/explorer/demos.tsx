@@ -87,7 +87,7 @@ export function ProgressDemo() {
 export function MacProgressDemo() {
   const { progress, running, start } = useProgress(35)
   return (
-    <div className="flex w-full max-w-sm flex-col gap-3 border-2 border-black bg-white p-3 font-mono text-[12px] text-black shadow-[3px_3px_0_#000]">
+    <div className="flex w-full max-w-sm flex-col gap-3 border-2 border-mac-ink bg-mac-paper p-3 font-mono text-[12px] text-mac-ink shadow-[3px_3px_0_var(--color-mac-ink)]">
       <p>{progress === 100 ? 'Copy complete.' : 'Copying files...'}</p>
       <MacProgress value={progress} label="Copy progress" />
       <div className="flex justify-end">

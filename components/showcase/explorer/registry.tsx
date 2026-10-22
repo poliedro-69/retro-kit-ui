@@ -9,7 +9,11 @@ import type { CodeFile, ExplorerCategory, ExplorerData, ExplorerItem, PropDoc } 
 const root = process.cwd()
 
 async function highlight(name: string, code: string, lang: 'tsx' | 'css' = 'tsx'): Promise<CodeFile> {
-  const html = await codeToHtml(code, { lang, theme: 'github-light' })
+  const html = await codeToHtml(code, {
+    lang,
+    themes: { light: 'github-light', dark: 'github-dark' },
+    defaultColor: false,
+  })
   return { name, code, html }
 }
 
@@ -68,7 +72,7 @@ function winDefs(): ItemDef[] {
       ],
       usage: `<div className="rt-desktop p-6">
   <div className="rt-raised p-3 text-rt-ink">
-    <div className="rt-sunken bg-white p-2">Hello, 3.1</div>
+    <div className="rt-sunken bg-rt-paper p-2">Hello, 3.1</div>
   </div>
 </div>`,
       sources: [WIN_SOURCES.tokens],
@@ -340,7 +344,7 @@ function macDefs(): ItemDef[] {
       from,
       preview: macPreviews.dither,
       props: [{ name: 'macDither', type: 'string', description: 'Tailwind classes that paint a 50% dither pattern.' }],
-      usage: `<div className={\`\${macDither} h-14 border-2 border-black\`} />`,
+      usage: `<div className={\`\${macDither} h-14 border-2 border-mac-ink\`} />`,
       sources: [MAC_SOURCES.window],
     },
     {

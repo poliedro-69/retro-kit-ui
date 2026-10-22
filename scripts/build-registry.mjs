@@ -32,7 +32,29 @@ function parseTokens(css) {
   return { theme, utilities: css_ }
 }
 
+function parseThemes(css) {
+  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '')
+  const blocks = {}
+  for (const match of clean.matchAll(/(\[data-rt-[^\]]+\])\s*\{([^}]*)\}/g)) {
+    blocks[match[1]] = Object.fromEntries(
+      match[2]
+        .split(';')
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .map((line) => {
+          const index = line.indexOf(':')
+          return [line.slice(0, index).trim(), line.slice(index + 1).replace(/\s+/g, ' ').trim()]
+        }),
+    )
+  }
+  return blocks
+}
+
 const tokens = parseTokens(readFileSync(join(root, 'packages/retro-ui/styles.css'), 'utf8'))
+const themeBlocks = parseThemes(readFileSync(join(root, 'packages/retro-ui/themes.css'), 'utf8'))
+const pick = (predicate) => Object.fromEntries(Object.entries(tokens.theme).filter(([key]) => predicate(key)))
+const retroTheme = pick((key) => !key.startsWith('color-mac'))
+const macTheme = pick((key) => key.startsWith('color-mac') || key === 'font-rt-mono')
 
 function filesIn(dir, type) {
   return readdirSync(join(root, dir), { withFileTypes: true })
@@ -54,7 +76,7 @@ const registry = {
       description: 'Windows 3.1 structure with a modern finish: window, button, fields, menubar, tabs, feedback and dialog.',
       dependencies: ['clsx', 'tailwind-merge'],
       files: filesIn('components/retro-ui', 'registry:component'),
-      cssVars: { theme: tokens.theme },
+      cssVars: { theme: retroTheme },
       css: tokens.utilities,
       meta,
     },
@@ -65,6 +87,17 @@ const registry = {
       description: 'Mac System 7 inspired window, button, fields, menubar and feedback components.',
       dependencies: ['clsx', 'tailwind-merge'],
       files: filesIn('components/mac-ui', 'registry:component'),
+      cssVars: { theme: macTheme },
+      meta,
+    },
+    {
+      name: 'retro-themes',
+      type: 'registry:style',
+      title: 'RetroKit themes',
+      description:
+        'Six color themes (Classic Navy, Hot Dog Stand, Phosphor Green, Amber Terminal, Rose, Dark) and four font themes (IBM Plex, Pixel, System, Mono). Set data-rt-theme and data-rt-font on any element, or use <RetroTheme>.',
+      registryDependencies: [`${author.siteUrl}/r/retro-ui.json`],
+      css: themeBlocks,
       meta,
     },
     {

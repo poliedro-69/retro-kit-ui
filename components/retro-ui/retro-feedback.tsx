@@ -30,10 +30,10 @@ export function RetroProgress({
 
 const tones = {
   neutral: 'bg-rt-face text-rt-ink',
-  info: 'bg-rt-accent text-white',
+  info: 'bg-rt-accent text-rt-on-accent',
   warn: 'bg-rt-warn text-rt-ink',
-  ok: 'bg-rt-ok text-white',
-  danger: 'bg-rt-danger text-white',
+  ok: 'bg-rt-ok text-rt-on-accent',
+  danger: 'bg-rt-danger text-rt-on-accent',
 } as const
 
 export function RetroBadge({
@@ -48,7 +48,7 @@ export function RetroBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-[2px] border border-rt-line px-1.5 py-px font-mono text-[11px] font-semibold tracking-wide uppercase shadow-[1px_1px_0_rgb(0_0_0/0.35)]',
+        'inline-flex items-center rounded-[2px] border border-rt-line px-1.5 py-px font-rt-mono text-[11px] font-semibold tracking-wide uppercase shadow-[1px_1px_0_rgb(0_0_0/0.35)]',
         tones[tone],
         className,
       )}

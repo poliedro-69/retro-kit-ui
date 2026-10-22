@@ -1,6 +1,7 @@
 /*
  * Retro UI tokens: Windows 3.1 structure (bevels, title bars, group boxes)
  * with a modern finish (cool grays, gradients, soft shadows, smooth states).
+ * Every color and font is a token, so themes.css can re-skin the kits.
  */
 @theme {
   --color-rt-face: #dde0e6;
@@ -9,13 +10,27 @@
   --color-rt-shadow: #8c93a3;
   --color-rt-line: #20242f;
   --color-rt-ink: #1b1f2a;
+  --color-rt-paper: #ffffff;
+  --color-rt-pressed: #cdd1d9;
   --color-rt-accent: #2b49c9;
   --color-rt-accent-deep: #162a82;
+  --color-rt-accent-hi: #4663e0;
+  --color-rt-accent-press: #1f3aa8;
+  --color-rt-on-accent: #ffffff;
   --color-rt-desktop: #167a84;
+  --color-rt-desktop-ink: #ffffff;
   --color-rt-warn: #f5c542;
   --color-rt-ok: #2f9e5b;
   --color-rt-danger: #d64545;
   --radius-rt: 3px;
+
+  --color-mac-paper: #ffffff;
+  --color-mac-ink: #000000;
+  --color-mac-hover: #f5f5f5;
+  --color-mac-dim: #737373;
+
+  --font-rt: var(--font-plex-sans, 'IBM Plex Sans'), ui-sans-serif, system-ui, sans-serif;
+  --font-rt-mono: var(--font-plex-mono, 'IBM Plex Mono'), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 @utility rt-raised {
@@ -32,7 +47,7 @@
 @utility rt-pressed {
   border: 1px solid var(--color-rt-line);
   border-radius: var(--radius-rt);
-  background-color: #cdd1d9;
+  background-color: var(--color-rt-pressed);
   background-image: none;
   box-shadow: inset 1px 1px 3px rgb(0 0 0 / 0.35);
 }
@@ -40,22 +55,22 @@
 @utility rt-sunken {
   border: 1px solid var(--color-rt-shadow);
   border-radius: 2px;
-  background-color: var(--color-rt-light);
+  background-color: var(--color-rt-paper);
   box-shadow:
     inset 1px 1px 2px rgb(0 0 0 / 0.28),
     1px 1px 0 var(--color-rt-light);
 }
 
 @utility rt-title {
-  color: #fff;
+  color: var(--color-rt-on-accent);
   background-image: linear-gradient(90deg, var(--color-rt-accent-deep), var(--color-rt-accent));
 }
 
 @utility rt-primary {
-  color: #fff;
+  color: var(--color-rt-on-accent);
   border-color: var(--color-rt-accent-deep);
   background-color: var(--color-rt-accent);
-  background-image: linear-gradient(180deg, #4663e0, var(--color-rt-accent));
+  background-image: linear-gradient(180deg, var(--color-rt-accent-hi), var(--color-rt-accent));
   box-shadow:
     inset 1px 1px 0 rgb(255 255 255 / 0.35),
     inset -1px -1px 0 var(--color-rt-accent-deep),
@@ -63,7 +78,7 @@
 }
 
 @utility rt-primary-pressed {
-  background-color: #1f3aa8;
+  background-color: var(--color-rt-accent-press);
   background-image: none;
   box-shadow: inset 1px 1px 3px rgb(0 0 0 / 0.5);
 }

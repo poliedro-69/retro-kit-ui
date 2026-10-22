@@ -5,6 +5,7 @@ import { RetroBadge, RetroButton, RetroGroup, RetroTabs, RetroWindow } from '@/c
 import { cn } from '@/lib/utils'
 import { CodeBlock } from './code-block'
 import { ComponentTree } from './component-tree'
+import { ThemePicker } from './theme-picker'
 import type { CodeFile, ExplorerData } from './types'
 
 const initialExpanded = (data: ExplorerData) => {
@@ -20,7 +21,7 @@ function CodePanel({ usage, sources }: { usage: CodeFile; sources: CodeFile[] })
   const file = files[active] ?? usage
 
   return (
-    <div className="rt-sunken flex min-h-0 flex-col bg-white">
+    <div className="rt-sunken flex min-h-0 flex-col bg-rt-paper">
       <div role="group" aria-label="Files" className="flex flex-wrap gap-1 border-b border-rt-shadow bg-rt-face p-1.5">
         {files.map((entry, index) => (
           <RetroButton
@@ -92,6 +93,7 @@ export function ComponentExplorer({ data }: { data: ExplorerData }) {
     <RetroWindow
       title="Component Explorer"
       className="w-full"
+      menu={<ThemePicker />}
       bodyClassName="flex flex-col"
       status={
         <>
@@ -104,7 +106,7 @@ export function ComponentExplorer({ data }: { data: ExplorerData }) {
     >
       <div className="grid gap-px bg-rt-shadow lg:h-[44rem] lg:grid-cols-[15rem_minmax(0,1fr)_17rem]">
         <section aria-label="Component tree" className="flex min-h-0 flex-col bg-rt-face p-1.5 lg:overflow-hidden">
-          <div className="rt-sunken min-h-0 flex-1 overflow-auto bg-white p-1 max-lg:max-h-72">
+          <div className="rt-sunken min-h-0 flex-1 overflow-auto bg-rt-paper p-1 max-lg:max-h-72">
             <ComponentTree
               kits={data.kits}
               expanded={expanded}
@@ -117,7 +119,7 @@ export function ComponentExplorer({ data }: { data: ExplorerData }) {
 
         <section aria-labelledby="item-title" className="flex min-h-0 flex-col gap-3 bg-rt-face p-3 lg:overflow-auto">
           <header>
-            <h2 id="item-title" className="font-mono text-[18px] font-semibold">
+            <h2 id="item-title" className="font-rt-mono text-[18px] font-semibold">
               {item.name}
             </h2>
             <p className="mt-0.5 leading-snug text-rt-ink/80">{item.description}</p>
@@ -134,7 +136,7 @@ export function ComponentExplorer({ data }: { data: ExplorerData }) {
                   <div
                     className={cn(
                       'rt-sunken flex min-h-80 items-center justify-center overflow-auto p-6',
-                      isMac ? 'bg-white bg-[radial-gradient(#000_0.75px,transparent_0.75px)] bg-[length:4px_4px]' : 'rt-desktop',
+                      isMac ? 'bg-mac-paper bg-[radial-gradient(var(--color-mac-ink)_0.75px,transparent_0.75px)] bg-[length:4px_4px]' : 'rt-desktop',
                     )}
                   >
                     <div key={item.id} className="flex w-full justify-center">
@@ -154,7 +156,7 @@ export function ComponentExplorer({ data }: { data: ExplorerData }) {
 
         <aside aria-label="Properties" className="flex min-h-0 flex-col gap-3 bg-rt-face p-3 lg:overflow-auto">
           <RetroGroup legend="Import">
-            <pre className="rt-sunken overflow-x-auto bg-white p-2 font-mono text-[11px] leading-relaxed whitespace-pre-wrap">
+            <pre className="rt-sunken overflow-x-auto bg-rt-paper p-2 font-mono text-[11px] leading-relaxed whitespace-pre-wrap">
               {item.importStatement || kit.setup || 'No import needed'}
             </pre>
           </RetroGroup>

@@ -45,7 +45,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
           <span className="flex-1 truncate">
             {added > 0 ? `${added} in cart` : soldOut ? 'Sold out' : `${product.stock} left in stock`}
           </span>
-          <span aria-hidden="true" className="font-mono text-[11px] text-rt-shadow">
+          <span aria-hidden="true" className="font-rt-mono text-[11px] text-rt-shadow">
             F1=Help
           </span>
         </>
@@ -80,7 +80,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
               {Array.from({ length: 5 }, (_, i) => (
                 <span
                   key={i}
-                  className={`size-2.5 rounded-[1px] border border-rt-line ${i < product.rating ? 'bg-rt-accent' : 'bg-white'}`}
+                  className={`size-2.5 rounded-[1px] border border-rt-line ${i < product.rating ? 'bg-rt-accent' : 'bg-rt-paper'}`}
                 />
               ))}
             </span>
@@ -154,7 +154,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
                 {formatter.format(product.oldPrice * quantity)}
               </span>
             ) : null}
-            <span className="font-mono text-[16px] font-semibold tabular-nums">{formatter.format(total)}</span>
+            <span className="font-rt-mono text-[16px] font-semibold tabular-nums">{formatter.format(total)}</span>
           </output>
         </div>
 

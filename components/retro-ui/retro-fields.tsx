@@ -134,7 +134,7 @@ export function RetroGroup({
   return (
     <fieldset
       className={cn(
-        'rounded-[3px] border border-rt-shadow px-3 pt-1 pb-2.5 shadow-[1px_1px_0_#fff,inset_1px_1px_0_#fff]',
+        'rounded-[3px] border border-rt-shadow px-3 pt-1 pb-2.5 shadow-[1px_1px_0_var(--color-rt-light),inset_1px_1px_0_var(--color-rt-light)]',
         className,
       )}
     >

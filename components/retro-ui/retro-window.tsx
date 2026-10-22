@@ -37,8 +37,8 @@ export function RetroWindow({
     <section
       aria-label={title}
       className={cn(
-        'flex flex-col rounded-[5px] border border-rt-line bg-rt-face p-0.75 text-[13px] text-rt-ink',
-        'shadow-[inset_1px_1px_0_#fff,0_2px_0_rgb(0_0_0/0.25),0_16px_32px_-12px_rgb(0_0_0/0.55)]',
+        'flex flex-col rounded-[5px] border border-rt-line bg-rt-face p-0.75 font-rt text-[13px] text-rt-ink',
+        'shadow-[inset_1px_1px_0_var(--color-rt-light),0_2px_0_rgb(0_0_0/0.25),0_16px_32px_-12px_rgb(0_0_0/0.55)]',
         className,
       )}
     >
@@ -50,17 +50,17 @@ export function RetroWindow({
             aria-label="Close window"
             className={cn(
               boxClass,
-              'transition-colors hover:bg-white active:rt-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent',
+              'transition-colors hover:bg-rt-light active:rt-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent',
             )}
           >
-            <span className="block h-0.75 w-3 rounded-[1px] border border-rt-line bg-white" />
+            <span className="block h-0.75 w-3 rounded-[1px] border border-rt-line bg-rt-paper" />
           </button>
         ) : (
           <span aria-hidden="true" className={boxClass}>
-            <span className="block h-0.75 w-3 rounded-[1px] border border-rt-line bg-white" />
+            <span className="block h-0.75 w-3 rounded-[1px] border border-rt-line bg-rt-paper" />
           </span>
         )}
-        <Title className="rt-title flex h-5.5 min-w-0 flex-1 items-center truncate rounded-[2px] px-2.5 font-mono text-[11px] font-semibold tracking-widest uppercase">
+        <Title className="rt-title flex h-5.5 min-w-0 flex-1 items-center truncate rounded-[2px] px-2.5 font-rt-mono text-[11px] font-semibold tracking-widest uppercase">
           {title}
         </Title>
         <span aria-hidden="true" className={boxClass}>

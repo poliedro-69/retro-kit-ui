@@ -69,12 +69,13 @@ const pkg = {
   repository: { type: 'git', url: `git+${author.repository}.git` },
   type: 'module',
   sideEffects: ['**/*.css'],
-  files: ['dist', 'styles.css', 'LICENSE', 'README.md'],
+  files: ['dist', 'styles.css', 'themes.css', 'LICENSE', 'README.md'],
   exports: {
     '.': { types: './dist/index.d.ts', default: './dist/index.js' },
     './windows': { types: './dist/windows/index.d.ts', default: './dist/windows/index.js' },
     './mac': { types: './dist/mac/index.d.ts', default: './dist/mac/index.js' },
     './styles.css': './styles.css',
+    './themes.css': './themes.css',
   },
   scripts: { build: 'tsc -p tsconfig.json' },
   dependencies: {

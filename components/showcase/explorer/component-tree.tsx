@@ -20,7 +20,7 @@ function Folder({ open }: { open: boolean }) {
       <path
         d={open ? 'M1 3h5l1.5 1.5H14V12H1Z' : 'M1 2h5l1.5 1.5H15V12H1Z'}
         fill="#f3d36b"
-        stroke="#000"
+        stroke="var(--color-rt-ink)"
         strokeWidth="1"
         strokeLinejoin="round"
       />
@@ -31,8 +31,8 @@ function Folder({ open }: { open: boolean }) {
 function Doc() {
   return (
     <svg viewBox="0 0 16 16" aria-hidden="true" className="size-4 shrink-0">
-      <path d="M3 1.5h6.5L13 5v9.5H3Z" fill="#fff" stroke="#000" strokeWidth="1" strokeLinejoin="round" />
-      <path d="M9.5 1.5V5H13M5 8h6M5 10.5h6" fill="none" stroke="#000" strokeWidth="1" />
+      <path d="M3 1.5h6.5L13 5v9.5H3Z" fill="var(--color-rt-paper)" stroke="var(--color-rt-ink)" strokeWidth="1" strokeLinejoin="round" />
+      <path d="M9.5 1.5V5H13M5 8h6M5 10.5h6" fill="none" stroke="var(--color-rt-ink)" strokeWidth="1" />
     </svg>
   )
 }
@@ -89,7 +89,7 @@ export function ComponentTree({ kits, expanded, selectedId, onToggle, onSelect }
                                     className={cn(
                                       rowBase,
                                       'pl-3',
-                                      selected ? 'bg-rt-accent text-white' : 'hover:bg-rt-face-hi',
+                                      selected ? 'bg-rt-accent text-rt-on-accent' : 'hover:bg-rt-face-hi',
                                     )}
                                   >
                                     <Doc />

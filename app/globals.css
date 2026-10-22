@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import '../packages/retro-ui/styles.css';
+@import '../packages/retro-ui/themes.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -193,6 +194,19 @@
   padding-right: 0.5rem;
   text-align: right;
   color: var(--color-rt-shadow);
-  border-right: 1px solid #e3e5ea;
+  border-right: 1px solid var(--color-rt-face);
   user-select: none;
+}
+
+.rt-code span {
+  color: var(--shiki-light);
+}
+
+[data-rt-tone='dark'] .rt-code span {
+  color: var(--shiki-dark);
+}
+
+[data-rt-theme='phosphor'] .rt-code span,
+[data-rt-theme='amber'] .rt-code span {
+  color: var(--color-rt-ink);
 }

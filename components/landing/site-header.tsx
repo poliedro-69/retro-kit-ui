@@ -25,7 +25,7 @@ export function SiteHeader() {
             <a
               key={link.href}
               href={link.href}
-              className="hidden px-3 py-1 text-[13px] hover:bg-rt-accent hover:text-white focus-visible:outline-2 focus-visible:outline-rt-accent sm:inline-block"
+              className="hidden px-3 py-1 text-[13px] hover:bg-rt-accent hover:text-rt-on-accent focus-visible:outline-2 focus-visible:outline-rt-accent sm:inline-block"
             >
               {link.label}
             </a>

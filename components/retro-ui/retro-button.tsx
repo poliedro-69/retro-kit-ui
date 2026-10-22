@@ -34,7 +34,7 @@ export function RetroButton({
       type={type}
       className={cn(
         base,
-        'disabled:cursor-not-allowed disabled:text-rt-shadow disabled:[text-shadow:1px_1px_0_#fff] disabled:hover:brightness-100',
+        'disabled:cursor-not-allowed disabled:text-rt-shadow disabled:[text-shadow:1px_1px_0_var(--color-rt-light)] disabled:hover:brightness-100',
         sizes[size],
         variant === 'primary' && 'enabled:rt-primary enabled:active:rt-primary-pressed',
         className,

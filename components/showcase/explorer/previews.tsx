@@ -188,15 +188,15 @@ export const macPreviews = {
     <div className="flex w-full max-w-sm flex-col gap-4">
       <MacWindow title="Patterns" bodyClassName="flex gap-3 p-3 text-center">
         <div className="flex-1">
-          <div className={`${macDither} h-14 border-2 border-black`} />
+          <div className={`${macDither} h-14 border-2 border-mac-ink`} />
           <p className="mt-1">dither</p>
         </div>
         <div className="flex-1">
-          <div className="h-14 border-2 border-black bg-black" />
+          <div className="h-14 border-2 border-mac-ink bg-mac-ink" />
           <p className="mt-1">black</p>
         </div>
         <div className="flex-1">
-          <div className="h-14 border-2 border-black bg-white shadow-[3px_3px_0_#000]" />
+          <div className="h-14 border-2 border-mac-ink bg-mac-paper shadow-[3px_3px_0_var(--color-mac-ink)]" />
           <p className="mt-1">shadow</p>
         </div>
       </MacWindow>
@@ -223,34 +223,34 @@ export const macPreviews = {
     </MacAlert>
   ),
   button: (
-    <div className="flex flex-wrap items-center justify-center gap-4 border-2 border-black bg-white p-4">
+    <div className="flex flex-wrap items-center justify-center gap-4 border-2 border-mac-ink bg-mac-paper p-4">
       <MacButton>Cancel</MacButton>
       <MacButton isDefault>OK</MacButton>
       <MacButton disabled>Disabled</MacButton>
     </div>
   ),
   input: (
-    <div className="flex w-full max-w-xs flex-col gap-3 border-2 border-black bg-white p-3">
+    <div className="flex w-full max-w-xs flex-col gap-3 border-2 border-mac-ink bg-mac-paper p-3">
       <MacInput label="Name" placeholder="e.g. Macintosh HD" autoComplete="off" />
       <MacInput label="Disabled" disabled defaultValue="Read only" />
     </div>
   ),
   checkbox: (
-    <div className="flex flex-col border-2 border-black bg-white p-3">
+    <div className="flex flex-col border-2 border-mac-ink bg-mac-paper p-3">
       <MacCheckbox label="Include dark dither" defaultChecked />
       <MacCheckbox label="Show invisibles" />
       <MacCheckbox label="Disabled option" disabled />
     </div>
   ),
   radio: (
-    <div className="flex flex-col border-2 border-black bg-white p-3">
+    <div className="flex flex-col border-2 border-mac-ink bg-mac-paper p-3">
       <MacRadio name="mac-mode" label="Easy Install" defaultChecked />
       <MacRadio name="mac-mode" label="Custom Install" />
       <MacRadio name="mac-mode" label="Read only" disabled />
     </div>
   ),
   group: (
-    <div className="w-full max-w-xs border-2 border-black bg-white p-3">
+    <div className="w-full max-w-xs border-2 border-mac-ink bg-mac-paper p-3">
       <MacGroup legend="Options">
         <MacCheckbox label="Run at startup" defaultChecked />
         <MacCheckbox label="Show tips" />
@@ -258,7 +258,7 @@ export const macPreviews = {
     </div>
   ),
   menubar: (
-    <div className="min-h-56 w-full max-w-md border-2 border-black bg-white shadow-[3px_3px_0_#000]">
+    <div className="min-h-56 w-full max-w-md border-2 border-mac-ink bg-mac-paper shadow-[3px_3px_0_var(--color-mac-ink)]">
       <MacMenubar
         menus={[
           { label: 'File', items: ['New', 'Open...', 'Close', 'Quit'] },

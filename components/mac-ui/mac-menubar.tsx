@@ -38,11 +38,11 @@ export function MacMenubar({ menus, label = 'Menu', className, onSelect }: MacMe
       role="menubar"
       aria-label={label}
       className={cn(
-        'flex items-center gap-1 border-b-2 border-black bg-white px-2 font-mono text-[12px] font-semibold text-black',
+        'flex items-center gap-1 border-b-2 border-mac-ink bg-mac-paper px-2 font-rt-mono text-[12px] font-semibold text-mac-ink',
         className,
       )}
     >
-      <span aria-hidden="true" className="mr-2 size-3 rounded-full bg-black" />
+      <span aria-hidden="true" className="mr-2 size-3 rounded-full bg-mac-ink" />
       {menus.map((menu, index) => {
         const isOpen = open === index
         return (
@@ -55,8 +55,8 @@ export function MacMenubar({ menus, label = 'Menu', className, onSelect }: MacMe
               onClick={() => setOpen(isOpen ? null : index)}
               onMouseEnter={() => open !== null && setOpen(index)}
               className={cn(
-                'px-2 py-0.5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-black',
-                isOpen ? 'bg-black text-white' : 'hover:bg-neutral-100',
+                'px-2 py-0.5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-mac-ink',
+                isOpen ? 'bg-mac-ink text-mac-paper' : 'hover:bg-mac-hover',
               )}
             >
               {menu.label}
@@ -65,7 +65,7 @@ export function MacMenubar({ menus, label = 'Menu', className, onSelect }: MacMe
               <ul
                 role="menu"
                 aria-label={menu.label}
-                className="absolute top-full left-0 z-10 min-w-36 border-2 border-black bg-white py-0.5 font-normal shadow-[3px_3px_0_#000]"
+                className="absolute top-full left-0 z-10 min-w-36 border-2 border-mac-ink bg-mac-paper py-0.5 font-normal shadow-[3px_3px_0_var(--color-mac-ink)]"
               >
                 {menu.items.map((item) => (
                   <li key={item} role="none">
@@ -76,7 +76,7 @@ export function MacMenubar({ menus, label = 'Menu', className, onSelect }: MacMe
                         onSelect?.(menu.label, item)
                         setOpen(null)
                       }}
-                      className="block w-full px-3 py-0.5 text-left hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white focus-visible:outline-none"
+                      className="block w-full px-3 py-0.5 text-left hover:bg-mac-ink hover:text-mac-paper focus-visible:bg-mac-ink focus-visible:text-mac-paper focus-visible:outline-none"
                     >
                       {item}
                     </button>

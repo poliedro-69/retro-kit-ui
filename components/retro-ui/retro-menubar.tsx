@@ -17,7 +17,7 @@ export function RetroMenubar({ items, label = 'Menu', className, onSelect }: Ret
           key={item}
           type="button"
           onClick={() => onSelect?.(item)}
-          className="rounded-[2px] px-2 py-0.5 text-[13px] transition-colors hover:bg-rt-accent hover:text-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-rt-accent"
+          className="rounded-[2px] px-2 py-0.5 text-[13px] transition-colors hover:bg-rt-accent hover:text-rt-on-accent focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-rt-accent"
         >
           <u className="underline-offset-2">{item[0]}</u>
           {item.slice(1)}

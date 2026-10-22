@@ -23,7 +23,7 @@ export function CodeBlock({ file }: { file: CodeFile }) {
   }
 
   return (
-    <figure className="m-0 bg-white">
+    <figure className="m-0 bg-rt-paper">
       <figcaption className="flex items-center justify-between gap-2 border-b border-rt-shadow bg-rt-face-hi px-2 py-1">
         <span className="truncate font-mono text-[11px] text-rt-ink/80">{file.name}</span>
         <RetroButton size="sm" onClick={copy}>
