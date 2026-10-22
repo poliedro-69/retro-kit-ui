@@ -1,10 +1,24 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
+import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google'
 import './globals.css'
 
+const plexSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-plex-sans',
+})
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  variable: '--font-plex-mono',
+})
+
 export const metadata: Metadata = {
-  title: 'Tienda Retro - Tarjetas de producto estilo Windows 3.1',
-  description: 'Bloque de tarjetas de producto ecommerce con Tailwind y estética de interfaces clásicas de Windows 3.1.',
+  title: 'Retro UI - Componentes Tailwind estilo Windows 3.1',
+  description:
+    'Librería de componentes React + Tailwind con estructura de Windows 3.1 y acabado moderno: ventanas, botones, formularios, pestañas, diálogos y tarjetas de producto.',
   generator: 'v0.app',
   icons: {
     icon: [
@@ -26,11 +40,8 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#167a84',
 }
 
 export default function RootLayout({
@@ -39,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body className="antialiased">
+    <html lang="es" className={`${plexSans.variable} ${plexMono.variable}`}>
+      <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

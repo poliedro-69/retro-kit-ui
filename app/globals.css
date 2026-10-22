@@ -5,6 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -153,42 +155,80 @@
   }
 }
 
+/*
+ * Retro UI tokens: Windows 3.1 structure (bevels, title bars, group boxes)
+ * with a modern finish (cool grays, gradients, soft shadows, smooth states).
+ */
 @theme {
-  --color-win-face: #c0c0c0;
-  --color-win-shadow: #808080;
-  --color-win-title: #000080;
-  --color-win-desktop: #008080;
-  --font-win: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+  --color-rt-face: #dde0e6;
+  --color-rt-face-hi: #eceef2;
+  --color-rt-light: #ffffff;
+  --color-rt-shadow: #8c93a3;
+  --color-rt-line: #20242f;
+  --color-rt-ink: #1b1f2a;
+  --color-rt-accent: #2b49c9;
+  --color-rt-accent-deep: #162a82;
+  --color-rt-desktop: #167a84;
+  --color-rt-warn: #f5c542;
+  --color-rt-ok: #2f9e5b;
+  --color-rt-danger: #d64545;
+  --radius-rt: 3px;
 }
 
-@utility win-raised {
-  border: 1px solid #000;
-  background-color: var(--color-win-face);
+@utility rt-raised {
+  border: 1px solid var(--color-rt-line);
+  border-radius: var(--radius-rt);
+  background-color: var(--color-rt-face);
+  background-image: linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face));
   box-shadow:
-    inset 1px 1px 0 #fff,
-    inset -2px -2px 0 var(--color-win-shadow);
+    inset 1px 1px 0 var(--color-rt-light),
+    inset -1px -1px 0 var(--color-rt-shadow),
+    0 1px 2px rgb(0 0 0 / 0.18);
 }
 
-@utility win-pressed {
-  border: 1px solid #000;
-  background-color: var(--color-win-face);
-  box-shadow: inset 1px 1px 0 var(--color-win-shadow);
+@utility rt-pressed {
+  border: 1px solid var(--color-rt-line);
+  border-radius: var(--radius-rt);
+  background-color: #cdd1d9;
+  background-image: none;
+  box-shadow: inset 1px 1px 3px rgb(0 0 0 / 0.35);
 }
 
-@utility win-sunken {
-  border: 1px solid var(--color-win-shadow);
-  border-right-color: #fff;
-  border-bottom-color: #fff;
-  box-shadow: inset 1px 1px 0 #000;
+@utility rt-sunken {
+  border: 1px solid var(--color-rt-shadow);
+  border-radius: 2px;
+  background-color: var(--color-rt-light);
+  box-shadow:
+    inset 1px 1px 2px rgb(0 0 0 / 0.28),
+    1px 1px 0 var(--color-rt-light);
 }
 
-@utility win-dither {
-  background-color: #fff;
-  background-image:
-    linear-gradient(45deg, #c0c0c0 25%, transparent 25%, transparent 75%, #c0c0c0 75%),
-    linear-gradient(45deg, #c0c0c0 25%, transparent 25%, transparent 75%, #c0c0c0 75%);
-  background-size: 4px 4px;
-  background-position: 0 0, 2px 2px;
+@utility rt-title {
+  color: #fff;
+  background-image: linear-gradient(90deg, var(--color-rt-accent-deep), var(--color-rt-accent));
+}
+
+@utility rt-primary {
+  color: #fff;
+  border-color: var(--color-rt-accent-deep);
+  background-color: var(--color-rt-accent);
+  background-image: linear-gradient(180deg, #4663e0, var(--color-rt-accent));
+  box-shadow:
+    inset 1px 1px 0 rgb(255 255 255 / 0.35),
+    inset -1px -1px 0 var(--color-rt-accent-deep),
+    0 1px 2px rgb(0 0 0 / 0.25);
+}
+
+@utility rt-primary-pressed {
+  background-color: #1f3aa8;
+  background-image: none;
+  box-shadow: inset 1px 1px 3px rgb(0 0 0 / 0.5);
+}
+
+@utility rt-desktop {
+  background-color: var(--color-rt-desktop);
+  background-image: radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px);
+  background-size: 14px 14px;
 }
 
 @layer base {

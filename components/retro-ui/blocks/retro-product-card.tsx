@@ -2,8 +2,11 @@
 
 import Image from 'next/image'
 import { useId, useState } from 'react'
-import { WinButton, WinCheckbox, WinGroup, WinRadio } from './win-controls'
-import { WinWindow } from './win-window'
+import { RetroBadge } from '../retro-feedback'
+import { RetroButton } from '../retro-button'
+import { RetroCheckbox, RetroGroup, RetroRadio } from '../retro-fields'
+import { RetroMenubar } from '../retro-menubar'
+import { RetroWindow } from '../retro-window'
 
 export type RetroProduct = {
   id: string
@@ -21,21 +24,22 @@ export type RetroProduct = {
 }
 
 const formatter = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })
+const GIFT_PRICE = 2.5
 
 export function RetroProductCard({ product }: { product: RetroProduct }) {
   const groupName = useId()
-  const [option, setOption] = useState(product.options[0])
   const [quantity, setQuantity] = useState(1)
   const [gift, setGift] = useState(false)
   const [added, setAdded] = useState(0)
 
-  const total = product.price * quantity + (gift ? 2.5 : 0)
+  const total = product.price * quantity + (gift ? GIFT_PRICE : 0)
   const soldOut = product.stock === 0
 
   return (
-    <WinWindow
+    <RetroWindow
       title={product.fileName}
       className="w-full max-w-sm"
+      menu={<RetroMenubar items={['Archivo', 'Edición', 'Ver', 'Ayuda']} />}
       status={
         <>
           <span className="flex-1 truncate">
@@ -45,21 +49,14 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
                 ? 'Agotado'
                 : `Quedan ${product.stock} uds.`}
           </span>
-          <span aria-hidden="true">F1=Ayuda</span>
+          <span aria-hidden="true" className="font-mono text-[11px] text-rt-shadow">
+            F1=Ayuda
+          </span>
         </>
       }
     >
-      <nav aria-label="Menú" className="flex gap-4 px-1.5 pb-1 [&_span]:underline-offset-2">
-        {['Archivo', 'Edición', 'Ver', 'Ayuda'].map((item) => (
-          <span key={item}>
-            <u>{item[0]}</u>
-            {item.slice(1)}
-          </span>
-        ))}
-      </nav>
-
-      <div className="flex flex-col gap-2.5 border-t border-win-shadow p-2.5 shadow-[0_-1px_0_#fff]">
-        <div className="win-sunken relative aspect-4/3 overflow-hidden bg-white">
+      <div className="flex flex-col gap-3 p-3">
+        <div className="rt-sunken relative aspect-4/3 overflow-hidden">
           <Image
             src={product.image}
             alt={product.name}
@@ -68,24 +65,26 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
             className="object-cover [image-rendering:pixelated]"
           />
           {product.oldPrice ? (
-            <span className="absolute top-1.5 left-1.5 border border-black bg-yellow-300 px-1.5 py-px text-[11px] font-bold">
-              ¡OFERTA!
-            </span>
+            <RetroBadge tone="warn" className="absolute top-2 left-2">
+              Oferta
+            </RetroBadge>
+          ) : null}
+          {soldOut ? (
+            <RetroBadge tone="danger" className="absolute top-2 right-2">
+              Agotado
+            </RetroBadge>
           ) : null}
         </div>
 
         <div>
-          <h3 className="text-[15px] font-bold">{product.name}</h3>
-          <p className="mt-0.5 leading-snug">{product.description}</p>
-          <p
-            className="mt-1.5 flex items-center gap-1 text-[12px]"
-            aria-label={`Valoración ${product.rating} de 5`}
-          >
+          <h3 className="text-[16px] font-semibold">{product.name}</h3>
+          <p className="mt-0.5 leading-snug text-rt-ink/80">{product.description}</p>
+          <p className="mt-1.5 flex items-center gap-1.5 text-[12px]" aria-label={`Valoración ${product.rating} de 5`}>
             <span aria-hidden="true" className="flex gap-0.5">
               {Array.from({ length: 5 }, (_, i) => (
                 <span
                   key={i}
-                  className={`h-2.5 w-2.5 border border-black ${i < product.rating ? 'bg-win-title' : 'bg-white'}`}
+                  className={`size-2.5 rounded-[1px] border border-rt-line ${i < product.rating ? 'bg-rt-accent' : 'bg-white'}`}
                 />
               ))}
             </span>
@@ -93,93 +92,94 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
           </p>
         </div>
 
-        <WinGroup legend="Características">
-          <dl className="win-sunken grid grid-cols-[auto_1fr] gap-x-3 bg-white px-2 py-1 text-[12px]">
+        <RetroGroup legend="Características">
+          <dl className="rt-sunken grid grid-cols-[auto_1fr] gap-x-3 px-2 py-1.5 text-[12px]">
             {product.specs.map((spec) => (
               <div key={spec.label} className="col-span-2 grid grid-cols-subgrid">
-                <dt className="font-bold">{spec.label}:</dt>
+                <dt className="font-semibold">{spec.label}</dt>
                 <dd>{spec.value}</dd>
               </div>
             ))}
           </dl>
-        </WinGroup>
+        </RetroGroup>
 
-        <WinGroup legend={product.optionsLabel}>
+        <RetroGroup legend={product.optionsLabel}>
           <div role="radiogroup" aria-label={product.optionsLabel} className="flex flex-wrap gap-x-4">
-            {product.options.map((value) => (
-              <WinRadio
+            {product.options.map((value, index) => (
+              <RetroRadio
                 key={value}
                 name={groupName}
                 value={value}
                 label={value}
-                checked={option === value}
-                onChange={setOption}
+                defaultChecked={index === 0}
               />
             ))}
           </div>
-          <div className="mt-1">
-            <WinCheckbox label="Envolver para regalo (+2,50 €)" checked={gift} onChange={setGift} />
-          </div>
-        </WinGroup>
+          <RetroCheckbox
+            label={`Envolver para regalo (+${formatter.format(GIFT_PRICE)})`}
+            checked={gift}
+            onChange={(event) => setGift(event.target.checked)}
+          />
+        </RetroGroup>
 
         <div className="flex items-stretch gap-2">
           <div className="flex items-center gap-1.5">
-            <label htmlFor={`${groupName}-qty`}>
-              <u>C</u>antidad:
+            <label htmlFor={`${groupName}-qty`} className="font-medium">
+              Cantidad
             </label>
             <input
               id={`${groupName}-qty`}
               readOnly
               value={quantity}
-              className="win-sunken h-6.5 w-9 bg-white text-center text-[13px] outline-none"
+              className="rt-sunken h-7 w-9 text-center text-[13px] outline-none"
             />
             <div className="flex flex-col gap-px">
-              <WinButton
+              <RetroButton
+                size="sm"
                 aria-label="Aumentar cantidad"
                 className="h-3 min-h-0 w-5 px-0 text-[7px] leading-none"
                 disabled={quantity >= Math.max(product.stock, 1)}
                 onClick={() => setQuantity((q) => q + 1)}
               >
                 ▲
-              </WinButton>
-              <WinButton
+              </RetroButton>
+              <RetroButton
+                size="sm"
                 aria-label="Disminuir cantidad"
                 className="h-3 min-h-0 w-5 px-0 text-[7px] leading-none"
                 disabled={quantity <= 1}
                 onClick={() => setQuantity((q) => q - 1)}
               >
                 ▼
-              </WinButton>
+              </RetroButton>
             </div>
           </div>
 
           <output
             aria-live="polite"
-            className="win-sunken ml-auto flex flex-col items-end justify-center bg-white px-2 leading-tight"
+            className="rt-sunken ml-auto flex flex-col items-end justify-center px-2.5 leading-tight"
           >
             {product.oldPrice ? (
-              <span className="text-[11px] text-win-shadow line-through">
+              <span className="text-[11px] text-rt-shadow line-through">
                 {formatter.format(product.oldPrice * quantity)}
               </span>
             ) : null}
-            <span className="text-[16px] font-bold tabular-nums">{formatter.format(total)}</span>
+            <span className="font-mono text-[16px] font-semibold tabular-nums">{formatter.format(total)}</span>
           </output>
         </div>
 
         <div className="flex gap-2">
-          <WinButton
-            isDefault
-            className="flex-1 font-bold"
+          <RetroButton
+            variant="primary"
+            className="flex-1 font-semibold"
             disabled={soldOut}
             onClick={() => setAdded((n) => n + quantity)}
           >
-            <u>A</u>ñadir al carrito
-          </WinButton>
-          <WinButton disabled={soldOut} aria-label="Comprar ahora">
-            <u>C</u>omprar
-          </WinButton>
+            Añadir al carrito
+          </RetroButton>
+          <RetroButton disabled={soldOut}>Comprar</RetroButton>
         </div>
       </div>
-    </WinWindow>
+    </RetroWindow>
   )
 }
