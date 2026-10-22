@@ -1,0 +1,125 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "retro-ui",
+  "title": "Windows 3.1 Kit",
+  "description": "Windows 3.1 structure with a modern finish: window, button, fields, menubar, tabs, feedback and dialog.",
+  "dependencies": [
+    "clsx",
+    "tailwind-merge"
+  ],
+  "files": [
+    {
+      "path": "components/retro-ui/index.ts",
+      "content": "export { RetroWindow } from './retro-window'\nexport { RetroButton, RetroLinkButton } from './retro-button'\nexport { RetroInput, RetroSelect, RetroCheckbox, RetroRadio, RetroGroup } from './retro-fields'\nexport { RetroMenubar } from './retro-menubar'\nexport { RetroTabs, type RetroTab } from './retro-tabs'\nexport { RetroProgress, RetroBadge } from './retro-feedback'\nexport { RetroDialog } from './retro-dialog'\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/index.ts"
+    },
+    {
+      "path": "components/retro-ui/retro-button.tsx",
+      "content": "import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype Variant = 'default' | 'primary'\ntype Size = 'sm' | 'md'\n\nconst base = cn(\n  'rt-raised inline-flex items-center justify-center gap-1.5 text-[13px] font-medium text-rt-ink select-none',\n  'transition-[filter,box-shadow] duration-100 hover:brightness-105',\n  'active:rt-pressed active:[&>span]:translate-y-px',\n  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent',\n)\n\nconst sizes: Record<Size, string> = {\n  md: 'min-h-7 px-4',\n  sm: 'min-h-5.5 px-2 text-[12px]',\n}\n\ntype RetroButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {\n  variant?: Variant\n  size?: Size\n}\n\nexport function RetroButton({\n  variant = 'default',\n  size = 'md',\n  className,\n  children,\n  type = 'button',\n  ...props\n}: RetroButtonProps) {\n  return (\n    <button\n      type={type}\n      className={cn(\n        base,\n        'disabled:cursor-not-allowed disabled:text-rt-shadow disabled:[text-shadow:1px_1px_0_#fff] disabled:hover:brightness-100',\n        sizes[size],\n        variant === 'primary' && 'enabled:rt-primary enabled:active:rt-primary-pressed',\n        className,\n      )}\n      {...props}\n    >\n      <span className=\"inline-flex items-center gap-1.5\">{children}</span>\n    </button>\n  )\n}\n\ntype RetroLinkButtonProps = AnchorHTMLAttributes<HTMLAnchorElement> & {\n  variant?: Variant\n  size?: Size\n}\n\nexport function RetroLinkButton({\n  variant = 'default',\n  size = 'md',\n  className,\n  children,\n  ...props\n}: RetroLinkButtonProps) {\n  return (\n    <a\n      className={cn(\n        base,\n        'no-underline',\n        sizes[size],\n        variant === 'primary' && 'any-link:rt-primary any-link:active:rt-primary-pressed',\n        className,\n      )}\n      {...props}\n    >\n      <span className=\"inline-flex items-center gap-1.5\">{children}</span>\n    </a>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-button.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-dialog.tsx",
+      "content": "'use client'\n\nimport { useEffect, useRef } from 'react'\nimport type { ReactNode } from 'react'\nimport { RetroWindow } from './retro-window'\n\ntype RetroDialogProps = {\n  open: boolean\n  onClose: () => void\n  title: string\n  children: ReactNode\n  actions?: ReactNode\n}\n\nexport function RetroDialog({ open, onClose, title, children, actions }: RetroDialogProps) {\n  const ref = useRef<HTMLDialogElement>(null)\n\n  useEffect(() => {\n    const dialog = ref.current\n    if (!dialog) return\n    if (open && !dialog.open) dialog.showModal()\n    if (!open && dialog.open) dialog.close()\n  }, [open])\n\n  return (\n    <dialog\n      ref={ref}\n      onClose={onClose}\n      aria-label={title}\n      className=\"m-auto w-[min(92vw,26rem)] bg-transparent p-0 backdrop:bg-black/45 backdrop:backdrop-blur-[2px]\"\n    >\n      <RetroWindow title={title} onClose={onClose}>\n        <div className=\"flex gap-3 p-4\">{children}</div>\n        {actions ? <div className=\"flex justify-center gap-2 px-4 pb-4\">{actions}</div> : null}\n      </RetroWindow>\n    </dialog>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-dialog.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-feedback.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport function RetroProgress({\n  value,\n  label,\n  className,\n}: {\n  value: number\n  label: string\n  className?: string\n}) {\n  const clamped = Math.min(100, Math.max(0, value))\n  return (\n    <div\n      role=\"progressbar\"\n      aria-label={label}\n      aria-valuemin={0}\n      aria-valuemax={100}\n      aria-valuenow={Math.round(clamped)}\n      className={cn('rt-sunken h-5.5 p-0.5', className)}\n    >\n      <div\n        className=\"h-full bg-[repeating-linear-gradient(90deg,var(--color-rt-accent)_0_9px,transparent_9px_12px)] transition-[width] duration-200\"\n        style={{ width: `${clamped}%` }}\n      />\n    </div>\n  )\n}\n\nconst tones = {\n  neutral: 'bg-rt-face text-rt-ink',\n  info: 'bg-rt-accent text-white',\n  warn: 'bg-rt-warn text-rt-ink',\n  ok: 'bg-rt-ok text-white',\n  danger: 'bg-rt-danger text-white',\n} as const\n\nexport function RetroBadge({\n  tone = 'neutral',\n  children,\n  className,\n}: {\n  tone?: keyof typeof tones\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <span\n      className={cn(\n        'inline-flex items-center rounded-[2px] border border-rt-line px-1.5 py-px font-mono text-[11px] font-semibold tracking-wide uppercase shadow-[1px_1px_0_rgb(0_0_0/0.35)]',\n        tones[tone],\n        className,\n      )}\n    >\n      {children}\n    </span>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-feedback.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-fields.tsx",
+      "content": "import { useId } from 'react'\nimport type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\nconst focusRing =\n  'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-rt-accent'\n\ntype RetroInputProps = InputHTMLAttributes<HTMLInputElement> & {\n  label?: string\n  hint?: string\n}\n\nexport function RetroInput({ label, hint, className, id, ...props }: RetroInputProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={inputId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <input\n        id={inputId}\n        aria-describedby={hint ? `${inputId}-hint` : undefined}\n        className={cn(\n          'rt-sunken h-7 px-2 text-[13px] text-rt-ink placeholder:text-rt-shadow',\n          'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n          focusRing,\n          className,\n        )}\n        {...props}\n      />\n      {hint ? (\n        <p id={`${inputId}-hint`} className=\"text-[12px] text-rt-shadow\">\n          {hint}\n        </p>\n      ) : null}\n    </div>\n  )\n}\n\ntype RetroSelectProps = SelectHTMLAttributes<HTMLSelectElement> & {\n  label?: string\n}\n\nexport function RetroSelect({ label, className, id, children, ...props }: RetroSelectProps) {\n  const autoId = useId()\n  const selectId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={selectId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <div className=\"relative\">\n        <select\n          id={selectId}\n          className={cn(\n            'rt-sunken h-7 w-full cursor-pointer appearance-none pr-8 pl-2 text-[13px] text-rt-ink',\n            'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n            focusRing,\n            className,\n          )}\n          {...props}\n        >\n          {children}\n        </select>\n        <span\n          aria-hidden=\"true\"\n          className=\"rt-raised pointer-events-none absolute top-0.5 right-0.5 bottom-0.5 flex w-5.5 items-center justify-center\"\n        >\n          <svg viewBox=\"0 0 8 8\" className=\"size-2 fill-current\">\n            <path d=\"M0 2h8L4 7z\" />\n          </svg>\n        </span>\n      </div>\n    </div>\n  )\n}\n\ntype ToggleProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {\n  label: ReactNode\n}\n\nconst toggleLabel =\n  'flex cursor-pointer items-center gap-2 py-0.5 has-disabled:cursor-not-allowed has-disabled:text-rt-shadow'\n\nexport function RetroCheckbox({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"checkbox\" className=\"peer sr-only\" {...props} />\n      <span\n        aria-hidden=\"true\"\n        className=\"rt-sunken flex size-4 shrink-0 items-center justify-center peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-rt-accent peer-checked:[&_svg]:scale-100\"\n      >\n        <svg\n          viewBox=\"0 0 10 10\"\n          className=\"size-2.5 scale-0 fill-none stroke-rt-ink stroke-[1.8] transition-transform duration-100\"\n        >\n          <path d=\"M1.5 5.2 4 7.7 8.5 2.5\" strokeLinecap=\"square\" />\n        </svg>\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function RetroRadio({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"radio\" className=\"peer sr-only\" {...props} />\n      <span\n        aria-hidden=\"true\"\n        className=\"rt-sunken flex size-4 shrink-0 items-center justify-center rounded-full peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-rt-accent peer-checked:[&_i]:scale-100\"\n      >\n        <i className=\"block size-1.75 scale-0 rounded-full bg-rt-ink transition-transform duration-100\" />\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function RetroGroup({\n  legend,\n  children,\n  className,\n}: {\n  legend: string\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <fieldset\n      className={cn(\n        'rounded-[3px] border border-rt-shadow px-3 pt-1 pb-2.5 shadow-[1px_1px_0_#fff,inset_1px_1px_0_#fff]',\n        className,\n      )}\n    >\n      <legend className=\"px-1.5 text-[12px] font-semibold tracking-wide\">{legend}</legend>\n      {children}\n    </fieldset>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-fields.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-menubar.tsx",
+      "content": "'use client'\n\nimport { cn } from '@/lib/utils'\n\ntype RetroMenubarProps = {\n  items: string[]\n  label?: string\n  className?: string\n  onSelect?: (item: string) => void\n}\n\nexport function RetroMenubar({ items, label = 'Menu', className, onSelect }: RetroMenubarProps) {\n  return (\n    <nav aria-label={label} className={cn('flex gap-0.5 px-0.5', className)}>\n      {items.map((item) => (\n        <button\n          key={item}\n          type=\"button\"\n          onClick={() => onSelect?.(item)}\n          className=\"rounded-[2px] px-2 py-0.5 text-[13px] transition-colors hover:bg-rt-accent hover:text-white focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-rt-accent\"\n        >\n          <u className=\"underline-offset-2\">{item[0]}</u>\n          {item.slice(1)}\n        </button>\n      ))}\n    </nav>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-menubar.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-tabs.tsx",
+      "content": "'use client'\n\nimport { useId, useRef, useState } from 'react'\nimport type { KeyboardEvent, ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport type RetroTab = { id: string; label: string; content: ReactNode }\n\ntype RetroTabsProps = {\n  tabs: RetroTab[]\n  value?: string\n  onValueChange?: (id: string) => void\n  className?: string\n  panelClassName?: string\n}\n\nexport function RetroTabs({ tabs, value, onValueChange, className, panelClassName }: RetroTabsProps) {\n  const baseId = useId()\n  const [inner, setInner] = useState(tabs[0]?.id)\n  const active = value ?? inner\n  const buttons = useRef<Record<string, HTMLButtonElement | null>>({})\n\n  function setActive(id: string) {\n    setInner(id)\n    onValueChange?.(id)\n  }\n\n  function onKeyDown(event: KeyboardEvent, index: number) {\n    const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0\n    if (!step) return\n    event.preventDefault()\n    const next = tabs[(index + step + tabs.length) % tabs.length]\n    setActive(next.id)\n    buttons.current[next.id]?.focus()\n  }\n\n  return (\n    <div className={cn('flex flex-col', className)}>\n      <div role=\"tablist\" className=\"flex items-end gap-0.5 px-1\">\n        {tabs.map((tab, index) => {\n          const selected = tab.id === active\n          return (\n            <button\n              key={tab.id}\n              ref={(node) => {\n                buttons.current[tab.id] = node\n              }}\n              id={`${baseId}-tab-${tab.id}`}\n              role=\"tab\"\n              type=\"button\"\n              aria-selected={selected}\n              aria-controls={`${baseId}-panel-${tab.id}`}\n              tabIndex={selected ? 0 : -1}\n              onClick={() => setActive(tab.id)}\n              onKeyDown={(event) => onKeyDown(event, index)}\n              className={cn(\n                'rt-raised relative rounded-b-none px-3.5 text-[13px] font-medium transition-[filter] hover:brightness-105',\n                'focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-rt-accent',\n                selected ? 'z-10 -mb-px h-7.5 border-b-rt-face bg-rt-face' : 'h-6.5 text-rt-ink/75',\n              )}\n            >\n              {tab.label}\n            </button>\n          )\n        })}\n      </div>\n      {tabs.map((tab) => (\n        <div\n          key={tab.id}\n          id={`${baseId}-panel-${tab.id}`}\n          role=\"tabpanel\"\n          aria-labelledby={`${baseId}-tab-${tab.id}`}\n          hidden={tab.id !== active}\n          className={panelClassName ?? 'rt-raised rounded-[3px] p-3'}\n        >\n          {tab.content}\n        </div>\n      ))}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-tabs.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-window.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype RetroWindowProps = {\n  title: string\n  children: ReactNode\n  menu?: ReactNode\n  status?: ReactNode\n  onClose?: () => void\n  className?: string\n  bodyClassName?: string\n  titleAs?: 'h2' | 'h3' | 'p'\n}\n\nfunction TitleGlyph({ kind }: { kind: 'min' | 'max' }) {\n  return (\n    <svg viewBox=\"0 0 8 8\" className=\"size-2 fill-current\" aria-hidden=\"true\">\n      {kind === 'min' ? <path d=\"M0 2h8L4 7z\" /> : <path d=\"M0 6h8L4 1z\" />}\n    </svg>\n  )\n}\n\nexport function RetroWindow({\n  title,\n  children,\n  menu,\n  status,\n  onClose,\n  className,\n  bodyClassName,\n  titleAs: Title = 'h2',\n}: RetroWindowProps) {\n  const boxClass =\n    'rt-raised flex size-5.5 shrink-0 items-center justify-center text-rt-ink'\n\n  return (\n    <section\n      aria-label={title}\n      className={cn(\n        'flex flex-col rounded-[5px] border border-rt-line bg-rt-face p-0.75 text-[13px] text-rt-ink',\n        'shadow-[inset_1px_1px_0_#fff,0_2px_0_rgb(0_0_0/0.25),0_16px_32px_-12px_rgb(0_0_0/0.55)]',\n        className,\n      )}\n    >\n      <header className=\"flex items-stretch gap-0.75\">\n        {onClose ? (\n          <button\n            type=\"button\"\n            onClick={onClose}\n            aria-label=\"Close window\"\n            className={cn(\n              boxClass,\n              'transition-colors hover:bg-white active:rt-pressed focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent',\n            )}\n          >\n            <span className=\"block h-0.75 w-3 rounded-[1px] border border-rt-line bg-white\" />\n          </button>\n        ) : (\n          <span aria-hidden=\"true\" className={boxClass}>\n            <span className=\"block h-0.75 w-3 rounded-[1px] border border-rt-line bg-white\" />\n          </span>\n        )}\n        <Title className=\"rt-title flex h-5.5 min-w-0 flex-1 items-center truncate rounded-[2px] px-2.5 font-mono text-[11px] font-semibold tracking-widest uppercase\">\n          {title}\n        </Title>\n        <span aria-hidden=\"true\" className={boxClass}>\n          <TitleGlyph kind=\"min\" />\n        </span>\n        <span aria-hidden=\"true\" className={boxClass}>\n          <TitleGlyph kind=\"max\" />\n        </span>\n      </header>\n\n      {menu ? <div className=\"mt-0.75\">{menu}</div> : null}\n\n      <div className={cn('mt-0.75 flex-1 border-t border-rt-shadow/60', bodyClassName)}>{children}</div>\n\n      {status ? (\n        <footer className=\"rt-sunken mt-0.75 flex items-center gap-2 px-2 py-0.5 text-[12px]\">\n          {status}\n        </footer>\n      ) : null}\n    </section>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-window.tsx"
+    }
+  ],
+  "cssVars": {
+    "theme": {
+      "color-rt-face": "#dde0e6",
+      "color-rt-face-hi": "#eceef2",
+      "color-rt-light": "#ffffff",
+      "color-rt-shadow": "#8c93a3",
+      "color-rt-line": "#20242f",
+      "color-rt-ink": "#1b1f2a",
+      "color-rt-accent": "#2b49c9",
+      "color-rt-accent-deep": "#162a82",
+      "color-rt-desktop": "#167a84",
+      "color-rt-warn": "#f5c542",
+      "color-rt-ok": "#2f9e5b",
+      "color-rt-danger": "#d64545",
+      "radius-rt": "3px"
+    }
+  },
+  "css": {
+    "@utility rt-raised": {
+      "border": "1px solid var(--color-rt-line)",
+      "border-radius": "var(--radius-rt)",
+      "background-color": "var(--color-rt-face)",
+      "background-image": "linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face))",
+      "box-shadow": "inset 1px 1px 0 var(--color-rt-light), inset -1px -1px 0 var(--color-rt-shadow), 0 1px 2px rgb(0 0 0 / 0.18)"
+    },
+    "@utility rt-pressed": {
+      "border": "1px solid var(--color-rt-line)",
+      "border-radius": "var(--radius-rt)",
+      "background-color": "#cdd1d9",
+      "background-image": "none",
+      "box-shadow": "inset 1px 1px 3px rgb(0 0 0 / 0.35)"
+    },
+    "@utility rt-sunken": {
+      "border": "1px solid var(--color-rt-shadow)",
+      "border-radius": "2px",
+      "background-color": "var(--color-rt-light)",
+      "box-shadow": "inset 1px 1px 2px rgb(0 0 0 / 0.28), 1px 1px 0 var(--color-rt-light)"
+    },
+    "@utility rt-title": {
+      "color": "#fff",
+      "background-image": "linear-gradient(90deg, var(--color-rt-accent-deep), var(--color-rt-accent))"
+    },
+    "@utility rt-primary": {
+      "color": "#fff",
+      "border-color": "var(--color-rt-accent-deep)",
+      "background-color": "var(--color-rt-accent)",
+      "background-image": "linear-gradient(180deg, #4663e0, var(--color-rt-accent))",
+      "box-shadow": "inset 1px 1px 0 rgb(255 255 255 / 0.35), inset -1px -1px 0 var(--color-rt-accent-deep), 0 1px 2px rgb(0 0 0 / 0.25)"
+    },
+    "@utility rt-primary-pressed": {
+      "background-color": "#1f3aa8",
+      "background-image": "none",
+      "box-shadow": "inset 1px 1px 3px rgb(0 0 0 / 0.5)"
+    },
+    "@utility rt-desktop": {
+      "background-color": "var(--color-rt-desktop)",
+      "background-image": "radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px)",
+      "background-size": "14px 14px"
+    }
+  },
+  "meta": {
+    "author": "Your Name (https://example.com)",
+    "license": "MIT with Attribution"
+  },
+  "type": "registry:component"
+}

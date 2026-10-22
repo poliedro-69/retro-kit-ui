@@ -1,0 +1,189 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "retrokit",
+  "homepage": "https://retrokit.example.com",
+  "items": [
+    {
+      "name": "retro-ui",
+      "type": "registry:component",
+      "title": "Windows 3.1 Kit",
+      "description": "Windows 3.1 structure with a modern finish: window, button, fields, menubar, tabs, feedback and dialog.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "components/retro-ui/index.ts",
+          "type": "registry:component",
+          "target": "components/retro-ui/index.ts"
+        },
+        {
+          "path": "components/retro-ui/retro-button.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-button.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-dialog.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-dialog.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-feedback.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-feedback.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-fields.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-fields.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-menubar.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-menubar.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-tabs.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-tabs.tsx"
+        },
+        {
+          "path": "components/retro-ui/retro-window.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/retro-window.tsx"
+        }
+      ],
+      "cssVars": {
+        "theme": {
+          "color-rt-face": "#dde0e6",
+          "color-rt-face-hi": "#eceef2",
+          "color-rt-light": "#ffffff",
+          "color-rt-shadow": "#8c93a3",
+          "color-rt-line": "#20242f",
+          "color-rt-ink": "#1b1f2a",
+          "color-rt-accent": "#2b49c9",
+          "color-rt-accent-deep": "#162a82",
+          "color-rt-desktop": "#167a84",
+          "color-rt-warn": "#f5c542",
+          "color-rt-ok": "#2f9e5b",
+          "color-rt-danger": "#d64545",
+          "radius-rt": "3px"
+        }
+      },
+      "css": {
+        "@utility rt-raised": {
+          "border": "1px solid var(--color-rt-line)",
+          "border-radius": "var(--radius-rt)",
+          "background-color": "var(--color-rt-face)",
+          "background-image": "linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face))",
+          "box-shadow": "inset 1px 1px 0 var(--color-rt-light), inset -1px -1px 0 var(--color-rt-shadow), 0 1px 2px rgb(0 0 0 / 0.18)"
+        },
+        "@utility rt-pressed": {
+          "border": "1px solid var(--color-rt-line)",
+          "border-radius": "var(--radius-rt)",
+          "background-color": "#cdd1d9",
+          "background-image": "none",
+          "box-shadow": "inset 1px 1px 3px rgb(0 0 0 / 0.35)"
+        },
+        "@utility rt-sunken": {
+          "border": "1px solid var(--color-rt-shadow)",
+          "border-radius": "2px",
+          "background-color": "var(--color-rt-light)",
+          "box-shadow": "inset 1px 1px 2px rgb(0 0 0 / 0.28), 1px 1px 0 var(--color-rt-light)"
+        },
+        "@utility rt-title": {
+          "color": "#fff",
+          "background-image": "linear-gradient(90deg, var(--color-rt-accent-deep), var(--color-rt-accent))"
+        },
+        "@utility rt-primary": {
+          "color": "#fff",
+          "border-color": "var(--color-rt-accent-deep)",
+          "background-color": "var(--color-rt-accent)",
+          "background-image": "linear-gradient(180deg, #4663e0, var(--color-rt-accent))",
+          "box-shadow": "inset 1px 1px 0 rgb(255 255 255 / 0.35), inset -1px -1px 0 var(--color-rt-accent-deep), 0 1px 2px rgb(0 0 0 / 0.25)"
+        },
+        "@utility rt-primary-pressed": {
+          "background-color": "#1f3aa8",
+          "background-image": "none",
+          "box-shadow": "inset 1px 1px 3px rgb(0 0 0 / 0.5)"
+        },
+        "@utility rt-desktop": {
+          "background-color": "var(--color-rt-desktop)",
+          "background-image": "radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px)",
+          "background-size": "14px 14px"
+        }
+      },
+      "meta": {
+        "author": "Your Name (https://example.com)",
+        "license": "MIT with Attribution"
+      }
+    },
+    {
+      "name": "mac-ui",
+      "type": "registry:component",
+      "title": "Mac System 7 Kit",
+      "description": "Mac System 7 inspired window, button, fields, menubar and feedback components.",
+      "dependencies": [
+        "clsx",
+        "tailwind-merge"
+      ],
+      "files": [
+        {
+          "path": "components/mac-ui/index.ts",
+          "type": "registry:component",
+          "target": "components/mac-ui/index.ts"
+        },
+        {
+          "path": "components/mac-ui/mac-button.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-button.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-feedback.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-feedback.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-fields.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-fields.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-menubar.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-menubar.tsx"
+        },
+        {
+          "path": "components/mac-ui/mac-window.tsx",
+          "type": "registry:component",
+          "target": "components/mac-ui/mac-window.tsx"
+        }
+      ],
+      "meta": {
+        "author": "Your Name (https://example.com)",
+        "license": "MIT with Attribution"
+      }
+    },
+    {
+      "name": "retro-product-card",
+      "type": "registry:block",
+      "title": "Retro product card",
+      "description": "E-commerce product card built with the Windows 3.1 Kit. Uses next/image.",
+      "registryDependencies": [
+        "https://retrokit.example.com/r/retro-ui.json"
+      ],
+      "files": [
+        {
+          "path": "components/retro-ui/blocks/retro-product-card.tsx",
+          "type": "registry:component",
+          "target": "components/retro-ui/blocks/retro-product-card.tsx"
+        }
+      ],
+      "meta": {
+        "author": "Your Name (https://example.com)",
+        "license": "MIT with Attribution"
+      }
+    }
+  ]
+}

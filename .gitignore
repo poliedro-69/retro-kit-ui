@@ -14,3 +14,8 @@ __v0_jsx-dev-runtime.ts
 node_modules
 .next/
 .DS_Store
+# Generated package output
+packages/retro-ui/src
+packages/retro-ui/dist
+packages/retro-ui/package.json
+packages/retro-ui/LICENSE

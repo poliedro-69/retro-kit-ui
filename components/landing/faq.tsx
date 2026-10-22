@@ -3,7 +3,7 @@ import { RetroWindow } from '@/components/retro-ui'
 const questions = [
   {
     q: 'Are the kits really free?',
-    a: 'Yes. Every kit is free for personal and commercial projects. There is no sign-up, no email wall and no attribution required.',
+    a: 'Yes. Every kit is free for personal and commercial projects. There is no sign-up and no email wall. The only condition is a small credit linking back to the author, as described on the license page.',
   },
   {
     q: 'Which frameworks do the kits support?',
@@ -11,7 +11,7 @@ const questions = [
   },
   {
     q: 'How do I install a kit?',
-    a: 'Download the zip, copy the components folder into your project and paste the design tokens into your global stylesheet. Then import the components you need.',
+    a: 'Install the npm package and import its stylesheet, or copy the components into your project with the shadcn CLI. Then import the components you need.',
   },
   {
     q: 'Can I change the colors?',

@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
+@import '../packages/retro-ui/styles.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -153,82 +154,6 @@
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.556 0 0);
   }
-}
-
-/*
- * Retro UI tokens: Windows 3.1 structure (bevels, title bars, group boxes)
- * with a modern finish (cool grays, gradients, soft shadows, smooth states).
- */
-@theme {
-  --color-rt-face: #dde0e6;
-  --color-rt-face-hi: #eceef2;
-  --color-rt-light: #ffffff;
-  --color-rt-shadow: #8c93a3;
-  --color-rt-line: #20242f;
-  --color-rt-ink: #1b1f2a;
-  --color-rt-accent: #2b49c9;
-  --color-rt-accent-deep: #162a82;
-  --color-rt-desktop: #167a84;
-  --color-rt-warn: #f5c542;
-  --color-rt-ok: #2f9e5b;
-  --color-rt-danger: #d64545;
-  --radius-rt: 3px;
-}
-
-@utility rt-raised {
-  border: 1px solid var(--color-rt-line);
-  border-radius: var(--radius-rt);
-  background-color: var(--color-rt-face);
-  background-image: linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face));
-  box-shadow:
-    inset 1px 1px 0 var(--color-rt-light),
-    inset -1px -1px 0 var(--color-rt-shadow),
-    0 1px 2px rgb(0 0 0 / 0.18);
-}
-
-@utility rt-pressed {
-  border: 1px solid var(--color-rt-line);
-  border-radius: var(--radius-rt);
-  background-color: #cdd1d9;
-  background-image: none;
-  box-shadow: inset 1px 1px 3px rgb(0 0 0 / 0.35);
-}
-
-@utility rt-sunken {
-  border: 1px solid var(--color-rt-shadow);
-  border-radius: 2px;
-  background-color: var(--color-rt-light);
-  box-shadow:
-    inset 1px 1px 2px rgb(0 0 0 / 0.28),
-    1px 1px 0 var(--color-rt-light);
-}
-
-@utility rt-title {
-  color: #fff;
-  background-image: linear-gradient(90deg, var(--color-rt-accent-deep), var(--color-rt-accent));
-}
-
-@utility rt-primary {
-  color: #fff;
-  border-color: var(--color-rt-accent-deep);
-  background-color: var(--color-rt-accent);
-  background-image: linear-gradient(180deg, #4663e0, var(--color-rt-accent));
-  box-shadow:
-    inset 1px 1px 0 rgb(255 255 255 / 0.35),
-    inset -1px -1px 0 var(--color-rt-accent-deep),
-    0 1px 2px rgb(0 0 0 / 0.25);
-}
-
-@utility rt-primary-pressed {
-  background-color: #1f3aa8;
-  background-image: none;
-  box-shadow: inset 1px 1px 3px rgb(0 0 0 / 0.5);
-}
-
-@utility rt-desktop {
-  background-color: var(--color-rt-desktop);
-  background-image: radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px);
-  background-size: 14px 14px;
 }
 
 @layer base {

@@ -1,9 +1,10 @@
 import { RetroLinkButton } from '@/components/retro-ui'
 
 const links = [
-  { href: '#kits', label: 'Kits' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '/#kits', label: 'Kits' },
+  { href: '/#faq', label: 'FAQ' },
   { href: '/showcase', label: 'Components' },
+  { href: '/license', label: 'License' },
 ]
 
 export function SiteHeader() {
@@ -11,7 +12,7 @@ export function SiteHeader() {
     <header className="rt-raised sticky top-0 z-30 rounded-none border-x-0 border-t-0">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2">
         <a
-          href="#top"
+          href="/"
           className="flex items-center gap-2 font-mono text-[13px] font-semibold tracking-widest uppercase focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent"
         >
           <span aria-hidden="true" className="rt-title flex size-6 items-center justify-center rounded-[2px] text-[11px]">
@@ -29,7 +30,7 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
-          <RetroLinkButton href="#kits" variant="primary" size="sm" className="ml-2">
+          <RetroLinkButton href="/#kits" variant="primary" size="sm" className="ml-2">
             Get free kits
           </RetroLinkButton>
         </nav>

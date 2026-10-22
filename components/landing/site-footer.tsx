@@ -22,12 +22,12 @@ export function SiteFooter() {
             <p className="font-mono text-[11px] font-semibold tracking-widest uppercase">Kits</p>
             <ul className="mt-2 flex flex-col gap-1.5">
               <li>
-                <a href="#kits" className={linkClass}>
+                <a href="/#kits" className={linkClass}>
                   Windows 3.1 Kit
                 </a>
               </li>
               <li>
-                <a href="#kits" className={linkClass}>
+                <a href="/#kits" className={linkClass}>
                   Mac System 7 Kit
                 </a>
               </li>
@@ -42,8 +42,13 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
-                <a href="#faq" className={linkClass}>
+                <a href="/#faq" className={linkClass}>
                   FAQ
+                </a>
+              </li>
+              <li>
+                <a href="/license" className={linkClass}>
+                  License
                 </a>
               </li>
               <li>
