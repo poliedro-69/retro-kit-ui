@@ -12,7 +12,10 @@ __v0_jsx-dev-runtime.ts
 
 # Common ignores
 node_modules
-.next/
+.next
+.eve/
+.output/
+.vercel//
 .DS_Store
 # Generated package output
 packages/retro-ui/src

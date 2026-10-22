@@ -9,4 +9,6 @@ const nextConfig = {
   },
 }
 
-export default nextConfig
+import { withEve } from 'eve/next'
+
+export default withEve(nextConfig)

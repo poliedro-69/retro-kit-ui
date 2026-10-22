@@ -18,8 +18,10 @@
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@vercel/analytics": "1.6.1",
+    "@your-scope/retrokit-elements": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "eve": "^0.81.1",
     "lucide-react": "^1.16.0",
     "next": "16.4.0",
     "react": "^19",
@@ -28,14 +30,14 @@
     "shadcn": "^4.11.0",
     "shiki": "^4.5.0",
     "tailwind-merge": "^3.3.1",
-    "tw-animate-css": "^1.4.0",
-    "@your-scope/retrokit-elements": "workspace:*"
+    "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "just-bash": "^3.6.0",
     "postcss": "^8.5",
     "tailwindcss": "^4.3.3",
     "typescript": "5.7.3"
