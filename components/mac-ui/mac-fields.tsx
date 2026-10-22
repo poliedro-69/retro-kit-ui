@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { InputHTMLAttributes, ReactNode } from 'react'
+import type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 type MacInputProps = InputHTMLAttributes<HTMLInputElement> & { label?: string }
@@ -18,6 +18,33 @@ export function MacInput({ label, className, id, ...props }: MacInputProps) {
         id={inputId}
         className={cn(
           'h-6 border-2 border-mac-ink bg-mac-paper px-1.5 text-[12px] text-mac-ink placeholder:text-mac-dim',
+          'disabled:border-dashed disabled:text-mac-dim',
+          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',
+          className,
+        )}
+        {...props}
+      />
+    </div>
+  )
+}
+
+type MacTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string }
+
+export function MacTextarea({ label, className, id, rows = 4, ...props }: MacTextareaProps) {
+  const autoId = useId()
+  const textareaId = id ?? autoId
+  return (
+    <div className="flex flex-col gap-1 font-rt-mono text-[12px] text-mac-ink">
+      {label ? (
+        <label htmlFor={textareaId} className="font-semibold">
+          {label}
+        </label>
+      ) : null}
+      <textarea
+        id={textareaId}
+        rows={rows}
+        className={cn(
+          'mac-scroll min-h-16 resize-y border-2 border-mac-ink bg-mac-paper p-1.5 text-[12px] leading-snug text-mac-ink placeholder:text-mac-dim',
           'disabled:border-dashed disabled:text-mac-dim',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',
           className,

@@ -2,11 +2,16 @@ import {
   MacAlert,
   MacButton,
   MacCheckbox,
+  MacDropdownMenu,
   MacGroup,
   MacInput,
+  MacListbox,
   MacMenubar,
   MacRadio,
   MacProgress,
+  MacScrollArea,
+  MacSlider,
+  MacTextarea,
   MacWindow,
   macDither,
 } from '@/components/mac-ui'
@@ -14,13 +19,18 @@ import {
   RetroBadge,
   RetroButton,
   RetroCheckbox,
+  RetroDropdownMenu,
   RetroGroup,
   RetroInput,
+  RetroListbox,
   RetroMenubar,
   RetroProgress,
   RetroRadio,
+  RetroScrollArea,
   RetroSelect,
+  RetroSlider,
   RetroTabs,
+  RetroTextarea,
   RetroWindow,
 } from '@/components/retro-ui'
 import { RetroProductCard } from '@/components/retro-ui/blocks/retro-product-card'
@@ -39,6 +49,18 @@ const swatches = [
   { name: 'ok', className: 'bg-rt-ok' },
   { name: 'danger', className: 'bg-rt-danger' },
 ]
+
+const fileOptions = [
+  { value: 'autoexec', label: 'AUTOEXEC.BAT' },
+  { value: 'config', label: 'CONFIG.SYS' },
+  { value: 'command', label: 'COMMAND.COM' },
+  { value: 'win', label: 'WIN.INI' },
+  { value: 'system', label: 'SYSTEM.INI' },
+  { value: 'progman', label: 'PROGMAN.INI', disabled: true },
+  { value: 'readme', label: 'README.TXT' },
+]
+
+const loremLines = Array.from({ length: 14 }, (_, index) => `Line ${index + 1}: The quick brown fox jumps over the lazy dog.`)
 
 export const winPreviews = {
   tokens: (
@@ -110,6 +132,51 @@ export const winPreviews = {
         <option value="svga">800 x 600, 256 colors</option>
         <option value="xga">1024 x 768, 256 colors</option>
       </RetroSelect>
+    </div>
+  ),
+  textarea: (
+    <div className="rt-raised w-full max-w-sm p-3">
+      <RetroTextarea label="Notes" placeholder="Type here..." hint="Resize from the bottom edge." />
+    </div>
+  ),
+  listbox: (
+    <div className="rt-raised grid w-full max-w-md gap-4 p-3 sm:grid-cols-2">
+      <RetroListbox label="Single selection" options={fileOptions} defaultValue={['config']} />
+      <RetroListbox label="Multiple selection" options={fileOptions} multiple defaultValue={['autoexec', 'win']} />
+    </div>
+  ),
+  slider: (
+    <div className="rt-raised flex w-full max-w-xs flex-col gap-4 p-3">
+      <RetroSlider label="Volume" defaultValue={60} />
+      <RetroSlider label="Mouse speed" min={1} max={10} defaultValue={4} />
+      <RetroSlider label="Disabled" disabled defaultValue={30} />
+    </div>
+  ),
+  scroll: (
+    <div className="rt-raised w-full max-w-sm p-3">
+      <RetroScrollArea label="Log output" className="h-32 bg-rt-paper p-2 font-mono">
+        {loremLines.map((line) => (
+          <p key={line} className="whitespace-nowrap">
+            {line}
+          </p>
+        ))}
+      </RetroScrollArea>
+    </div>
+  ),
+  dropdown: (
+    <div className="rt-raised min-h-56 w-full max-w-sm p-3">
+      <RetroDropdownMenu
+        label="Actions"
+        items={[
+          { label: 'New', shortcut: 'Ctrl+N' },
+          { label: 'Open...', shortcut: 'Ctrl+O' },
+          { label: 'Save', shortcut: 'Ctrl+S' },
+          { separator: true },
+          { label: 'Print', disabled: true },
+          { separator: true },
+          { label: 'Exit', shortcut: 'Alt+F4' },
+        ]}
+      />
     </div>
   ),
   checkbox: (
@@ -233,6 +300,51 @@ export const macPreviews = {
     <div className="flex w-full max-w-xs flex-col gap-3 border-2 border-mac-ink bg-mac-paper p-3">
       <MacInput label="Name" placeholder="e.g. Macintosh HD" autoComplete="off" />
       <MacInput label="Disabled" disabled defaultValue="Read only" />
+    </div>
+  ),
+  textarea: (
+    <div className="w-full max-w-sm border-2 border-mac-ink bg-mac-paper p-3">
+      <MacTextarea label="Notes" placeholder="Type here..." />
+    </div>
+  ),
+  listbox: (
+    <div className="grid w-full max-w-md gap-4 border-2 border-mac-ink bg-mac-paper p-3 sm:grid-cols-2">
+      <MacListbox label="Single selection" options={fileOptions} defaultValue={['config']} />
+      <MacListbox label="Multiple selection" options={fileOptions} multiple defaultValue={['autoexec', 'win']} />
+    </div>
+  ),
+  slider: (
+    <div className="flex w-full max-w-xs flex-col gap-4 border-2 border-mac-ink bg-mac-paper p-3">
+      <MacSlider label="Volume" defaultValue={60} />
+      <MacSlider label="Mouse speed" min={1} max={10} defaultValue={4} />
+      <MacSlider label="Disabled" disabled defaultValue={30} />
+    </div>
+  ),
+  scroll: (
+    <div className="w-full max-w-sm border-2 border-mac-ink bg-mac-paper p-3">
+      <MacScrollArea label="Log output" className="h-32 p-2">
+        {loremLines.map((line) => (
+          <p key={line} className="whitespace-nowrap">
+            {line}
+          </p>
+        ))}
+      </MacScrollArea>
+    </div>
+  ),
+  dropdown: (
+    <div className="min-h-56 w-full max-w-sm border-2 border-mac-ink bg-mac-paper p-3">
+      <MacDropdownMenu
+        label="Actions"
+        items={[
+          { label: 'New', shortcut: 'Cmd+N' },
+          { label: 'Open...', shortcut: 'Cmd+O' },
+          { label: 'Save', shortcut: 'Cmd+S' },
+          { separator: true },
+          { label: 'Print', disabled: true },
+          { separator: true },
+          { label: 'Quit', shortcut: 'Cmd+Q' },
+        ]}
+      />
     </div>
   ),
   checkbox: (

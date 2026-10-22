@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'
+import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 const focusRing =
@@ -33,6 +33,42 @@ export function RetroInput({ label, hint, className, id, ...props }: RetroInputP
       />
       {hint ? (
         <p id={`${inputId}-hint`} className="text-[12px] text-rt-shadow">
+          {hint}
+        </p>
+      ) : null}
+    </div>
+  )
+}
+
+type RetroTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+  label?: string
+  hint?: string
+}
+
+export function RetroTextarea({ label, hint, className, id, rows = 4, ...props }: RetroTextareaProps) {
+  const autoId = useId()
+  const textareaId = id ?? autoId
+  return (
+    <div className="flex flex-col gap-1">
+      {label ? (
+        <label htmlFor={textareaId} className="font-medium">
+          {label}
+        </label>
+      ) : null}
+      <textarea
+        id={textareaId}
+        rows={rows}
+        aria-describedby={hint ? `${textareaId}-hint` : undefined}
+        className={cn(
+          'rt-sunken rt-scroll min-h-16 resize-y p-2 text-[13px] leading-snug text-rt-ink placeholder:text-rt-shadow',
+          'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',
+          focusRing,
+          className,
+        )}
+        {...props}
+      />
+      {hint ? (
+        <p id={`${textareaId}-hint`} className="text-[12px] text-rt-shadow">
           {hint}
         </p>
       ) : null}

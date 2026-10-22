@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "retro-ui",
   "title": "Windows 3.1 Kit",
-  "description": "Windows 3.1 structure with a modern finish: window, button, fields, menubar, tabs, feedback and dialog.",
+  "description": "Windows 3.1 structure with a modern finish: window, button, fields (input, textarea, select, listbox, slider), scroll area, dropdown menu, menubar, tabs, feedback and dialog.",
   "dependencies": [
     "clsx",
     "tailwind-merge"
@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "components/retro-ui/index.ts",
-      "content": "export { RetroWindow } from './retro-window'\nexport { RetroButton, RetroLinkButton } from './retro-button'\nexport { RetroInput, RetroSelect, RetroCheckbox, RetroRadio, RetroGroup } from './retro-fields'\nexport { RetroMenubar } from './retro-menubar'\nexport { RetroTabs, type RetroTab } from './retro-tabs'\nexport { RetroProgress, RetroBadge } from './retro-feedback'\nexport { RetroDialog } from './retro-dialog'\nexport {\n  RetroTheme,\n  RETRO_THEMES,\n  RETRO_FONTS,\n  type RetroThemeId,\n  type RetroFontId,\n} from './retro-theme'\n",
+      "content": "export { RetroWindow } from './retro-window'\nexport { RetroButton, RetroLinkButton } from './retro-button'\nexport { RetroInput, RetroTextarea, RetroSelect, RetroCheckbox, RetroRadio, RetroGroup } from './retro-fields'\nexport { RetroScrollArea } from './retro-scroll'\nexport { RetroListbox, type RetroListboxOption } from './retro-listbox'\nexport { RetroSlider } from './retro-slider'\nexport { RetroDropdownMenu, type RetroMenuItem } from './retro-dropdown'\nexport { RetroMenubar } from './retro-menubar'\nexport { RetroTabs, type RetroTab } from './retro-tabs'\nexport { RetroProgress, RetroBadge } from './retro-feedback'\nexport { RetroDialog } from './retro-dialog'\nexport {\n  RetroTheme,\n  RETRO_THEMES,\n  RETRO_FONTS,\n  type RetroThemeId,\n  type RetroFontId,\n} from './retro-theme'\n",
       "type": "registry:component",
       "target": "components/retro-ui/index.ts"
     },
@@ -27,6 +27,12 @@
       "target": "components/retro-ui/retro-dialog.tsx"
     },
     {
+      "path": "components/retro-ui/retro-dropdown.tsx",
+      "content": "'use client'\n\nimport { useEffect, useId, useRef, useState } from 'react'\nimport type { KeyboardEvent } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport type RetroMenuItem =\n  | { separator: true }\n  | { label: string; shortcut?: string; disabled?: boolean; onSelect?: () => void }\n\ntype RetroDropdownMenuProps = {\n  label: string\n  items: RetroMenuItem[]\n  align?: 'start' | 'end'\n  className?: string\n}\n\nconst enabledIndices = (items: RetroMenuItem[]) =>\n  items.flatMap((item, index) => ('separator' in item || item.disabled ? [] : [index]))\n\nexport function RetroDropdownMenu({ label, items, align = 'start', className }: RetroDropdownMenuProps) {\n  const [open, setOpen] = useState(false)\n  const rootRef = useRef<HTMLDivElement>(null)\n  const triggerRef = useRef<HTMLButtonElement>(null)\n  const itemRefs = useRef<(HTMLButtonElement | null)[]>([])\n  const initialFocus = useRef<'first' | 'last'>('first')\n  const menuId = useId()\n\n  useEffect(() => {\n    if (!open) return\n    const list = enabledIndices(items)\n    const target = initialFocus.current === 'last' ? list[list.length - 1] : list[0]\n    itemRefs.current[target]?.focus()\n    const onPointerDown = (event: PointerEvent) => {\n      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)\n    }\n    document.addEventListener('pointerdown', onPointerDown)\n    return () => document.removeEventListener('pointerdown', onPointerDown)\n  }, [open, items])\n\n  function close(refocus: boolean) {\n    setOpen(false)\n    if (refocus) triggerRef.current?.focus()\n  }\n\n  function openWith(position: 'first' | 'last') {\n    initialFocus.current = position\n    setOpen(true)\n  }\n\n  function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>) {\n    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {\n      event.preventDefault()\n      openWith(event.key === 'ArrowDown' ? 'first' : 'last')\n    }\n  }\n\n  function onMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    const list = enabledIndices(items)\n    const position = list.indexOf(itemRefs.current.findIndex((el) => el === document.activeElement))\n    const focusAt = (index: number | undefined) => {\n      if (index !== undefined) itemRefs.current[index]?.focus()\n    }\n    switch (event.key) {\n      case 'ArrowDown':\n        event.preventDefault()\n        focusAt(list[(position + 1) % list.length])\n        break\n      case 'ArrowUp':\n        event.preventDefault()\n        focusAt(position <= 0 ? list[list.length - 1] : list[position - 1])\n        break\n      case 'Home':\n        event.preventDefault()\n        focusAt(list[0])\n        break\n      case 'End':\n        event.preventDefault()\n        focusAt(list[list.length - 1])\n        break\n      case 'Escape':\n        event.preventDefault()\n        close(true)\n        break\n      case 'Tab':\n        close(false)\n        break\n    }\n  }\n\n  return (\n    <div ref={rootRef} className={cn('relative inline-block', className)}>\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        aria-haspopup=\"menu\"\n        aria-expanded={open}\n        aria-controls={open ? menuId : undefined}\n        onClick={() => (open ? close(false) : openWith('first'))}\n        onKeyDown={onTriggerKeyDown}\n        className={cn(\n          'rt-raised inline-flex min-h-7 items-center gap-2 px-3 text-[13px] font-medium text-rt-ink select-none',\n          'hover:brightness-105 active:rt-pressed aria-expanded:rt-pressed',\n          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent',\n        )}\n      >\n        {label}\n        <svg aria-hidden=\"true\" viewBox=\"0 0 8 8\" className=\"size-2 fill-current\">\n          <path d=\"M0 2h8L4 7z\" />\n        </svg>\n      </button>\n      {open ? (\n        <div\n          id={menuId}\n          role=\"menu\"\n          aria-label={label}\n          onKeyDown={onMenuKeyDown}\n          className={cn(\n            'rt-raised absolute top-full z-20 mt-1 min-w-48 p-0.5 shadow-[0_8px_20px_-6px_rgb(0_0_0/0.5)]',\n            align === 'end' ? 'right-0' : 'left-0',\n          )}\n        >\n          {items.map((item, index) =>\n            'separator' in item ? (\n              <div\n                key={`separator-${index}`}\n                role=\"separator\"\n                className=\"mx-1 my-0.5 h-px bg-rt-shadow shadow-[0_1px_0_var(--color-rt-light)]\"\n              />\n            ) : (\n              <button\n                key={item.label}\n                ref={(element) => {\n                  itemRefs.current[index] = element\n                }}\n                type=\"button\"\n                role=\"menuitem\"\n                tabIndex={-1}\n                disabled={item.disabled}\n                onMouseEnter={(event) => event.currentTarget.focus()}\n                onClick={() => {\n                  item.onSelect?.()\n                  close(true)\n                }}\n                className={cn(\n                  'flex w-full items-center justify-between gap-6 rounded-[2px] px-3 py-1 text-left text-[13px] text-rt-ink',\n                  'focus-visible:bg-rt-accent focus-visible:text-rt-on-accent focus-visible:outline-none',\n                  'disabled:cursor-not-allowed disabled:text-rt-shadow disabled:[text-shadow:1px_1px_0_var(--color-rt-light)]',\n                )}\n              >\n                <span>{item.label}</span>\n                {item.shortcut ? <span className=\"font-mono text-[11px] opacity-70\">{item.shortcut}</span> : null}\n              </button>\n            ),\n          )}\n        </div>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-dropdown.tsx"
+    },
+    {
       "path": "components/retro-ui/retro-feedback.tsx",
       "content": "import type { ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport function RetroProgress({\n  value,\n  label,\n  className,\n}: {\n  value: number\n  label: string\n  className?: string\n}) {\n  const clamped = Math.min(100, Math.max(0, value))\n  return (\n    <div\n      role=\"progressbar\"\n      aria-label={label}\n      aria-valuemin={0}\n      aria-valuemax={100}\n      aria-valuenow={Math.round(clamped)}\n      className={cn('rt-sunken h-5.5 p-0.5', className)}\n    >\n      <div\n        className=\"h-full bg-[repeating-linear-gradient(90deg,var(--color-rt-accent)_0_9px,transparent_9px_12px)] transition-[width] duration-200\"\n        style={{ width: `${clamped}%` }}\n      />\n    </div>\n  )\n}\n\nconst tones = {\n  neutral: 'bg-rt-face text-rt-ink',\n  info: 'bg-rt-accent text-rt-on-accent',\n  warn: 'bg-rt-warn text-rt-ink',\n  ok: 'bg-rt-ok text-rt-on-accent',\n  danger: 'bg-rt-danger text-rt-on-accent',\n} as const\n\nexport function RetroBadge({\n  tone = 'neutral',\n  children,\n  className,\n}: {\n  tone?: keyof typeof tones\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <span\n      className={cn(\n        'inline-flex items-center rounded-[2px] border border-rt-line px-1.5 py-px font-rt-mono text-[11px] font-semibold tracking-wide uppercase shadow-[1px_1px_0_rgb(0_0_0/0.35)]',\n        tones[tone],\n        className,\n      )}\n    >\n      {children}\n    </span>\n  )\n}\n",
       "type": "registry:component",
@@ -34,15 +40,33 @@
     },
     {
       "path": "components/retro-ui/retro-fields.tsx",
-      "content": "import { useId } from 'react'\nimport type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\nconst focusRing =\n  'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-rt-accent'\n\ntype RetroInputProps = InputHTMLAttributes<HTMLInputElement> & {\n  label?: string\n  hint?: string\n}\n\nexport function RetroInput({ label, hint, className, id, ...props }: RetroInputProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={inputId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <input\n        id={inputId}\n        aria-describedby={hint ? `${inputId}-hint` : undefined}\n        className={cn(\n          'rt-sunken h-7 px-2 text-[13px] text-rt-ink placeholder:text-rt-shadow',\n          'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n          focusRing,\n          className,\n        )}\n        {...props}\n      />\n      {hint ? (\n        <p id={`${inputId}-hint`} className=\"text-[12px] text-rt-shadow\">\n          {hint}\n        </p>\n      ) : null}\n    </div>\n  )\n}\n\ntype RetroSelectProps = SelectHTMLAttributes<HTMLSelectElement> & {\n  label?: string\n}\n\nexport function RetroSelect({ label, className, id, children, ...props }: RetroSelectProps) {\n  const autoId = useId()\n  const selectId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={selectId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <div className=\"relative\">\n        <select\n          id={selectId}\n          className={cn(\n            'rt-sunken h-7 w-full cursor-pointer appearance-none pr-8 pl-2 text-[13px] text-rt-ink',\n            'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n            focusRing,\n            className,\n          )}\n          {...props}\n        >\n          {children}\n        </select>\n        <span\n          aria-hidden=\"true\"\n          className=\"rt-raised pointer-events-none absolute top-0.5 right-0.5 bottom-0.5 flex w-5.5 items-center justify-center\"\n        >\n          <svg viewBox=\"0 0 8 8\" className=\"size-2 fill-current\">\n            <path d=\"M0 2h8L4 7z\" />\n          </svg>\n        </span>\n      </div>\n    </div>\n  )\n}\n\ntype ToggleProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {\n  label: ReactNode\n}\n\nconst toggleLabel =\n  'flex cursor-pointer items-center gap-2 py-0.5 has-disabled:cursor-not-allowed has-disabled:text-rt-shadow'\n\nexport function RetroCheckbox({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"checkbox\" className=\"peer sr-only\" {...props} />\n      <span\n        aria-hidden=\"true\"\n        className=\"rt-sunken flex size-4 shrink-0 items-center justify-center peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-rt-accent peer-checked:[&_svg]:scale-100\"\n      >\n        <svg\n          viewBox=\"0 0 10 10\"\n          className=\"size-2.5 scale-0 fill-none stroke-rt-ink stroke-[1.8] transition-transform duration-100\"\n        >\n          <path d=\"M1.5 5.2 4 7.7 8.5 2.5\" strokeLinecap=\"square\" />\n        </svg>\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function RetroRadio({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"radio\" className=\"peer sr-only\" {...props} />\n      <span\n        aria-hidden=\"true\"\n        className=\"rt-sunken flex size-4 shrink-0 items-center justify-center rounded-full peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-rt-accent peer-checked:[&_i]:scale-100\"\n      >\n        <i className=\"block size-1.75 scale-0 rounded-full bg-rt-ink transition-transform duration-100\" />\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function RetroGroup({\n  legend,\n  children,\n  className,\n}: {\n  legend: string\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <fieldset\n      className={cn(\n        'rounded-[3px] border border-rt-shadow px-3 pt-1 pb-2.5 shadow-[1px_1px_0_var(--color-rt-light),inset_1px_1px_0_var(--color-rt-light)]',\n        className,\n      )}\n    >\n      <legend className=\"px-1.5 text-[12px] font-semibold tracking-wide\">{legend}</legend>\n      {children}\n    </fieldset>\n  )\n}\n",
+      "content": "import { useId } from 'react'\nimport type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\nconst focusRing =\n  'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-rt-accent'\n\ntype RetroInputProps = InputHTMLAttributes<HTMLInputElement> & {\n  label?: string\n  hint?: string\n}\n\nexport function RetroInput({ label, hint, className, id, ...props }: RetroInputProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={inputId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <input\n        id={inputId}\n        aria-describedby={hint ? `${inputId}-hint` : undefined}\n        className={cn(\n          'rt-sunken h-7 px-2 text-[13px] text-rt-ink placeholder:text-rt-shadow',\n          'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n          focusRing,\n          className,\n        )}\n        {...props}\n      />\n      {hint ? (\n        <p id={`${inputId}-hint`} className=\"text-[12px] text-rt-shadow\">\n          {hint}\n        </p>\n      ) : null}\n    </div>\n  )\n}\n\ntype RetroTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {\n  label?: string\n  hint?: string\n}\n\nexport function RetroTextarea({ label, hint, className, id, rows = 4, ...props }: RetroTextareaProps) {\n  const autoId = useId()\n  const textareaId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={textareaId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <textarea\n        id={textareaId}\n        rows={rows}\n        aria-describedby={hint ? `${textareaId}-hint` : undefined}\n        className={cn(\n          'rt-sunken rt-scroll min-h-16 resize-y p-2 text-[13px] leading-snug text-rt-ink placeholder:text-rt-shadow',\n          'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n          focusRing,\n          className,\n        )}\n        {...props}\n      />\n      {hint ? (\n        <p id={`${textareaId}-hint`} className=\"text-[12px] text-rt-shadow\">\n          {hint}\n        </p>\n      ) : null}\n    </div>\n  )\n}\n\ntype RetroSelectProps = SelectHTMLAttributes<HTMLSelectElement> & {\n  label?: string\n}\n\nexport function RetroSelect({ label, className, id, children, ...props }: RetroSelectProps) {\n  const autoId = useId()\n  const selectId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label ? (\n        <label htmlFor={selectId} className=\"font-medium\">\n          {label}\n        </label>\n      ) : null}\n      <div className=\"relative\">\n        <select\n          id={selectId}\n          className={cn(\n            'rt-sunken h-7 w-full cursor-pointer appearance-none pr-8 pl-2 text-[13px] text-rt-ink',\n            'disabled:cursor-not-allowed disabled:bg-rt-face disabled:text-rt-shadow',\n            focusRing,\n            className,\n          )}\n          {...props}\n        >\n          {children}\n        </select>\n        <span\n          aria-hidden=\"true\"\n          className=\"rt-raised pointer-events-none absolute top-0.5 right-0.5 bottom-0.5 flex w-5.5 items-center justify-center\"\n        >\n          <svg viewBox=\"0 0 8 8\" className=\"size-2 fill-current\">\n            <path d=\"M0 2h8L4 7z\" />\n          </svg>\n        </span>\n      </div>\n    </div>\n  )\n}\n\ntype ToggleProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {\n  label: ReactNode\n}\n\nconst toggleLabel =\n  'flex cursor-pointer items-center gap-2 py-0.5 has-disabled:cursor-not-allowed has-disabled:text-rt-shadow'\n\nexport function RetroCheckbox({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"checkbox\" className=\"peer sr-only\" {...props} />\n      <span\n        aria-hidden=\"true\"\n        className=\"rt-sunken flex size-4 shrink-0 items-center justify-center peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-rt-accent peer-checked:[&_svg]:scale-100\"\n      >\n        <svg\n          viewBox=\"0 0 10 10\"\n          className=\"size-2.5 scale-0 fill-none stroke-rt-ink stroke-[1.8] transition-transform duration-100\"\n        >\n          <path d=\"M1.5 5.2 4 7.7 8.5 2.5\" strokeLinecap=\"square\" />\n        </svg>\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function RetroRadio({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"radio\" className=\"peer sr-only\" {...props} />\n      <span\n        aria-hidden=\"true\"\n        className=\"rt-sunken flex size-4 shrink-0 items-center justify-center rounded-full peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-rt-accent peer-checked:[&_i]:scale-100\"\n      >\n        <i className=\"block size-1.75 scale-0 rounded-full bg-rt-ink transition-transform duration-100\" />\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function RetroGroup({\n  legend,\n  children,\n  className,\n}: {\n  legend: string\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <fieldset\n      className={cn(\n        'rounded-[3px] border border-rt-shadow px-3 pt-1 pb-2.5 shadow-[1px_1px_0_var(--color-rt-light),inset_1px_1px_0_var(--color-rt-light)]',\n        className,\n      )}\n    >\n      <legend className=\"px-1.5 text-[12px] font-semibold tracking-wide\">{legend}</legend>\n      {children}\n    </fieldset>\n  )\n}\n",
       "type": "registry:component",
       "target": "components/retro-ui/retro-fields.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-listbox.tsx",
+      "content": "'use client'\n\nimport { useId, useRef, useState } from 'react'\nimport type { KeyboardEvent } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport type RetroListboxOption = { value: string; label: string; disabled?: boolean }\n\ntype RetroListboxProps = {\n  options: RetroListboxOption[]\n  label: string\n  multiple?: boolean\n  value?: string[]\n  defaultValue?: string[]\n  onValueChange?: (value: string[]) => void\n  className?: string\n  listClassName?: string\n}\n\nexport function RetroListbox({\n  options,\n  label,\n  multiple = false,\n  value,\n  defaultValue = [],\n  onValueChange,\n  className,\n  listClassName,\n}: RetroListboxProps) {\n  const baseId = useId()\n  const labelId = `${baseId}-label`\n  const listRef = useRef<HTMLDivElement>(null)\n  const [internal, setInternal] = useState(defaultValue)\n  const selected = value ?? internal\n  const [active, setActive] = useState(() => {\n    const index = options.findIndex((option) => selected.includes(option.value) && !option.disabled)\n    return index >= 0 ? index : Math.max(0, options.findIndex((option) => !option.disabled))\n  })\n\n  const optionId = (index: number) => `${baseId}-option-${index}`\n\n  function commit(next: string[]) {\n    if (value === undefined) setInternal(next)\n    onValueChange?.(next)\n  }\n\n  function choose(index: number) {\n    const option = options[index]\n    if (!option || option.disabled) return\n    setActive(index)\n    if (multiple) {\n      commit(selected.includes(option.value) ? selected.filter((v) => v !== option.value) : [...selected, option.value])\n    } else {\n      commit([option.value])\n    }\n  }\n\n  function step(from: number, direction: 1 | -1) {\n    let index = from + direction\n    while (index >= 0 && index < options.length && options[index].disabled) index += direction\n    return index >= 0 && index < options.length ? index : from\n  }\n\n  function moveTo(index: number) {\n    if (index < 0 || index >= options.length) return\n    setActive(index)\n    listRef.current?.children[index]?.scrollIntoView({ block: 'nearest' })\n    if (!multiple) choose(index)\n  }\n\n  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'ArrowUp':\n        event.preventDefault()\n        moveTo(step(active, event.key === 'ArrowDown' ? 1 : -1))\n        break\n      case 'Home':\n        event.preventDefault()\n        moveTo(step(-1, 1))\n        break\n      case 'End':\n        event.preventDefault()\n        moveTo(step(options.length, -1))\n        break\n      case ' ':\n      case 'Enter':\n        event.preventDefault()\n        choose(active)\n        break\n    }\n  }\n\n  return (\n    <div className={cn('flex flex-col gap-1', className)}>\n      <span id={labelId} className=\"font-medium\">\n        {label}\n      </span>\n      <div\n        ref={listRef}\n        role=\"listbox\"\n        aria-labelledby={labelId}\n        aria-multiselectable={multiple || undefined}\n        aria-activedescendant={optionId(active)}\n        tabIndex={0}\n        onKeyDown={onKeyDown}\n        className={cn(\n          'group rt-sunken rt-scroll h-32 overflow-auto py-0.5 text-[13px] text-rt-ink',\n          'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-rt-accent',\n          listClassName,\n        )}\n      >\n        {options.map((option, index) => {\n          const isSelected = selected.includes(option.value)\n          return (\n            <div\n              key={option.value}\n              id={optionId(index)}\n              role=\"option\"\n              aria-selected={isSelected}\n              aria-disabled={option.disabled || undefined}\n              onClick={() => choose(index)}\n              className={cn(\n                'cursor-pointer px-2 py-0.5 select-none',\n                isSelected ? 'bg-rt-accent text-rt-on-accent' : 'hover:bg-rt-face-hi',\n                index === active &&\n                  'group-focus-visible:outline-1 group-focus-visible:-outline-offset-1 group-focus-visible:outline-dotted group-focus-visible:outline-current',\n                option.disabled && 'cursor-not-allowed text-rt-shadow hover:bg-transparent',\n              )}\n            >\n              {option.label}\n            </div>\n          )\n        })}\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-listbox.tsx"
     },
     {
       "path": "components/retro-ui/retro-menubar.tsx",
       "content": "'use client'\n\nimport { cn } from '@/lib/utils'\n\ntype RetroMenubarProps = {\n  items: string[]\n  label?: string\n  className?: string\n  onSelect?: (item: string) => void\n}\n\nexport function RetroMenubar({ items, label = 'Menu', className, onSelect }: RetroMenubarProps) {\n  return (\n    <nav aria-label={label} className={cn('flex gap-0.5 px-0.5', className)}>\n      {items.map((item) => (\n        <button\n          key={item}\n          type=\"button\"\n          onClick={() => onSelect?.(item)}\n          className=\"rounded-[2px] px-2 py-0.5 text-[13px] transition-colors hover:bg-rt-accent hover:text-rt-on-accent focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-rt-accent\"\n        >\n          <u className=\"underline-offset-2\">{item[0]}</u>\n          {item.slice(1)}\n        </button>\n      ))}\n    </nav>\n  )\n}\n",
       "type": "registry:component",
       "target": "components/retro-ui/retro-menubar.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-scroll.tsx",
+      "content": "import type { HTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype RetroScrollAreaProps = HTMLAttributes<HTMLDivElement> & {\n  label: string\n  sunken?: boolean\n}\n\nexport function RetroScrollArea({ label, sunken = true, className, children, ...props }: RetroScrollAreaProps) {\n  return (\n    <div\n      role=\"region\"\n      aria-label={label}\n      tabIndex={0}\n      className={cn(\n        'rt-scroll overflow-auto text-[13px] text-rt-ink',\n        sunken && 'rt-sunken',\n        'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-rt-accent',\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-scroll.tsx"
+    },
+    {
+      "path": "components/retro-ui/retro-slider.tsx",
+      "content": "'use client'\n\nimport { useId, useState } from 'react'\nimport type { ChangeEvent, CSSProperties, InputHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype RetroSliderProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {\n  label?: string\n  showValue?: boolean\n}\n\nexport function RetroSlider({\n  label,\n  showValue = true,\n  min = 0,\n  max = 100,\n  value,\n  defaultValue,\n  onChange,\n  className,\n  id,\n  ...props\n}: RetroSliderProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  const [internal, setInternal] = useState(Number(defaultValue ?? min))\n  const current = value !== undefined ? Number(value) : internal\n  const range = Number(max) - Number(min)\n  const fill = range > 0 ? ((current - Number(min)) / range) * 100 : 0\n\n  function handleChange(event: ChangeEvent<HTMLInputElement>) {\n    setInternal(Number(event.target.value))\n    onChange?.(event)\n  }\n\n  return (\n    <div className=\"flex flex-col gap-1\">\n      {label || showValue ? (\n        <div className=\"flex items-baseline justify-between gap-3\">\n          {label ? (\n            <label htmlFor={inputId} className=\"font-medium\">\n              {label}\n            </label>\n          ) : (\n            <span />\n          )}\n          {showValue ? (\n            <output htmlFor={inputId} className=\"font-mono text-[12px] text-rt-ink\">\n              {current}\n            </output>\n          ) : null}\n        </div>\n      ) : null}\n      <input\n        id={inputId}\n        type=\"range\"\n        min={min}\n        max={max}\n        {...(value !== undefined ? { value } : { defaultValue: defaultValue ?? min })}\n        onChange={handleChange}\n        style={{ '--rt-fill': `${fill}%` } as CSSProperties}\n        className={cn('rt-range w-full', className)}\n        {...props}\n      />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/retro-ui/retro-slider.tsx"
     },
     {
       "path": "components/retro-ui/retro-tabs.tsx",
@@ -129,6 +153,118 @@
       "background-color": "var(--color-rt-desktop)",
       "background-image": "radial-gradient(rgb(255 255 255 / 0.14) 1px, transparent 1px)",
       "background-size": "14px 14px"
+    },
+    ".rt-scroll::-webkit-scrollbar": {
+      "width": "17px",
+      "height": "17px"
+    },
+    ".rt-scroll::-webkit-scrollbar-track": {
+      "background-color": "var(--color-rt-face)",
+      "background-image": "repeating-conic-gradient(var(--color-rt-face-hi) 0% 25%, var(--color-rt-face) 0% 50%)",
+      "background-size": "2px 2px"
+    },
+    ".rt-scroll::-webkit-scrollbar-thumb": {
+      "border": "1px solid var(--color-rt-line)",
+      "border-radius": "3px",
+      "background-color": "var(--color-rt-face)",
+      "background-image": "linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face))",
+      "box-shadow": "inset 1px 1px 0 var(--color-rt-light), inset -1px -1px 0 var(--color-rt-shadow)"
+    },
+    ".rt-scroll::-webkit-scrollbar-corner": {
+      "background-color": "var(--color-rt-face)"
+    },
+    ".rt-scroll::-webkit-scrollbar-button:single-button": {
+      "display": "block",
+      "width": "17px",
+      "height": "17px",
+      "border": "1px solid var(--color-rt-line)",
+      "border-radius": "3px",
+      "background-color": "var(--color-rt-face)",
+      "background-repeat": "no-repeat",
+      "background-size": "4px 4px",
+      "box-shadow": "inset 1px 1px 0 var(--color-rt-light), inset -1px -1px 0 var(--color-rt-shadow)"
+    },
+    ".rt-scroll::-webkit-scrollbar-button:single-button:vertical:decrement": {
+      "background-image": "linear-gradient(to bottom right, transparent 50%, var(--color-rt-ink) 50%), linear-gradient(to bottom left, transparent 50%, var(--color-rt-ink) 50%)",
+      "background-position": "calc(50% - 2px) 50%, calc(50% + 2px) 50%"
+    },
+    ".rt-scroll::-webkit-scrollbar-button:single-button:vertical:increment": {
+      "background-image": "linear-gradient(to top right, transparent 50%, var(--color-rt-ink) 50%), linear-gradient(to top left, transparent 50%, var(--color-rt-ink) 50%)",
+      "background-position": "calc(50% - 2px) 50%, calc(50% + 2px) 50%"
+    },
+    ".rt-scroll::-webkit-scrollbar-button:single-button:horizontal:decrement": {
+      "background-image": "linear-gradient(to bottom right, transparent 50%, var(--color-rt-ink) 50%), linear-gradient(to top right, transparent 50%, var(--color-rt-ink) 50%)",
+      "background-position": "50% calc(50% - 2px), 50% calc(50% + 2px)"
+    },
+    ".rt-scroll::-webkit-scrollbar-button:single-button:horizontal:increment": {
+      "background-image": "linear-gradient(to bottom left, transparent 50%, var(--color-rt-ink) 50%), linear-gradient(to top left, transparent 50%, var(--color-rt-ink) 50%)",
+      "background-position": "50% calc(50% - 2px), 50% calc(50% + 2px)"
+    },
+    ".rt-range": {
+      "height": "20px",
+      "background": "transparent",
+      "cursor": "pointer",
+      "-webkit-appearance": "none",
+      "appearance": "none"
+    },
+    ".rt-range:disabled": {
+      "cursor": "not-allowed",
+      "opacity": "0.55"
+    },
+    ".rt-range::-webkit-slider-runnable-track": {
+      "box-sizing": "border-box",
+      "height": "8px",
+      "border": "1px solid var(--color-rt-shadow)",
+      "border-radius": "2px",
+      "background": "linear-gradient(90deg, var(--color-rt-accent) var(--rt-fill, 0%), var(--color-rt-paper) var(--rt-fill, 0%))",
+      "box-shadow": "inset 1px 1px 2px rgb(0 0 0 / 0.28), 1px 1px 0 var(--color-rt-light)"
+    },
+    ".rt-range::-moz-range-track": {
+      "box-sizing": "border-box",
+      "height": "8px",
+      "border": "1px solid var(--color-rt-shadow)",
+      "border-radius": "2px",
+      "background": "linear-gradient(90deg, var(--color-rt-accent) var(--rt-fill, 0%), var(--color-rt-paper) var(--rt-fill, 0%))",
+      "box-shadow": "inset 1px 1px 2px rgb(0 0 0 / 0.28), 1px 1px 0 var(--color-rt-light)"
+    },
+    ".rt-range::-webkit-slider-thumb": {
+      "-webkit-appearance": "none",
+      "appearance": "none",
+      "box-sizing": "border-box",
+      "width": "12px",
+      "height": "20px",
+      "margin-top": "-6px",
+      "border": "1px solid var(--color-rt-line)",
+      "border-radius": "3px",
+      "background-color": "var(--color-rt-face)",
+      "background-image": "linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face))",
+      "box-shadow": "inset 1px 1px 0 var(--color-rt-light), inset -1px -1px 0 var(--color-rt-shadow), 0 1px 2px rgb(0 0 0 / 0.25)"
+    },
+    ".rt-range::-moz-range-thumb": {
+      "box-sizing": "border-box",
+      "width": "12px",
+      "height": "20px",
+      "border": "1px solid var(--color-rt-line)",
+      "border-radius": "3px",
+      "background-color": "var(--color-rt-face)",
+      "background-image": "linear-gradient(180deg, var(--color-rt-face-hi), var(--color-rt-face))",
+      "box-shadow": "inset 1px 1px 0 var(--color-rt-light), inset -1px -1px 0 var(--color-rt-shadow), 0 1px 2px rgb(0 0 0 / 0.25)"
+    },
+    ".rt-range:active::-webkit-slider-thumb": {
+      "background-color": "var(--color-rt-pressed)",
+      "background-image": "none"
+    },
+    ".rt-range:active::-moz-range-thumb": {
+      "background-color": "var(--color-rt-pressed)",
+      "background-image": "none"
+    },
+    ".rt-range:focus-visible::-webkit-slider-thumb": {
+      "outline": "2px solid var(--color-rt-accent)",
+      "outline-offset": "2px"
+    },
+    ".rt-range:focus-visible::-moz-range-thumb": {
+      "outline": "2px solid var(--color-rt-accent)",
+      "outline-offset": "2px"
     }
   },
   "meta": {

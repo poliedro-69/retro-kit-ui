@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "mac-ui",
   "title": "Mac System 7 Kit",
-  "description": "Mac System 7 inspired window, button, fields, menubar and feedback components.",
+  "description": "Mac System 7 inspired window, button, fields (input, textarea, listbox, slider), scroll area, dropdown menu, menubar and feedback components.",
   "dependencies": [
     "clsx",
     "tailwind-merge"
@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "components/mac-ui/index.ts",
-      "content": "export { MacWindow, macDither } from './mac-window'\nexport { MacButton } from './mac-button'\nexport { MacInput, MacCheckbox, MacRadio, MacGroup } from './mac-fields'\nexport { MacMenubar, type MacMenu } from './mac-menubar'\nexport { MacProgress, MacAlert } from './mac-feedback'\n",
+      "content": "export { MacWindow, macDither } from './mac-window'\nexport { MacButton } from './mac-button'\nexport { MacInput, MacTextarea, MacCheckbox, MacRadio, MacGroup } from './mac-fields'\nexport { MacScrollArea } from './mac-scroll'\nexport { MacListbox, type MacListboxOption } from './mac-listbox'\nexport { MacSlider } from './mac-slider'\nexport { MacDropdownMenu, type MacMenuItem } from './mac-dropdown'\nexport { MacMenubar, type MacMenu } from './mac-menubar'\nexport { MacProgress, MacAlert } from './mac-feedback'\n",
       "type": "registry:component",
       "target": "components/mac-ui/index.ts"
     },
@@ -21,6 +21,12 @@
       "target": "components/mac-ui/mac-button.tsx"
     },
     {
+      "path": "components/mac-ui/mac-dropdown.tsx",
+      "content": "'use client'\n\nimport { useEffect, useId, useRef, useState } from 'react'\nimport type { KeyboardEvent } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport type MacMenuItem =\n  | { separator: true }\n  | { label: string; shortcut?: string; disabled?: boolean; onSelect?: () => void }\n\ntype MacDropdownMenuProps = {\n  label: string\n  items: MacMenuItem[]\n  align?: 'start' | 'end'\n  className?: string\n}\n\nconst enabledIndices = (items: MacMenuItem[]) =>\n  items.flatMap((item, index) => ('separator' in item || item.disabled ? [] : [index]))\n\nexport function MacDropdownMenu({ label, items, align = 'start', className }: MacDropdownMenuProps) {\n  const [open, setOpen] = useState(false)\n  const rootRef = useRef<HTMLDivElement>(null)\n  const triggerRef = useRef<HTMLButtonElement>(null)\n  const itemRefs = useRef<(HTMLButtonElement | null)[]>([])\n  const initialFocus = useRef<'first' | 'last'>('first')\n  const menuId = useId()\n\n  useEffect(() => {\n    if (!open) return\n    const list = enabledIndices(items)\n    const target = initialFocus.current === 'last' ? list[list.length - 1] : list[0]\n    itemRefs.current[target]?.focus()\n    const onPointerDown = (event: PointerEvent) => {\n      if (!rootRef.current?.contains(event.target as Node)) setOpen(false)\n    }\n    document.addEventListener('pointerdown', onPointerDown)\n    return () => document.removeEventListener('pointerdown', onPointerDown)\n  }, [open, items])\n\n  function close(refocus: boolean) {\n    setOpen(false)\n    if (refocus) triggerRef.current?.focus()\n  }\n\n  function openWith(position: 'first' | 'last') {\n    initialFocus.current = position\n    setOpen(true)\n  }\n\n  function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>) {\n    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {\n      event.preventDefault()\n      openWith(event.key === 'ArrowDown' ? 'first' : 'last')\n    }\n  }\n\n  function onMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    const list = enabledIndices(items)\n    const position = list.indexOf(itemRefs.current.findIndex((el) => el === document.activeElement))\n    const focusAt = (index: number | undefined) => {\n      if (index !== undefined) itemRefs.current[index]?.focus()\n    }\n    switch (event.key) {\n      case 'ArrowDown':\n        event.preventDefault()\n        focusAt(list[(position + 1) % list.length])\n        break\n      case 'ArrowUp':\n        event.preventDefault()\n        focusAt(position <= 0 ? list[list.length - 1] : list[position - 1])\n        break\n      case 'Home':\n        event.preventDefault()\n        focusAt(list[0])\n        break\n      case 'End':\n        event.preventDefault()\n        focusAt(list[list.length - 1])\n        break\n      case 'Escape':\n        event.preventDefault()\n        close(true)\n        break\n      case 'Tab':\n        close(false)\n        break\n    }\n  }\n\n  return (\n    <div ref={rootRef} className={cn('relative inline-block font-rt-mono text-[12px] text-mac-ink', className)}>\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        aria-haspopup=\"menu\"\n        aria-expanded={open}\n        aria-controls={open ? menuId : undefined}\n        onClick={() => (open ? close(false) : openWith('first'))}\n        onKeyDown={onTriggerKeyDown}\n        className={cn(\n          'flex items-center gap-3 border-2 border-mac-ink bg-mac-paper px-3 py-0.5 font-semibold shadow-[2px_2px_0_var(--color-mac-ink)] select-none',\n          'hover:bg-mac-hover aria-expanded:bg-mac-ink aria-expanded:text-mac-paper',\n          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',\n        )}\n      >\n        {label}\n        <svg aria-hidden=\"true\" viewBox=\"0 0 8 8\" className=\"size-2 fill-current\">\n          <path d=\"M0 2h8L4 7z\" />\n        </svg>\n      </button>\n      {open ? (\n        <div\n          id={menuId}\n          role=\"menu\"\n          aria-label={label}\n          onKeyDown={onMenuKeyDown}\n          className={cn(\n            'absolute top-full z-20 min-w-44 border-2 border-mac-ink bg-mac-paper py-0.5 shadow-[3px_3px_0_var(--color-mac-ink)]',\n            align === 'end' ? 'right-0' : 'left-0',\n          )}\n        >\n          {items.map((item, index) =>\n            'separator' in item ? (\n              <div key={`separator-${index}`} role=\"separator\" className=\"my-0.5 border-t border-dashed border-mac-ink\" />\n            ) : (\n              <button\n                key={item.label}\n                ref={(element) => {\n                  itemRefs.current[index] = element\n                }}\n                type=\"button\"\n                role=\"menuitem\"\n                tabIndex={-1}\n                disabled={item.disabled}\n                onMouseEnter={(event) => event.currentTarget.focus()}\n                onClick={() => {\n                  item.onSelect?.()\n                  close(true)\n                }}\n                className={cn(\n                  'flex w-full items-center justify-between gap-6 px-3 py-0.5 text-left',\n                  'focus-visible:bg-mac-ink focus-visible:text-mac-paper focus-visible:outline-none',\n                  'disabled:cursor-not-allowed disabled:text-mac-dim',\n                )}\n              >\n                <span>{item.label}</span>\n                {item.shortcut ? <span>{item.shortcut}</span> : null}\n              </button>\n            ),\n          )}\n        </div>\n      ) : null}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/mac-ui/mac-dropdown.tsx"
+    },
+    {
       "path": "components/mac-ui/mac-feedback.tsx",
       "content": "import type { ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport function MacProgress({ value, label, className }: { value: number; label: string; className?: string }) {\n  const clamped = Math.min(100, Math.max(0, value))\n  return (\n    <div\n      role=\"progressbar\"\n      aria-label={label}\n      aria-valuemin={0}\n      aria-valuemax={100}\n      aria-valuenow={Math.round(clamped)}\n      className={cn('h-4 border-2 border-mac-ink bg-mac-paper p-px', className)}\n    >\n      <div className=\"h-full bg-mac-ink\" style={{ width: `${clamped}%` }} />\n    </div>\n  )\n}\n\ntype MacAlertProps = {\n  label: string\n  children: ReactNode\n  actions?: ReactNode\n  className?: string\n}\n\nexport function MacAlert({ label, children, actions, className }: MacAlertProps) {\n  return (\n    <div\n      role=\"alertdialog\"\n      aria-label={label}\n      className={cn('border-2 border-mac-ink bg-mac-paper p-0.5 shadow-[3px_3px_0_var(--color-mac-ink)]', className)}\n    >\n      <div className=\"border-2 border-mac-ink p-3 font-rt-mono text-[12px] text-mac-ink\">\n        <div className=\"flex gap-3\">\n          <svg viewBox=\"0 0 32 32\" aria-hidden=\"true\" className=\"size-8 shrink-0\">\n            <path d=\"M16 3 30 28H2Z\" fill=\"var(--color-mac-paper)\" stroke=\"var(--color-mac-ink)\" strokeWidth=\"2.5\" strokeLinejoin=\"round\" />\n            <path d=\"M16 12v8M16 23.5v1\" stroke=\"var(--color-mac-ink)\" strokeWidth=\"3\" />\n          </svg>\n          <div className=\"leading-snug\">{children}</div>\n        </div>\n        {actions ? <div className=\"mt-3 flex justify-end gap-4 pr-1\">{actions}</div> : null}\n      </div>\n    </div>\n  )\n}\n",
       "type": "registry:component",
@@ -28,15 +34,33 @@
     },
     {
       "path": "components/mac-ui/mac-fields.tsx",
-      "content": "import { useId } from 'react'\nimport type { InputHTMLAttributes, ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype MacInputProps = InputHTMLAttributes<HTMLInputElement> & { label?: string }\n\nexport function MacInput({ label, className, id, ...props }: MacInputProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1 font-rt-mono text-[12px] text-mac-ink\">\n      {label ? (\n        <label htmlFor={inputId} className=\"font-semibold\">\n          {label}\n        </label>\n      ) : null}\n      <input\n        id={inputId}\n        className={cn(\n          'h-6 border-2 border-mac-ink bg-mac-paper px-1.5 text-[12px] text-mac-ink placeholder:text-mac-dim',\n          'disabled:border-dashed disabled:text-mac-dim',\n          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',\n          className,\n        )}\n        {...props}\n      />\n    </div>\n  )\n}\n\ntype ToggleProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & { label: ReactNode }\n\nconst toggleLabel =\n  'flex cursor-pointer items-center gap-2 py-0.5 font-rt-mono text-[12px] text-mac-ink has-disabled:cursor-not-allowed has-disabled:text-mac-dim'\n\nconst toggleBox =\n  'flex size-3.5 shrink-0 items-center justify-center border-2 border-mac-ink bg-mac-paper peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-mac-ink peer-disabled:border-dashed'\n\nexport function MacCheckbox({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"checkbox\" className=\"peer sr-only\" {...props} />\n      <span aria-hidden=\"true\" className={cn(toggleBox, 'peer-checked:[&_svg]:scale-100')}>\n        <svg viewBox=\"0 0 10 10\" className=\"size-2.5 scale-0\">\n          <path d=\"M1 1l8 8M9 1L1 9\" stroke=\"var(--color-mac-ink)\" strokeWidth=\"1.5\" />\n        </svg>\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function MacRadio({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"radio\" className=\"peer sr-only\" {...props} />\n      <span aria-hidden=\"true\" className={cn(toggleBox, 'rounded-full peer-checked:[&_i]:scale-100')}>\n        <i className=\"block size-1.5 scale-0 rounded-full bg-mac-ink\" />\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function MacGroup({\n  legend,\n  children,\n  className,\n}: {\n  legend: string\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <fieldset className={cn('border-2 border-mac-ink px-3 pt-1 pb-2 font-rt-mono text-[12px] text-mac-ink', className)}>\n      <legend className=\"bg-mac-paper px-1.5 font-semibold\">{legend}</legend>\n      {children}\n    </fieldset>\n  )\n}\n",
+      "content": "import { useId } from 'react'\nimport type { InputHTMLAttributes, ReactNode, TextareaHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype MacInputProps = InputHTMLAttributes<HTMLInputElement> & { label?: string }\n\nexport function MacInput({ label, className, id, ...props }: MacInputProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1 font-rt-mono text-[12px] text-mac-ink\">\n      {label ? (\n        <label htmlFor={inputId} className=\"font-semibold\">\n          {label}\n        </label>\n      ) : null}\n      <input\n        id={inputId}\n        className={cn(\n          'h-6 border-2 border-mac-ink bg-mac-paper px-1.5 text-[12px] text-mac-ink placeholder:text-mac-dim',\n          'disabled:border-dashed disabled:text-mac-dim',\n          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',\n          className,\n        )}\n        {...props}\n      />\n    </div>\n  )\n}\n\ntype MacTextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & { label?: string }\n\nexport function MacTextarea({ label, className, id, rows = 4, ...props }: MacTextareaProps) {\n  const autoId = useId()\n  const textareaId = id ?? autoId\n  return (\n    <div className=\"flex flex-col gap-1 font-rt-mono text-[12px] text-mac-ink\">\n      {label ? (\n        <label htmlFor={textareaId} className=\"font-semibold\">\n          {label}\n        </label>\n      ) : null}\n      <textarea\n        id={textareaId}\n        rows={rows}\n        className={cn(\n          'mac-scroll min-h-16 resize-y border-2 border-mac-ink bg-mac-paper p-1.5 text-[12px] leading-snug text-mac-ink placeholder:text-mac-dim',\n          'disabled:border-dashed disabled:text-mac-dim',\n          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',\n          className,\n        )}\n        {...props}\n      />\n    </div>\n  )\n}\n\ntype ToggleProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & { label: ReactNode }\n\nconst toggleLabel =\n  'flex cursor-pointer items-center gap-2 py-0.5 font-rt-mono text-[12px] text-mac-ink has-disabled:cursor-not-allowed has-disabled:text-mac-dim'\n\nconst toggleBox =\n  'flex size-3.5 shrink-0 items-center justify-center border-2 border-mac-ink bg-mac-paper peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-mac-ink peer-disabled:border-dashed'\n\nexport function MacCheckbox({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"checkbox\" className=\"peer sr-only\" {...props} />\n      <span aria-hidden=\"true\" className={cn(toggleBox, 'peer-checked:[&_svg]:scale-100')}>\n        <svg viewBox=\"0 0 10 10\" className=\"size-2.5 scale-0\">\n          <path d=\"M1 1l8 8M9 1L1 9\" stroke=\"var(--color-mac-ink)\" strokeWidth=\"1.5\" />\n        </svg>\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function MacRadio({ label, className, ...props }: ToggleProps) {\n  return (\n    <label className={cn(toggleLabel, className)}>\n      <input type=\"radio\" className=\"peer sr-only\" {...props} />\n      <span aria-hidden=\"true\" className={cn(toggleBox, 'rounded-full peer-checked:[&_i]:scale-100')}>\n        <i className=\"block size-1.5 scale-0 rounded-full bg-mac-ink\" />\n      </span>\n      <span>{label}</span>\n    </label>\n  )\n}\n\nexport function MacGroup({\n  legend,\n  children,\n  className,\n}: {\n  legend: string\n  children: ReactNode\n  className?: string\n}) {\n  return (\n    <fieldset className={cn('border-2 border-mac-ink px-3 pt-1 pb-2 font-rt-mono text-[12px] text-mac-ink', className)}>\n      <legend className=\"bg-mac-paper px-1.5 font-semibold\">{legend}</legend>\n      {children}\n    </fieldset>\n  )\n}\n",
       "type": "registry:component",
       "target": "components/mac-ui/mac-fields.tsx"
+    },
+    {
+      "path": "components/mac-ui/mac-listbox.tsx",
+      "content": "'use client'\n\nimport { useId, useRef, useState } from 'react'\nimport type { KeyboardEvent } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport type MacListboxOption = { value: string; label: string; disabled?: boolean }\n\ntype MacListboxProps = {\n  options: MacListboxOption[]\n  label: string\n  multiple?: boolean\n  value?: string[]\n  defaultValue?: string[]\n  onValueChange?: (value: string[]) => void\n  className?: string\n  listClassName?: string\n}\n\nexport function MacListbox({\n  options,\n  label,\n  multiple = false,\n  value,\n  defaultValue = [],\n  onValueChange,\n  className,\n  listClassName,\n}: MacListboxProps) {\n  const baseId = useId()\n  const labelId = `${baseId}-label`\n  const listRef = useRef<HTMLDivElement>(null)\n  const [internal, setInternal] = useState(defaultValue)\n  const selected = value ?? internal\n  const [active, setActive] = useState(() => {\n    const index = options.findIndex((option) => selected.includes(option.value) && !option.disabled)\n    return index >= 0 ? index : Math.max(0, options.findIndex((option) => !option.disabled))\n  })\n\n  const optionId = (index: number) => `${baseId}-option-${index}`\n\n  function commit(next: string[]) {\n    if (value === undefined) setInternal(next)\n    onValueChange?.(next)\n  }\n\n  function choose(index: number) {\n    const option = options[index]\n    if (!option || option.disabled) return\n    setActive(index)\n    if (multiple) {\n      commit(selected.includes(option.value) ? selected.filter((v) => v !== option.value) : [...selected, option.value])\n    } else {\n      commit([option.value])\n    }\n  }\n\n  function step(from: number, direction: 1 | -1) {\n    let index = from + direction\n    while (index >= 0 && index < options.length && options[index].disabled) index += direction\n    return index >= 0 && index < options.length ? index : from\n  }\n\n  function moveTo(index: number) {\n    if (index < 0 || index >= options.length) return\n    setActive(index)\n    listRef.current?.children[index]?.scrollIntoView({ block: 'nearest' })\n    if (!multiple) choose(index)\n  }\n\n  function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {\n    switch (event.key) {\n      case 'ArrowDown':\n      case 'ArrowUp':\n        event.preventDefault()\n        moveTo(step(active, event.key === 'ArrowDown' ? 1 : -1))\n        break\n      case 'Home':\n        event.preventDefault()\n        moveTo(step(-1, 1))\n        break\n      case 'End':\n        event.preventDefault()\n        moveTo(step(options.length, -1))\n        break\n      case ' ':\n      case 'Enter':\n        event.preventDefault()\n        choose(active)\n        break\n    }\n  }\n\n  return (\n    <div className={cn('flex flex-col gap-1 font-rt-mono text-[12px] text-mac-ink', className)}>\n      <span id={labelId} className=\"font-semibold\">\n        {label}\n      </span>\n      <div\n        ref={listRef}\n        role=\"listbox\"\n        aria-labelledby={labelId}\n        aria-multiselectable={multiple || undefined}\n        aria-activedescendant={optionId(active)}\n        tabIndex={0}\n        onKeyDown={onKeyDown}\n        className={cn(\n          'group mac-scroll h-32 overflow-auto border-2 border-mac-ink bg-mac-paper',\n          'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',\n          listClassName,\n        )}\n      >\n        {options.map((option, index) => {\n          const isSelected = selected.includes(option.value)\n          return (\n            <div\n              key={option.value}\n              id={optionId(index)}\n              role=\"option\"\n              aria-selected={isSelected}\n              aria-disabled={option.disabled || undefined}\n              onClick={() => choose(index)}\n              className={cn(\n                'cursor-pointer px-2 py-0.5 select-none',\n                isSelected ? 'bg-mac-ink text-mac-paper' : 'hover:bg-mac-hover',\n                index === active &&\n                  'group-focus-visible:outline-1 group-focus-visible:-outline-offset-3 group-focus-visible:outline-dotted group-focus-visible:outline-current',\n                option.disabled && 'cursor-not-allowed text-mac-dim hover:bg-transparent',\n              )}\n            >\n              {option.label}\n            </div>\n          )\n        })}\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/mac-ui/mac-listbox.tsx"
     },
     {
       "path": "components/mac-ui/mac-menubar.tsx",
       "content": "'use client'\n\nimport { useEffect, useRef, useState } from 'react'\nimport { cn } from '@/lib/utils'\n\nexport type MacMenu = { label: string; items: string[] }\n\ntype MacMenubarProps = {\n  menus: MacMenu[]\n  label?: string\n  className?: string\n  onSelect?: (menu: string, item: string) => void\n}\n\nexport function MacMenubar({ menus, label = 'Menu', className, onSelect }: MacMenubarProps) {\n  const [open, setOpen] = useState<number | null>(null)\n  const ref = useRef<HTMLDivElement>(null)\n\n  useEffect(() => {\n    if (open === null) return\n    const onPointerDown = (event: PointerEvent) => {\n      if (!ref.current?.contains(event.target as Node)) setOpen(null)\n    }\n    const onKeyDown = (event: KeyboardEvent) => {\n      if (event.key === 'Escape') setOpen(null)\n    }\n    document.addEventListener('pointerdown', onPointerDown)\n    document.addEventListener('keydown', onKeyDown)\n    return () => {\n      document.removeEventListener('pointerdown', onPointerDown)\n      document.removeEventListener('keydown', onKeyDown)\n    }\n  }, [open])\n\n  return (\n    <div\n      ref={ref}\n      role=\"menubar\"\n      aria-label={label}\n      className={cn(\n        'flex items-center gap-1 border-b-2 border-mac-ink bg-mac-paper px-2 font-rt-mono text-[12px] font-semibold text-mac-ink',\n        className,\n      )}\n    >\n      <span aria-hidden=\"true\" className=\"mr-2 size-3 rounded-full bg-mac-ink\" />\n      {menus.map((menu, index) => {\n        const isOpen = open === index\n        return (\n          <div key={menu.label} role=\"none\" className=\"relative\">\n            <button\n              type=\"button\"\n              role=\"menuitem\"\n              aria-haspopup=\"menu\"\n              aria-expanded={isOpen}\n              onClick={() => setOpen(isOpen ? null : index)}\n              onMouseEnter={() => open !== null && setOpen(index)}\n              className={cn(\n                'px-2 py-0.5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-mac-ink',\n                isOpen ? 'bg-mac-ink text-mac-paper' : 'hover:bg-mac-hover',\n              )}\n            >\n              {menu.label}\n            </button>\n            {isOpen ? (\n              <ul\n                role=\"menu\"\n                aria-label={menu.label}\n                className=\"absolute top-full left-0 z-10 min-w-36 border-2 border-mac-ink bg-mac-paper py-0.5 font-normal shadow-[3px_3px_0_var(--color-mac-ink)]\"\n              >\n                {menu.items.map((item) => (\n                  <li key={item} role=\"none\">\n                    <button\n                      type=\"button\"\n                      role=\"menuitem\"\n                      onClick={() => {\n                        onSelect?.(menu.label, item)\n                        setOpen(null)\n                      }}\n                      className=\"block w-full px-3 py-0.5 text-left hover:bg-mac-ink hover:text-mac-paper focus-visible:bg-mac-ink focus-visible:text-mac-paper focus-visible:outline-none\"\n                    >\n                      {item}\n                    </button>\n                  </li>\n                ))}\n              </ul>\n            ) : null}\n          </div>\n        )\n      })}\n    </div>\n  )\n}\n",
       "type": "registry:component",
       "target": "components/mac-ui/mac-menubar.tsx"
+    },
+    {
+      "path": "components/mac-ui/mac-scroll.tsx",
+      "content": "import type { HTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype MacScrollAreaProps = HTMLAttributes<HTMLDivElement> & {\n  label: string\n  framed?: boolean\n}\n\nexport function MacScrollArea({ label, framed = true, className, children, ...props }: MacScrollAreaProps) {\n  return (\n    <div\n      role=\"region\"\n      aria-label={label}\n      tabIndex={0}\n      className={cn(\n        'mac-scroll overflow-auto bg-mac-paper font-rt-mono text-[12px] text-mac-ink',\n        framed && 'border-2 border-mac-ink',\n        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mac-ink',\n        className,\n      )}\n      {...props}\n    >\n      {children}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/mac-ui/mac-scroll.tsx"
+    },
+    {
+      "path": "components/mac-ui/mac-slider.tsx",
+      "content": "'use client'\n\nimport { useId, useState } from 'react'\nimport type { ChangeEvent, CSSProperties, InputHTMLAttributes } from 'react'\nimport { cn } from '@/lib/utils'\n\ntype MacSliderProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {\n  label?: string\n  showValue?: boolean\n}\n\nexport function MacSlider({\n  label,\n  showValue = true,\n  min = 0,\n  max = 100,\n  value,\n  defaultValue,\n  onChange,\n  className,\n  id,\n  ...props\n}: MacSliderProps) {\n  const autoId = useId()\n  const inputId = id ?? autoId\n  const [internal, setInternal] = useState(Number(defaultValue ?? min))\n  const current = value !== undefined ? Number(value) : internal\n  const range = Number(max) - Number(min)\n  const fill = range > 0 ? ((current - Number(min)) / range) * 100 : 0\n\n  function handleChange(event: ChangeEvent<HTMLInputElement>) {\n    setInternal(Number(event.target.value))\n    onChange?.(event)\n  }\n\n  return (\n    <div className=\"flex flex-col gap-1 font-rt-mono text-[12px] text-mac-ink\">\n      {label || showValue ? (\n        <div className=\"flex items-baseline justify-between gap-3\">\n          {label ? (\n            <label htmlFor={inputId} className=\"font-semibold\">\n              {label}\n            </label>\n          ) : (\n            <span />\n          )}\n          {showValue ? <output htmlFor={inputId}>{current}</output> : null}\n        </div>\n      ) : null}\n      <input\n        id={inputId}\n        type=\"range\"\n        min={min}\n        max={max}\n        {...(value !== undefined ? { value } : { defaultValue: defaultValue ?? min })}\n        onChange={handleChange}\n        style={{ '--mac-fill': `${fill}%` } as CSSProperties}\n        className={cn('mac-range w-full', className)}\n        {...props}\n      />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/mac-ui/mac-slider.tsx"
     },
     {
       "path": "components/mac-ui/mac-window.tsx",
@@ -52,6 +76,112 @@
       "color-mac-hover": "#f5f5f5",
       "color-mac-dim": "#737373",
       "font-rt-mono": "var(--font-plex-mono, 'IBM Plex Mono'), ui-monospace, SFMono-Regular, Menlo, monospace"
+    }
+  },
+  "css": {
+    "@supports not selector(::-webkit-scrollbar)": {
+      ".mac-scroll": {
+        "scrollbar-color": "var(--color-mac-ink) var(--color-mac-paper)"
+      }
+    },
+    ".mac-scroll::-webkit-scrollbar": {
+      "width": "16px",
+      "height": "16px"
+    },
+    ".mac-scroll::-webkit-scrollbar-track": {
+      "background-color": "var(--color-mac-paper)",
+      "background-image": "repeating-conic-gradient(var(--color-mac-ink) 0% 25%, var(--color-mac-paper) 0% 50%)",
+      "background-size": "2px 2px"
+    },
+    ".mac-scroll::-webkit-scrollbar-thumb": {
+      "border": "2px solid var(--color-mac-ink)",
+      "background-color": "var(--color-mac-paper)"
+    },
+    ".mac-scroll::-webkit-scrollbar-corner": {
+      "border": "2px solid var(--color-mac-ink)",
+      "background-color": "var(--color-mac-paper)"
+    },
+    ".mac-scroll::-webkit-scrollbar-button:single-button": {
+      "display": "block",
+      "width": "16px",
+      "height": "16px",
+      "border": "2px solid var(--color-mac-ink)",
+      "background-color": "var(--color-mac-paper)",
+      "background-repeat": "no-repeat",
+      "background-size": "4px 4px"
+    },
+    ".mac-scroll::-webkit-scrollbar-button:single-button:vertical:decrement": {
+      "background-image": "linear-gradient(to bottom right, transparent 50%, var(--color-mac-ink) 50%), linear-gradient(to bottom left, transparent 50%, var(--color-mac-ink) 50%)",
+      "background-position": "calc(50% - 2px) 50%, calc(50% + 2px) 50%"
+    },
+    ".mac-scroll::-webkit-scrollbar-button:single-button:vertical:increment": {
+      "background-image": "linear-gradient(to top right, transparent 50%, var(--color-mac-ink) 50%), linear-gradient(to top left, transparent 50%, var(--color-mac-ink) 50%)",
+      "background-position": "calc(50% - 2px) 50%, calc(50% + 2px) 50%"
+    },
+    ".mac-scroll::-webkit-scrollbar-button:single-button:horizontal:decrement": {
+      "background-image": "linear-gradient(to bottom right, transparent 50%, var(--color-mac-ink) 50%), linear-gradient(to top right, transparent 50%, var(--color-mac-ink) 50%)",
+      "background-position": "50% calc(50% - 2px), 50% calc(50% + 2px)"
+    },
+    ".mac-scroll::-webkit-scrollbar-button:single-button:horizontal:increment": {
+      "background-image": "linear-gradient(to bottom left, transparent 50%, var(--color-mac-ink) 50%), linear-gradient(to top left, transparent 50%, var(--color-mac-ink) 50%)",
+      "background-position": "50% calc(50% - 2px), 50% calc(50% + 2px)"
+    },
+    ".mac-range": {
+      "height": "20px",
+      "background": "transparent",
+      "cursor": "pointer",
+      "-webkit-appearance": "none",
+      "appearance": "none"
+    },
+    ".mac-range:disabled": {
+      "cursor": "not-allowed",
+      "opacity": "0.5"
+    },
+    ".mac-range::-webkit-slider-runnable-track": {
+      "box-sizing": "border-box",
+      "height": "10px",
+      "border": "2px solid var(--color-mac-ink)",
+      "background": "linear-gradient(90deg, var(--color-mac-ink) var(--mac-fill, 0%), var(--color-mac-paper) var(--mac-fill, 0%))"
+    },
+    ".mac-range::-moz-range-track": {
+      "box-sizing": "border-box",
+      "height": "10px",
+      "border": "2px solid var(--color-mac-ink)",
+      "background": "linear-gradient(90deg, var(--color-mac-ink) var(--mac-fill, 0%), var(--color-mac-paper) var(--mac-fill, 0%))"
+    },
+    ".mac-range::-webkit-slider-thumb": {
+      "-webkit-appearance": "none",
+      "appearance": "none",
+      "box-sizing": "border-box",
+      "width": "14px",
+      "height": "20px",
+      "margin-top": "-5px",
+      "border": "2px solid var(--color-mac-ink)",
+      "background-color": "var(--color-mac-paper)",
+      "box-shadow": "2px 2px 0 var(--color-mac-ink)"
+    },
+    ".mac-range::-moz-range-thumb": {
+      "box-sizing": "border-box",
+      "width": "14px",
+      "height": "20px",
+      "border": "2px solid var(--color-mac-ink)",
+      "border-radius": "0",
+      "background-color": "var(--color-mac-paper)",
+      "box-shadow": "2px 2px 0 var(--color-mac-ink)"
+    },
+    ".mac-range:active::-webkit-slider-thumb": {
+      "background-color": "var(--color-mac-ink)"
+    },
+    ".mac-range:active::-moz-range-thumb": {
+      "background-color": "var(--color-mac-ink)"
+    },
+    ".mac-range:focus-visible::-webkit-slider-thumb": {
+      "outline": "2px solid var(--color-mac-ink)",
+      "outline-offset": "2px"
+    },
+    ".mac-range:focus-visible::-moz-range-thumb": {
+      "outline": "2px solid var(--color-mac-ink)",
+      "outline-offset": "2px"
     }
   },
   "meta": {

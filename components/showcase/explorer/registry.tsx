@@ -35,6 +35,10 @@ const WIN_SOURCES = {
   dialog: 'components/retro-ui/retro-dialog.tsx',
   button: 'components/retro-ui/retro-button.tsx',
   fields: 'components/retro-ui/retro-fields.tsx',
+  scroll: 'components/retro-ui/retro-scroll.tsx',
+  listbox: 'components/retro-ui/retro-listbox.tsx',
+  slider: 'components/retro-ui/retro-slider.tsx',
+  dropdown: 'components/retro-ui/retro-dropdown.tsx',
   menubar: 'components/retro-ui/retro-menubar.tsx',
   tabs: 'components/retro-ui/retro-tabs.tsx',
   feedback: 'components/retro-ui/retro-feedback.tsx',
@@ -45,6 +49,10 @@ const MAC_SOURCES = {
   window: 'components/mac-ui/mac-window.tsx',
   button: 'components/mac-ui/mac-button.tsx',
   fields: 'components/mac-ui/mac-fields.tsx',
+  scroll: 'components/mac-ui/mac-scroll.tsx',
+  listbox: 'components/mac-ui/mac-listbox.tsx',
+  slider: 'components/mac-ui/mac-slider.tsx',
+  dropdown: 'components/mac-ui/mac-dropdown.tsx',
   menubar: 'components/mac-ui/mac-menubar.tsx',
   feedback: 'components/mac-ui/mac-feedback.tsx',
 }
@@ -230,6 +238,107 @@ function winDefs(): ItemDef[] {
   <RetroCheckbox label="Run at startup" />
 </RetroGroup>`,
       sources: [WIN_SOURCES.fields],
+    },
+    {
+      id: 'win-textarea',
+      name: 'Textarea',
+      description: 'Sunken multi-line field with label, hint and vertical resize.',
+      exports: ['RetroTextarea'],
+      from,
+      preview: winPreviews.textarea,
+      props: [
+        { name: 'label', type: 'string', description: 'Visible label linked to the textarea.' },
+        { name: 'hint', type: 'string', description: 'Helper text shown under the field.' },
+        { name: 'rows', type: 'number', defaultValue: '4', description: 'Visible text rows.' },
+        { name: '...textarea', type: 'TextareaHTMLAttributes', description: 'Any native textarea attribute.' },
+      ],
+      usage: `<RetroTextarea label="Notes" placeholder="Type here..." hint="Resize from the bottom edge." />`,
+      sources: [WIN_SOURCES.fields],
+    },
+    {
+      id: 'win-listbox',
+      name: 'Listbox',
+      description: 'Scrollable option list with single or multiple selection and full keyboard support.',
+      exports: ['RetroListbox'],
+      from,
+      preview: winPreviews.listbox,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible name, also shown above the list.' },
+        { name: 'options', type: 'RetroListboxOption[]', description: 'Items with value, label and optional disabled.' },
+        { name: 'multiple', type: 'boolean', defaultValue: 'false', description: 'Allows selecting several options.' },
+        { name: 'value', type: 'string[]', description: 'Selected values for controlled usage.' },
+        { name: 'defaultValue', type: 'string[]', defaultValue: '[]', description: 'Initial selection when uncontrolled.' },
+        { name: 'onValueChange', type: '(value: string[]) => void', description: 'Called when the selection changes.' },
+      ],
+      usage: `<RetroListbox
+  label="Startup files"
+  multiple
+  options={[
+    { value: 'autoexec', label: 'AUTOEXEC.BAT' },
+    { value: 'config', label: 'CONFIG.SYS' },
+  ]}
+  onValueChange={(values) => console.log(values)}
+/>`,
+      sources: [WIN_SOURCES.listbox],
+    },
+    {
+      id: 'win-slider',
+      name: 'Slider',
+      description: 'Native range input with a beveled thumb and a live value readout.',
+      exports: ['RetroSlider'],
+      from,
+      preview: winPreviews.slider,
+      props: [
+        { name: 'label', type: 'string', description: 'Visible label linked to the slider.' },
+        { name: 'showValue', type: 'boolean', defaultValue: 'true', description: 'Shows the current value.' },
+        { name: 'min / max / step', type: 'number', description: 'Range limits and increment.' },
+        { name: '...input', type: 'InputHTMLAttributes', description: 'Any native range input attribute.' },
+      ],
+      usage: `<RetroSlider label="Volume" defaultValue={60} />`,
+      sources: [WIN_SOURCES.slider],
+    },
+    {
+      id: 'win-scroll',
+      name: 'Scroll Area',
+      description: 'Keyboard-focusable region with classic arrow-button scrollbars.',
+      exports: ['RetroScrollArea'],
+      from,
+      preview: winPreviews.scroll,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible name of the region.' },
+        { name: 'sunken', type: 'boolean', defaultValue: 'true', description: 'Draws the sunken frame.' },
+        { name: 'className', type: 'string', description: 'Set a height or max-height to enable scrolling.' },
+      ],
+      usage: `<RetroScrollArea label="Log output" className="h-32 p-2">
+  {lines.map((line) => <p key={line}>{line}</p>)}
+</RetroScrollArea>`,
+      sources: [WIN_SOURCES.scroll],
+    },
+    {
+      id: 'win-dropdown',
+      name: 'Dropdown Menu',
+      description: 'Button-triggered menu with shortcuts, separators and arrow key navigation.',
+      exports: ['RetroDropdownMenu'],
+      from,
+      preview: winPreviews.dropdown,
+      props: [
+        { name: 'label', type: 'string', description: 'Trigger text and accessible menu name.' },
+        {
+          name: 'items',
+          type: 'RetroMenuItem[]',
+          description: 'Entries with label, shortcut, disabled, onSelect, or { separator: true }.',
+        },
+        { name: 'align', type: "'start' | 'end'", defaultValue: "'start'", description: 'Which edge the menu aligns to.' },
+      ],
+      usage: `<RetroDropdownMenu
+  label="Actions"
+  items={[
+    { label: 'New', shortcut: 'Ctrl+N', onSelect: createFile },
+    { separator: true },
+    { label: 'Exit', onSelect: quit },
+  ]}
+/>`,
+      sources: [WIN_SOURCES.dropdown],
     },
     {
       id: 'win-menubar',
@@ -444,6 +553,104 @@ function macDefs(): ItemDef[] {
       sources: [MAC_SOURCES.fields],
     },
     {
+      id: 'mac-textarea',
+      name: 'Textarea',
+      description: 'Multi-line field with a heavy frame and vertical resize.',
+      exports: ['MacTextarea'],
+      from,
+      preview: macPreviews.textarea,
+      props: [
+        { name: 'label', type: 'string', description: 'Visible label linked to the textarea.' },
+        { name: 'rows', type: 'number', defaultValue: '4', description: 'Visible text rows.' },
+        { name: '...textarea', type: 'TextareaHTMLAttributes', description: 'Any native textarea attribute.' },
+      ],
+      usage: `<MacTextarea label="Notes" placeholder="Type here..." />`,
+      sources: [MAC_SOURCES.fields],
+    },
+    {
+      id: 'mac-listbox',
+      name: 'Listbox',
+      description: 'Option list with inverted selection, single or multiple, fully keyboard operable.',
+      exports: ['MacListbox'],
+      from,
+      preview: macPreviews.listbox,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible name, also shown above the list.' },
+        { name: 'options', type: 'MacListboxOption[]', description: 'Items with value, label and optional disabled.' },
+        { name: 'multiple', type: 'boolean', defaultValue: 'false', description: 'Allows selecting several options.' },
+        { name: 'value', type: 'string[]', description: 'Selected values for controlled usage.' },
+        { name: 'defaultValue', type: 'string[]', defaultValue: '[]', description: 'Initial selection when uncontrolled.' },
+        { name: 'onValueChange', type: '(value: string[]) => void', description: 'Called when the selection changes.' },
+      ],
+      usage: `<MacListbox
+  label="Startup items"
+  options={[
+    { value: 'finder', label: 'Finder' },
+    { value: 'system', label: 'System Folder' },
+  ]}
+/>`,
+      sources: [MAC_SOURCES.listbox],
+    },
+    {
+      id: 'mac-slider',
+      name: 'Slider',
+      description: 'Native range input drawn as a 1-bit track with a solid thumb.',
+      exports: ['MacSlider'],
+      from,
+      preview: macPreviews.slider,
+      props: [
+        { name: 'label', type: 'string', description: 'Visible label linked to the slider.' },
+        { name: 'showValue', type: 'boolean', defaultValue: 'true', description: 'Shows the current value.' },
+        { name: 'min / max / step', type: 'number', description: 'Range limits and increment.' },
+        { name: '...input', type: 'InputHTMLAttributes', description: 'Any native range input attribute.' },
+      ],
+      usage: `<MacSlider label="Volume" defaultValue={60} />`,
+      sources: [MAC_SOURCES.slider],
+    },
+    {
+      id: 'mac-scroll',
+      name: 'Scroll Area',
+      description: 'Keyboard-focusable region with dithered System 7 scrollbars.',
+      exports: ['MacScrollArea'],
+      from,
+      preview: macPreviews.scroll,
+      props: [
+        { name: 'label', type: 'string', description: 'Accessible name of the region.' },
+        { name: 'framed', type: 'boolean', defaultValue: 'true', description: 'Draws the black frame.' },
+        { name: 'className', type: 'string', description: 'Set a height or max-height to enable scrolling.' },
+      ],
+      usage: `<MacScrollArea label="Log output" className="h-32 p-2">
+  {lines.map((line) => <p key={line}>{line}</p>)}
+</MacScrollArea>`,
+      sources: [MAC_SOURCES.scroll],
+    },
+    {
+      id: 'mac-dropdown',
+      name: 'Dropdown Menu',
+      description: 'Button-triggered menu with inverted highlight, shortcuts and separators.',
+      exports: ['MacDropdownMenu'],
+      from,
+      preview: macPreviews.dropdown,
+      props: [
+        { name: 'label', type: 'string', description: 'Trigger text and accessible menu name.' },
+        {
+          name: 'items',
+          type: 'MacMenuItem[]',
+          description: 'Entries with label, shortcut, disabled, onSelect, or { separator: true }.',
+        },
+        { name: 'align', type: "'start' | 'end'", defaultValue: "'start'", description: 'Which edge the menu aligns to.' },
+      ],
+      usage: `<MacDropdownMenu
+  label="Actions"
+  items={[
+    { label: 'New', shortcut: 'Cmd+N', onSelect: createFile },
+    { separator: true },
+    { label: 'Quit', onSelect: quit },
+  ]}
+/>`,
+      sources: [MAC_SOURCES.dropdown],
+    },
+    {
       id: 'mac-menubar',
       name: 'Menu Bar',
       description: 'Pull-down menus with the inverted highlight, closing on Escape or outside click.',
@@ -484,8 +691,12 @@ const winGroups: [string, string, string[]][] = [
   ['foundations', 'Foundations', ['win-tokens']],
   ['containers', 'Containers', ['win-window', 'win-dialog']],
   ['actions', 'Actions', ['win-button', 'win-link-button']],
-  ['forms', 'Forms', ['win-input', 'win-select', 'win-checkbox', 'win-radio', 'win-group']],
-  ['navigation', 'Navigation', ['win-menubar', 'win-tabs']],
+  [
+    'forms',
+    'Forms',
+    ['win-input', 'win-textarea', 'win-select', 'win-listbox', 'win-slider', 'win-checkbox', 'win-radio', 'win-group'],
+  ],
+  ['navigation', 'Navigation', ['win-menubar', 'win-dropdown', 'win-tabs', 'win-scroll']],
   ['feedback', 'Feedback', ['win-progress', 'win-badge']],
   ['blocks', 'Blocks', ['win-product-card']],
 ]
@@ -494,8 +705,8 @@ const macGroups: [string, string, string[]][] = [
   ['foundations', 'Foundations', ['mac-dither']],
   ['containers', 'Containers', ['mac-window', 'mac-alert']],
   ['actions', 'Actions', ['mac-button']],
-  ['forms', 'Forms', ['mac-input', 'mac-checkbox', 'mac-radio', 'mac-group']],
-  ['navigation', 'Navigation', ['mac-menubar']],
+  ['forms', 'Forms', ['mac-input', 'mac-textarea', 'mac-listbox', 'mac-slider', 'mac-checkbox', 'mac-radio', 'mac-group']],
+  ['navigation', 'Navigation', ['mac-menubar', 'mac-dropdown', 'mac-scroll']],
   ['feedback', 'Feedback', ['mac-progress']],
 ]
 

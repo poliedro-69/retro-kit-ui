@@ -32,6 +32,46 @@ function parseTokens(css) {
   return { theme, utilities: css_ }
 }
 
+function parseDeclarations(body) {
+  return Object.fromEntries(
+    body
+      .split(';')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const index = line.indexOf(':')
+        return [line.slice(0, index).trim(), line.slice(index + 1).replace(/\s+/g, ' ').trim()]
+      }),
+  )
+}
+
+function parseBlock(text) {
+  const out = {}
+  let cursor = 0
+  while (cursor < text.length) {
+    const open = text.indexOf('{', cursor)
+    if (open === -1) break
+    const selector = text.slice(cursor, open).trim().replace(/\s+/g, ' ')
+    let depth = 1
+    let end = open + 1
+    while (depth && end < text.length) {
+      if (text[end] === '{') depth++
+      else if (text[end] === '}') depth--
+      end++
+    }
+    const body = text.slice(open + 1, end - 1)
+    out[selector] = body.includes('{') ? parseBlock(body) : parseDeclarations(body)
+    cursor = end
+  }
+  return out
+}
+
+// Rules between the registry markers (scrollbars, range sliders) are passed through verbatim.
+function parseRules(css) {
+  const match = css.match(/\/\* registry:rules \*\/([\s\S]*?)\/\* \/registry:rules \*\//)
+  return match ? parseBlock(match[1].replace(/\/\*[\s\S]*?\*\//g, '')) : {}
+}
+
 function parseThemes(css) {
   const clean = css.replace(/\/\*[\s\S]*?\*\//g, '')
   const blocks = {}
@@ -51,6 +91,21 @@ function parseThemes(css) {
 }
 
 const tokens = parseTokens(readFileSync(join(root, 'packages/retro-ui/styles.css'), 'utf8'))
+const rules = parseRules(readFileSync(join(root, 'packages/retro-ui/styles.css'), 'utf8'))
+
+function rulesFor(prefix) {
+  const out = {}
+  for (const [selector, value] of Object.entries(rules)) {
+    if (selector.startsWith('@')) {
+      const inner = Object.fromEntries(Object.entries(value).filter(([key]) => key.startsWith(prefix)))
+      if (Object.keys(inner).length) out[selector] = inner
+    } else if (selector.startsWith(prefix)) {
+      out[selector] = value
+    }
+  }
+  return out
+}
+
 const themeBlocks = parseThemes(readFileSync(join(root, 'packages/retro-ui/themes.css'), 'utf8'))
 const pick = (predicate) => Object.fromEntries(Object.entries(tokens.theme).filter(([key]) => predicate(key)))
 const retroTheme = pick((key) => !key.startsWith('color-mac'))
@@ -73,21 +128,22 @@ const registry = {
       name: 'retro-ui',
       type: 'registry:component',
       title: 'Windows 3.1 Kit',
-      description: 'Windows 3.1 structure with a modern finish: window, button, fields, menubar, tabs, feedback and dialog.',
+      description: 'Windows 3.1 structure with a modern finish: window, button, fields (input, textarea, select, listbox, slider), scroll area, dropdown menu, menubar, tabs, feedback and dialog.',
       dependencies: ['clsx', 'tailwind-merge'],
       files: filesIn('components/retro-ui', 'registry:component'),
       cssVars: { theme: retroTheme },
-      css: tokens.utilities,
+      css: { ...tokens.utilities, ...rulesFor('.rt-') },
       meta,
     },
     {
       name: 'mac-ui',
       type: 'registry:component',
       title: 'Mac System 7 Kit',
-      description: 'Mac System 7 inspired window, button, fields, menubar and feedback components.',
+      description: 'Mac System 7 inspired window, button, fields (input, textarea, listbox, slider), scroll area, dropdown menu, menubar and feedback components.',
       dependencies: ['clsx', 'tailwind-merge'],
       files: filesIn('components/mac-ui', 'registry:component'),
       cssVars: { theme: macTheme },
+      css: rulesFor('.mac-'),
       meta,
     },
     {
