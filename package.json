@@ -11,7 +11,9 @@
     "registry:build": "node scripts/build-registry.mjs",
     "elements:build": "tsc -p packages/retro-elements/tsconfig.json",
     "vue:build": "tsc -p packages/retro-vue/tsconfig.json",
-    "packages:build": "pnpm package:build && pnpm elements:build && pnpm vue:build"
+    "packages:build": "pnpm package:build && pnpm elements:build && pnpm vue:build",
+    "packages:check": "pnpm packages:build && pnpm -r --filter \"./packages/*\" exec npm pack --dry-run",
+    "packages:publish": "pnpm packages:build && pnpm -r --filter \"./packages/*\" publish --access public --no-git-checks"
   },
   "dependencies": {
     "@base-ui/react": "^1.5.0",

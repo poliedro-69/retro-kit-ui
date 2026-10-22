@@ -46,7 +46,8 @@
     "./themes.css": "./themes.css"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "pnpm run build"
   },
   "publishConfig": {
     "access": "public"

@@ -3,6 +3,7 @@ import { SiteFooter } from '@/components/landing/site-footer'
 import { SiteHeader } from '@/components/landing/site-header'
 import { DocsNav } from '@/components/docs/docs-nav'
 import { Code, DocsSection, Step } from '@/components/docs/docs-section'
+import { FrameworksOverview, ReactGuide, SvelteGuide, VueGuide } from '@/components/docs/framework-guides'
 import { InstallTabs, PackageManagerProvider } from '@/components/docs/package-manager'
 import { Snippet } from '@/components/docs/snippet'
 import { RETRO_FONTS, RETRO_THEMES, RetroBadge, RetroLinkButton, RetroTabs } from '@/components/retro-ui'
@@ -11,7 +12,7 @@ import { credit, site } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: `Installation - ${site.productName}`,
-  description: `Install ${site.productName} with npm, pnpm, yarn or bun, or copy the components with the shadcn registry. Includes Tailwind CSS v4 setup, fonts, themes and a minimal example.`,
+  description: `Install ${site.productName} with npm, pnpm, yarn or bun, or copy the components with the shadcn registry. Guides for Vue, Nuxt, React, Next.js and Svelte, plus Tailwind CSS v4 setup, fonts, themes and a minimal example.`,
 }
 
 const pkg = site.packageName
@@ -159,7 +160,17 @@ export default function DocsPage() {
             <DocsNav />
             <div className="flex min-w-0 flex-col gap-6">
               <DocsSection id="overview" title="1. Overview" status="Pick a method">
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                  <MethodCard
+                    title="Web Components"
+                    badge="Any framework"
+                    href="#frameworks"
+                    points={[
+                      'Guides for Vue, Nuxt, React, Next.js and Svelte',
+                      'Typed Vue wrappers with v-model',
+                      'One markup for every framework',
+                    ]}
+                  />
                   <MethodCard
                     title="npm package"
                     badge="Quick start"
@@ -251,7 +262,23 @@ export default function DocsPage() {
                 </Step>
               </DocsSection>
 
-              <DocsSection id="fonts" title="4. Fonts" status={`${RETRO_FONTS.length} font sets`}>
+              <DocsSection id="frameworks" title="4. Frameworks" status="Web Components">
+                <FrameworksOverview />
+              </DocsSection>
+
+              <DocsSection id="vue" title="5. Vue and Nuxt" status={site.vuePackage}>
+                <VueGuide />
+              </DocsSection>
+
+              <DocsSection id="react" title="6. React and Next.js" status="Web Components or native">
+                <ReactGuide />
+              </DocsSection>
+
+              <DocsSection id="svelte" title="7. Svelte and SvelteKit" status={site.elementsPackage}>
+                <SvelteGuide />
+              </DocsSection>
+
+              <DocsSection id="fonts" title="8. Fonts" status={`${RETRO_FONTS.length} font sets`}>
                 <p>
                   The kits read four CSS variables and fall back to the font names. Load the fonts with{' '}
                   <Code>next/font</Code> or any other method. Skip the pixel fonts if you only use the default set.
@@ -284,7 +311,7 @@ export default function DocsPage() {
                 </div>
               </DocsSection>
 
-              <DocsSection id="themes" title="5. Themes" status={`${RETRO_THEMES.length} color themes`}>
+              <DocsSection id="themes" title="9. Themes" status={`${RETRO_THEMES.length} color themes`}>
                 <p>
                   Colors and fonts are independent. Set <Code>data-rt-theme</Code> and <Code>data-rt-font</Code> on{' '}
                   <Code>{'<html>'}</Code> for the whole app, or wrap a subtree in <Code>RetroTheme</Code>. Try them
@@ -318,7 +345,7 @@ export default function DocsPage() {
                 </ul>
               </DocsSection>
 
-              <DocsSection id="example" title="6. Minimal example" status="Copy, paste, run">
+              <DocsSection id="example" title="10. Minimal example" status="Copy, paste, run">
                 <p>A complete page using both kits, a theme and the required credit.</p>
                 <RetroTabs
                   panelClassName="rt-raised rounded-[3px] p-2"
@@ -339,7 +366,7 @@ export default function DocsPage() {
                 />
               </DocsSection>
 
-              <DocsSection id="attribution" title="7. Attribution" status="Required">
+              <DocsSection id="attribution" title="11. Attribution" status="Required">
                 <p>
                   {site.productName} is free for personal and commercial work under MIT with an attribution clause. Show
                   this credit somewhere users can see it, with the link to {site.author.name}:

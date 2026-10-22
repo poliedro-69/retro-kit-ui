@@ -77,7 +77,7 @@ const pkg = {
     './styles.css': './styles.css',
     './themes.css': './themes.css',
   },
-  scripts: { build: 'tsc -p tsconfig.json' },
+  scripts: { build: 'tsc -p tsconfig.json', prepublishOnly: 'pnpm run build' },
   dependencies: {
     clsx: rootPkg.dependencies.clsx,
     'tailwind-merge': rootPkg.dependencies['tailwind-merge'],
@@ -103,26 +103,74 @@ write(join(pkgDir, 'LICENSE'), license)
 console.log(`Synced ${author.packageName} -> packages/retro-ui`)
 
 // Web Components + framework wrappers share the author data, license and themes.
+const elementsName = `${author.packageName}-elements`
+const vueName = `${author.packageName}-vue`
 const siblings = [
   { dir: 'retro-elements', suffix: 'elements' },
   { dir: 'retro-vue', suffix: 'vue' },
 ]
+
+const previousElementsName = JSON.parse(
+  readFileSync(join(root, 'packages/retro-elements/package.json'), 'utf8'),
+).name
+
+// Source and typings import the elements package by name; keep them in step with author.json.
+function renameInFiles(files, from, to) {
+  if (from === to) return
+  for (const file of files) {
+    if (!existsSync(file)) continue
+    const code = readFileSync(file, 'utf8')
+    if (code.includes(from)) writeFileSync(file, code.replaceAll(from, to))
+  }
+}
+renameInFiles(
+  [
+    join(root, 'packages/retro-vue/src/index.ts'),
+    join(root, 'packages/retro-vue/src/factory.ts'),
+    join(root, 'packages/retro-elements/types/react.d.ts'),
+    join(root, 'packages/retro-elements/types/svelte.d.ts'),
+  ],
+  previousElementsName,
+  elementsName,
+)
+
 for (const { dir, suffix } of siblings) {
   const target = join(root, 'packages', dir)
   const file = join(target, 'package.json')
   const manifest = JSON.parse(readFileSync(file, 'utf8'))
-  const elementsName = `${author.packageName}-elements`
   manifest.name = `${author.packageName}-${suffix}`
   manifest.author = `${author.name} <${author.email}> (${author.url})`
   manifest.homepage = author.siteUrl
   manifest.repository = { type: 'git', url: `git+${author.repository}.git`, directory: `packages/${dir}` }
-  if (manifest.dependencies?.['@your-scope/retrokit-elements']) {
-    delete manifest.dependencies['@your-scope/retrokit-elements']
+  manifest.scripts = { ...manifest.scripts, prepublishOnly: 'pnpm run build' }
+  const oldDependency = Object.keys(manifest.dependencies ?? {}).find((name) => name.endsWith('-elements'))
+  if (oldDependency) {
+    delete manifest.dependencies[oldDependency]
     manifest.dependencies[elementsName] = 'workspace:*'
   }
   write(file, `${JSON.stringify(manifest, null, 2)}\n`)
   write(join(target, 'LICENSE'), license)
 }
+
+const tokens = {
+  '{{elementsPackage}}': elementsName,
+  '{{vuePackage}}': vueName,
+  '{{reactPackage}}': author.packageName,
+  '{{product}}': author.productName,
+  '{{siteUrl}}': author.siteUrl,
+  '{{year}}': String(author.year),
+  '{{authorName}}': author.name,
+  '{{authorUrl}}': author.url,
+  '{{creditHtml}}': `Built with ${author.productName} by <a href="${author.url}">${author.name}</a>`,
+  '{{creditMarkdown}}': `Built with ${author.productName} by [${author.name}](${author.url})`,
+}
+function renderReadme(templateName) {
+  let text = readFileSync(join(root, 'license', templateName), 'utf8')
+  for (const [token, value] of Object.entries(tokens)) text = text.replaceAll(token, value)
+  return text
+}
+write(join(root, 'packages/retro-elements/README.md'), renderReadme('README.elements.template.md'))
+write(join(root, 'packages/retro-vue/README.md'), renderReadme('README.vue.template.md'))
 write(
   join(root, 'packages/retro-elements/themes.css'),
   readFileSync(join(pkgDir, 'themes.css'), 'utf8'),
