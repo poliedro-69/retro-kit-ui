@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Check, Download, FileArchive } from 'lucide-react'
-import { RetroBadge, RetroButton, RetroDialog, RetroProgress, RetroWindow } from '@/components/retro-ui'
-import { MacButton, MacWindow } from '@/components/mac-ui'
+import { Check } from 'lucide-react'
+import { RetroBadge, RetroWindow } from '@/components/retro-ui'
+import { MacWindow } from '@/components/mac-ui'
 import { MacPreview, Win31Preview } from './kit-previews'
 
 type Kit = {
@@ -50,24 +49,6 @@ function FeatureList({ features, mac }: { features: string[]; mac?: boolean }) {
 }
 
 export function KitCatalog() {
-  const [open, setOpen] = useState(false)
-  const [kit, setKit] = useState<Kit>(kits[0])
-  const [progress, setProgress] = useState(0)
-
-  useEffect(() => {
-    if (!open || progress >= 100) return
-    const timer = setTimeout(() => setProgress((value) => Math.min(100, value + 12)), 140)
-    return () => clearTimeout(timer)
-  }, [open, progress])
-
-  function startDownload(selected: Kit) {
-    setKit(selected)
-    setProgress(0)
-    setOpen(true)
-  }
-
-  const done = progress >= 100
-
   return (
     <section id="kits" aria-label="Free UI kits" className="mx-auto max-w-6xl scroll-mt-16 px-4 py-12">
       <RetroWindow
@@ -101,10 +82,12 @@ export function KitCatalog() {
               <div className="flex flex-1 flex-col gap-4 p-4">
                 <p className="leading-relaxed text-pretty">{kits[0].description}</p>
                 <FeatureList features={kits[0].features} />
-                <RetroButton variant="primary" className="mt-auto w-full" onClick={() => startDownload(kits[0])}>
-                  <Download className="size-4" aria-hidden="true" />
-                  Download Windows 3.1 Kit
-                </RetroButton>
+                <a
+                  href="/showcase"
+                  className="mt-auto inline-flex w-full items-center justify-center border-2 border-rt-line bg-rt-accent px-3 py-2 text-center font-mono text-[13px] font-bold text-white shadow-[inset_1px_1px_0_var(--color-rt-accent-hi),inset_-1px_-1px_0_var(--color-rt-accent-deep),2px_2px_0_var(--color-rt-shadow)] hover:bg-rt-accent-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rt-accent"
+                >
+                  Explore Windows 3.1 components
+                </a>
               </div>
             </RetroWindow>
 
@@ -121,38 +104,18 @@ export function KitCatalog() {
                   </span>
                   <span className="border-2 border-black px-1.5 font-semibold uppercase">Free</span>
                 </p>
-                <MacButton isDefault className="mx-1 mt-1 py-1.5" onClick={() => startDownload(kits[1])}>
-                  Download System 7 Kit
-                </MacButton>
+                <a
+                  href="/showcase"
+                  className="mx-1 mt-1 inline-flex items-center justify-center border-2 border-black bg-white px-3 py-1.5 text-center font-mono text-[12px] font-semibold text-black shadow-[2px_2px_0_#000] hover:bg-black hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                >
+                  Explore System 7 components
+                </a>
               </div>
             </MacWindow>
           </div>
         </div>
       </RetroWindow>
 
-      <RetroDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        title={done ? 'Demo complete' : 'Copying files...'}
-        actions={
-          done ? (
-            <RetroButton variant="primary" onClick={() => setOpen(false)}>
-              OK
-            </RetroButton>
-          ) : (
-            <RetroButton onClick={() => setOpen(false)}>Cancel</RetroButton>
-          )
-        }
-      >
-        <FileArchive className="size-8 shrink-0 text-rt-accent-deep" aria-hidden="true" />
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <p className="truncate font-mono text-[12px]">{kit.file}</p>
-          <RetroProgress value={progress} label={`Copying ${kit.name}`} />
-          <p aria-live="polite" className="text-[12px] text-rt-ink/80">
-            {done ? 'This is a demo: no file was downloaded.' : `${Math.round(progress)}% complete`}
-          </p>
-        </div>
-      </RetroDialog>
     </section>
   )
 }
