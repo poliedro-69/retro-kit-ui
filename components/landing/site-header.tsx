@@ -31,6 +31,17 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
+          <a
+            href="https://github.com/poliedro-69/retro-kit-ui"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Open RetroKit on GitHub"
+            className="ml-1 inline-flex size-7 items-center justify-center border border-transparent hover:border-rt-border hover:bg-rt-accent hover:text-rt-on-accent focus-visible:outline-2 focus-visible:outline-rt-accent"
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24" className="size-4 fill-current">
+              <path d="M12 .75a11.25 11.25 0 0 0-3.56 21.92c.56.1.77-.24.77-.54v-2.1c-3.14.68-3.8-1.33-3.8-1.33-.5-1.27-1.22-1.6-1.22-1.6-1-.68.08-.67.08-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.67 2.58 1.19 3.21.91.1-.71.38-1.19.7-1.46-2.51-.29-5.15-1.26-5.15-5.6 0-1.24.44-2.25 1.13-3.04-.11-.28-.49-1.44.11-3 0 0 .92-.3 3.1 1.16a10.8 10.8 0 0 1 5.64 0c2.18-1.46 3.1-1.16 3.1-1.16.6 1.56.22 2.72.11 3 .7.79 1.13 1.8 1.13 3.04 0 4.35-2.65 5.3-5.17 5.59.39.34.74 1 .74 2.02v3c0 .3.2.65.78.54A11.25 11.25 0 0 0 12 .75Z" />
+            </svg>
+          </a>
           <RetroLinkButton href="/#kits" variant="primary" size="sm" className="ml-2">
             Get free kits
           </RetroLinkButton>

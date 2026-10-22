@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { RetroLinkButton } from '@/components/retro-ui'
+import { SiteHeader } from '@/components/landing/site-header'
 import { ComponentExplorer } from '@/components/showcase/explorer/component-explorer'
 import { getExplorerData } from '@/components/showcase/explorer/registry'
 import { InstallPanel } from '@/components/showcase/install-panel'
@@ -17,7 +18,8 @@ export default async function Page() {
   return (
     <main>
       <ShowcaseThemeShell>
-        <div className="mx-auto flex max-w-7xl flex-col gap-4">
+        <SiteHeader />
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4">
           <div className="flex items-center justify-between gap-3">
             <h1 className="font-rt-mono text-[15px] font-semibold tracking-widest text-rt-desktop-ink uppercase">
               RetroKit.exe
