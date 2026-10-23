@@ -5,7 +5,6 @@ export const site = {
   siteUrl: author.siteUrl,
   packageName: author.packageName,
   elementsPackage: `${author.packageName}-elements`,
-  vuePackage: `${author.packageName}-vue`,
   repository: author.repository,
   author: { name: author.name, url: author.url, email: author.email },
   year: author.year,

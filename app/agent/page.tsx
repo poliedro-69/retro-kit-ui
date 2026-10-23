@@ -14,7 +14,7 @@ export default function AgentPage() {
         <header className="max-w-3xl space-y-2">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-rt-accent-deep">Private developer tool</p>
           <h1 className="font-mono text-3xl font-bold">Component Agent</h1>
-          <p className="text-sm">Describe a component once. retro-component-builder carries it through both retro kits, React, Web Components, Vue, showcase, registry, validation and main.</p>
+          <p className="text-sm">Describe a component once. retro-component-builder carries it through both retro kits, React, Web Components, showcase, registry, validation and main.</p>
         </header>
         <ComponentAgentChat />
       </div>

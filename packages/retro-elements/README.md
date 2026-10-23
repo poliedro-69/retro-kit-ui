@@ -1,8 +1,8 @@
 # @your-scope/retrokit-elements
 
-Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js, Vue, Svelte and plain HTML with a bundler.
+Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js and plain HTML with a bundler.
 
-Part of RetroKit. Looking for Vue components with `v-model`? Use `@your-scope/retrokit-vue`. Looking for React components? Use `@your-scope/retrokit`.
+Part of RetroKit. Looking for React components? Use `@your-scope/retrokit`.
 
 ## Install
 
@@ -44,9 +44,7 @@ Props are attributes in kebab-case, and booleans are present or absent. Elements
 
 ## Frameworks
 
-- **Vue and Nuxt:** use `@your-scope/retrokit-vue` for typed components with `v-model`.
 - **React and Next.js:** add `/// <reference types="@your-scope/retrokit-elements/react" />` for JSX typings.
-- **Svelte and SvelteKit:** add `/// <reference types="@your-scope/retrokit-elements/svelte" />` for Svelte 5 typings.
 
 Full guides: https://machinetix.com/docs
 

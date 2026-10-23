@@ -10,8 +10,7 @@
     "package:build": "node scripts/sync-package.mjs && tsc -p packages/retro-ui/tsconfig.json",
     "registry:build": "node scripts/build-registry.mjs",
     "elements:build": "tsc -p packages/retro-elements/tsconfig.json",
-    "vue:build": "tsc -p packages/retro-vue/tsconfig.json",
-    "packages:build": "pnpm package:build && pnpm elements:build && pnpm vue:build",
+    "packages:build": "pnpm package:build && pnpm elements:build",
     "packages:check": "pnpm packages:build && pnpm -r --filter \"./packages/*\" exec npm pack --dry-run",
     "packages:publish": "pnpm packages:build && pnpm -r --filter \"./packages/*\" publish --access public --no-git-checks"
   },
@@ -23,7 +22,7 @@
     "clsx": "^2.1.1",
     "eve": "^0.81.1",
     "lucide-react": "^1.16.0",
-    "next": "16.4.0",
+    "next": "16.4.2",
     "react": "^19",
     "react-dom": "^19",
     "server-only": "^0.0.1",

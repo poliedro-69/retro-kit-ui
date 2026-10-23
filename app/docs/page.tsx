@@ -3,7 +3,7 @@ import { SiteFooter } from '@/components/landing/site-footer'
 import { SiteHeader } from '@/components/landing/site-header'
 import { DocsNav } from '@/components/docs/docs-nav'
 import { Code, DocsSection, Step } from '@/components/docs/docs-section'
-import { FrameworksOverview, ReactGuide, SvelteGuide, VueGuide } from '@/components/docs/framework-guides'
+import { FrameworksOverview, ReactGuide } from '@/components/docs/framework-guides'
 import { InstallTabs, PackageManagerProvider } from '@/components/docs/package-manager'
 import { Snippet } from '@/components/docs/snippet'
 import { RETRO_FONTS, RETRO_THEMES, RetroBadge, RetroLinkButton, RetroTabs } from '@/components/retro-ui'
@@ -12,7 +12,7 @@ import { credit, site } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: `Installation - ${site.productName}`,
-  description: `Install ${site.productName} with npm, pnpm, yarn or bun, or copy the components with the shadcn registry. Guides for Vue, Nuxt, React, Next.js and Svelte, plus Tailwind CSS v4 setup, fonts, themes and a minimal example.`,
+  description: `Install ${site.productName} with npm, pnpm, yarn or bun, or copy the components with the shadcn registry. Guides for React, Next.js and Web Components, plus Tailwind CSS v4 setup, fonts, themes and a minimal example.`,
 }
 
 const pkg = site.packageName
@@ -166,8 +166,8 @@ export default function DocsPage() {
                     badge="Any framework"
                     href="#frameworks"
                     points={[
-                      'Guides for Vue, Nuxt, React, Next.js and Svelte',
-                      'Typed Vue wrappers with v-model',
+                      'Guides for React, Next.js and Web Components',
+                      'Typed React components and Web Components',
                       'One markup for every framework',
                     ]}
                   />
@@ -266,16 +266,8 @@ export default function DocsPage() {
                 <FrameworksOverview />
               </DocsSection>
 
-              <DocsSection id="vue" title="5. Vue and Nuxt" status={site.vuePackage}>
-                <VueGuide />
-              </DocsSection>
-
               <DocsSection id="react" title="6. React and Next.js" status="Web Components or native">
                 <ReactGuide />
-              </DocsSection>
-
-              <DocsSection id="svelte" title="7. Svelte and SvelteKit" status={site.elementsPackage}>
-                <SvelteGuide />
               </DocsSection>
 
               <DocsSection id="fonts" title="8. Fonts" status={`${RETRO_FONTS.length} font sets`}>

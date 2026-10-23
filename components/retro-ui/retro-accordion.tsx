@@ -30,7 +30,7 @@ export function RetroAccordion({ items, type = 'single', defaultValue = [], clas
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    const triggers = [...event.currentTarget.querySelectorAll<HTMLButtonElement>('[data-accordion-trigger]:not(:disabled)')]
+    const triggers = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[data-accordion-trigger]:not(:disabled)'))
     const index = triggers.findIndex((trigger) => trigger === document.activeElement)
     if (index < 0) return
     const target =

@@ -60,7 +60,7 @@ export function ComponentAgentChat() {
         <ul className="list-disc space-y-1 pl-5">
           <li>React kits</li>
           <li>Web Components</li>
-          <li>Vue wrappers</li>
+          <li>React and Web Components</li>
           <li>Showcase and registry</li>
           <li>Builds and browser QA</li>
           <li>Commit and push to main</li>
