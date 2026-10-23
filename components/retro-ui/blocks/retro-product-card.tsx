@@ -57,6 +57,7 @@ export function RetroProductCard({ product }: { product: RetroProduct }) {
             src={product.image}
             alt={product.name}
             fill
+            priority
             sizes="(min-width: 640px) 384px, 100vw"
             className="object-cover [image-rendering:pixelated]"
           />
