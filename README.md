@@ -8,7 +8,7 @@ Componentes React con la personalidad visual de **Windows 3.1** y **Mac System 7
 Construye formularios, dashboards y bloques completos con estética de software clásico.
 
 [![Windows 3.1](https://img.shields.io/badge/Windows_3.1-1f4e9e?style=for-the-badge&logoColor=white)](./packages/retro-ui)
-[![Mac System 7](https://img.shields.io/badge/Mac_System_7-111111?style=for-the-badge&logo=apple&logoColor=white)](./packages/retro-vue)
+[![Mac System 7](https://img.shields.io/badge/Mac_System_7-111111?style=for-the-badge&logo=apple&logoColor=white)](./packages/retro-ui)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 <br />
@@ -38,7 +38,7 @@ Incluye dos lenguajes visuales:
 - Data display: table, tree view, accordion y scroll area.
 - Bloques listos para usar, como tarjetas de producto y galerías de imágenes.
 - Previews interactivas para comparar ambos kits desde el explorador.
-- Paquetes para React, Web Components y Vue.
+- Paquetes para React y Web Components.
 
 ## Inicio rápido
 
@@ -63,7 +63,6 @@ Consulta la documentación específica de cada paquete:
 
 - [`@your-scope/retrokit-ui`](./packages/retro-ui) — componentes React Windows 3.1.
 - [`@your-scope/retrokit-elements`](./packages/retro-elements) — Web Components.
-- [`@your-scope/retrokit-vue`](./packages/retro-vue) — componentes Vue.
 
 ## Filosofía visual
 
@@ -80,7 +79,6 @@ components/
 packages/
 ├── retro-ui/       # Paquete React
 ├── retro-elements/ # Web Components
-└── retro-vue/      # Paquete Vue
 ```
 
 ## Contribuir

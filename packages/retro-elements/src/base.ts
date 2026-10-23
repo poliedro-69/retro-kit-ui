@@ -3,7 +3,7 @@ export type PropSpec = Record<string, PropType>
 
 const kebab = (name: string) => name.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)
 
-// Importing this package on the server (Next.js SSR, Nuxt, SvelteKit) must not throw.
+// Importing this package on the server (including Next.js SSR) must not throw.
 const BaseElement: typeof HTMLElement =
   typeof HTMLElement === 'undefined' ? (class {} as unknown as typeof HTMLElement) : HTMLElement
 

@@ -1,5 +1,5 @@
 const kebab = (name) => name.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
-// Importing this package on the server (Next.js SSR, Nuxt, SvelteKit) must not throw.
+// Importing this package on the server (including Next.js SSR) must not throw.
 const BaseElement = typeof HTMLElement === 'undefined' ? class {
 } : HTMLElement;
 const sheetCache = new Map();

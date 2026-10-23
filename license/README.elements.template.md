@@ -1,8 +1,8 @@
 # {{elementsPackage}}
 
-Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js, Vue, Svelte and plain HTML with a bundler.
+Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js and plain HTML with a bundler.
 
-Part of {{product}}. Looking for Vue components with `v-model`? Use `{{vuePackage}}`. Looking for React components? Use `{{reactPackage}}`.
+Part of {{product}}. Looking for React components? Use `{{reactPackage}}`.
 
 ## Install
 
@@ -44,9 +44,7 @@ Props are attributes in kebab-case, and booleans are present or absent. Elements
 
 ## Frameworks
 
-- **Vue and Nuxt:** use `{{vuePackage}}` for typed components with `v-model`.
 - **React and Next.js:** add `/// <reference types="{{elementsPackage}}/react" />` for JSX typings.
-- **Svelte and SvelteKit:** add `/// <reference types="{{elementsPackage}}/svelte" />` for Svelte 5 typings.
 
 Full guides: {{siteUrl}}/docs
 

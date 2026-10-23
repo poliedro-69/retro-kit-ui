@@ -3,7 +3,7 @@ import { runCommand, resolveInsideRepo } from '../lib/repo'
 
 export default defineTool({
   description:
-    'List tracked and untracked files of the retro-kit-ui repository, optionally limited to a directory (for example "components/retro-ui" or "packages/retro-vue").',
+    'List tracked and untracked files of the retro-kit-ui repository, optionally limited to a directory (for example "components/retro-ui" or "packages/retro-elements").',
   inputSchema: {
     type: 'object',
     properties: {

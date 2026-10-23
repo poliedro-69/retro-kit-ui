@@ -28,16 +28,16 @@ import { site } from '@/lib/site'
 export const metadata: Metadata = {
   metadataBase: new URL(site.siteUrl),
   title: {
-    default: 'RetroKit - Free retro UI kits for React, Vue and Tailwind CSS',
+    default: 'RetroKit - Free retro UI kits for React and Tailwind CSS',
     template: '%s | RetroKit',
   },
   description:
-    'Free Windows 3.1 and Mac System 7 inspired UI kits. React, Vue and Web Components with Tailwind CSS, classic bevels and modern focus states.',
+    'Free Windows 3.1 and Mac System 7 inspired UI kits. React and Web Components with Tailwind CSS, classic bevels and modern focus states.',
   applicationName: 'RetroKit',
   authors: [{ name: site.authorName, url: site.authorUrl }],
   keywords: [
     'retro ui kit', 'windows 3.1 ui', 'system 7 ui', 'tailwind css components',
-    'react retro components', 'vue retro components', 'web components',
+    'react retro components', 'web components',
     'free ui kit', 'pixel ui', '90s ui',
   ],
   alternates: { canonical: '/' },
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     type: 'website',
     siteName: 'RetroKit',
     title: 'RetroKit - Free retro UI kits',
-    description: 'Windows 3.1 and Mac System 7 UI kits for React, Vue and Tailwind CSS.',
+    description: 'Windows 3.1 and Mac System 7 UI kits for React and Tailwind CSS.'
     url: '/',
   },
   twitter: { card: 'summary_large_image' },
@@ -65,8 +65,8 @@ Longitud orientativa: título 50-60 caracteres, descripción 140-160.
 
 | Ruta | Title | Idea de description |
 | --- | --- | --- |
-| `/` | RetroKit - Free retro UI kits for React, Vue and Tailwind | Descarga gratuita de kits Windows 3.1 y Mac System 7 |
-| `/docs` | Installation guide | npm, shadcn registry, Web Components, Vue, React y Svelte paso a paso |
+| `/` | RetroKit - Free retro UI kits for React and Tailwind | Descarga gratuita de kits Windows 3.1 y Mac System 7 |
+| `/docs` | Installation guide | npm, shadcn registry, Web Components y React paso a paso |
 | `/showcase` | Component explorer | Más de 20 componentes retro con vista previa y código |
 | `/license` | License | MIT con atribución: qué debes enlazar y cómo |
 | `/elements` | (ver punto 7) | Página de pruebas, no indexar |
@@ -166,7 +166,7 @@ Y en `/docs`, `FAQPage` si hay sección de preguntas frecuentes (la landing ya t
 
 - Enlace a la web desde el campo `homepage` de los tres paquetes npm y desde el README del repositorio.
 - La cláusula de atribución de la licencia genera enlaces de vuelta de forma natural: mantener la página `/license` clara y con un snippet copiable.
-- Publicar en: Product Hunt, Hacker News (Show HN), Reddit (r/webdev, r/reactjs, r/vuejs), awesome-lists de UI kits y de Tailwind, directorios de componentes y de shadcn registries.
+- Publicar en: Product Hunt, Hacker News (Show HN), Reddit (r/webdev, r/reactjs), awesome-lists de UI kits y de Tailwind, directorios de componentes y de shadcn registries.
 - Un artículo corto de lanzamiento ("Building a Windows 3.1 UI kit with Tailwind") con enlace a la web.
 
 ## 11. Search Console y medición
@@ -182,7 +182,7 @@ La búsqueda de npm usa nombre, descripción, `keywords` y README.
 
 - **Nombre**: incluir "retro" o "retrokit"; fácil de teclear.
 - **`description`**: frase corta con las palabras clave ("Free Windows 3.1 and Mac System 7 inspired React + Tailwind CSS components").
-- **`keywords`**: ya hay `react`, `tailwindcss`, `retro`, `windows-3.1`, `system-7`, `components`. Añadir `ui-kit`, `design-system`, `90s`, `nostalgia`, `vintage`, `pixel` y, según el paquete, `web-components` / `vue`.
+- **`keywords`**: ya hay `react`, `tailwindcss`, `retro`, `windows-3.1`, `system-7`, `components`. Añadir `ui-kit`, `design-system`, `90s`, `nostalgia`, `vintage`, `pixel` y, según el paquete, `web-components`.
 - **README**: primera pantalla con qué es, una captura o GIF, instalación en 3 líneas y enlace a `/docs`. Las capturas deben estar en una URL absoluta (npm no resuelve rutas relativas a imágenes del repo).
 - **`homepage`** y **`repository`** correctos para que la ficha enlace a la web y a GitHub.
 - Mantener las versiones actualizadas: npm penaliza paquetes sin releases en mucho tiempo.

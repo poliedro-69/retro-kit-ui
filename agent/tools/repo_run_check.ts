@@ -10,7 +10,7 @@ const CHECKS: Record<string, string[]> = {
 
 export default defineTool({
   description:
-    'Run one of the repository checks: typecheck (tsc --noEmit), packages_build (retro-ui, retro-elements and retro-vue), registry_build (shadcn registry) or packages_check (build plus npm pack dry run). Returns the exit code and the tail of the output.',
+    'Run one of the repository checks: typecheck (tsc --noEmit), packages_build (retro-ui and retro-elements), registry_build (shadcn registry) or packages_check (build plus npm pack dry run). Returns the exit code and the tail of the output.',
   inputSchema: {
     type: 'object',
     properties: {

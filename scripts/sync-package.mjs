@@ -104,11 +104,7 @@ console.log(`Synced ${author.packageName} -> packages/retro-ui`)
 
 // Web Components + framework wrappers share the author data, license and themes.
 const elementsName = `${author.packageName}-elements`
-const vueName = `${author.packageName}-vue`
-const siblings = [
-  { dir: 'retro-elements', suffix: 'elements' },
-  { dir: 'retro-vue', suffix: 'vue' },
-]
+const siblings = [{ dir: 'retro-elements', suffix: 'elements' }]
 
 const previousElementsName = JSON.parse(
   readFileSync(join(root, 'packages/retro-elements/package.json'), 'utf8'),
@@ -124,12 +120,7 @@ function renameInFiles(files, from, to) {
   }
 }
 renameInFiles(
-  [
-    join(root, 'packages/retro-vue/src/index.ts'),
-    join(root, 'packages/retro-vue/src/factory.ts'),
-    join(root, 'packages/retro-elements/types/react.d.ts'),
-    join(root, 'packages/retro-elements/types/svelte.d.ts'),
-  ],
+  [join(root, 'packages/retro-elements/types/react.d.ts')],
   previousElementsName,
   elementsName,
 )
@@ -154,7 +145,6 @@ for (const { dir, suffix } of siblings) {
 
 const tokens = {
   '{{elementsPackage}}': elementsName,
-  '{{vuePackage}}': vueName,
   '{{reactPackage}}': author.packageName,
   '{{product}}': author.productName,
   '{{siteUrl}}': author.siteUrl,
@@ -170,9 +160,8 @@ function renderReadme(templateName) {
   return text
 }
 write(join(root, 'packages/retro-elements/README.md'), renderReadme('README.elements.template.md'))
-write(join(root, 'packages/retro-vue/README.md'), renderReadme('README.vue.template.md'))
 write(
   join(root, 'packages/retro-elements/themes.css'),
   readFileSync(join(pkgDir, 'themes.css'), 'utf8'),
 )
-console.log('Synced elements + vue manifests, LICENSE and themes.css')
+console.log('Synced elements manifest, LICENSE and themes.css')

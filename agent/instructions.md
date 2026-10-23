@@ -31,7 +31,6 @@ Trabaja en pasos pequeños: lee solo los archivos necesarios, escribe y comprueb
 9. Añade su entrada al registry: nombre, descripción, exports, import, props, usage, fuentes y categoría del árbol.
 10. Añade o actualiza demos interactivas cuando el componente necesite estado, como Toast, Dialog o Dropdown.
 11. Implementa el equivalente en `packages/retro-elements` como Web Component, con atributos, propiedades, eventos, teclado y estilos coherentes.
-12. Implementa el wrapper equivalente en `packages/retro-vue`, manteniendo nombres, props y eventos idiomáticos de Vue.
 13. Sincroniza los artefactos npm y el registry shadcn usando los scripts existentes. No edites archivos generados a mano si existe un script para regenerarlos.
 14. Comprueba documentación, README, tipos públicos y ejemplos de importación.
 15. Ejecuta las comprobaciones más estrechas primero y después `pnpm packages:build`, `pnpm registry:build` y los checks relevantes. Corrige errores reales; no los ocultes.
