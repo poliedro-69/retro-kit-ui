@@ -10,12 +10,15 @@ Ya existe:
 - HTML semántico y `alt` en imágenes.
 - Todos los textos en inglés.
 
-No existe:
-- `metadataBase`, URLs canónicas, Open Graph, Twitter Card.
+Ya implementado:
+- `metadataBase`, URLs canónicas, Open Graph y Twitter Card.
 - `app/sitemap.ts` y `app/robots.ts`.
 - Imagen social (`opengraph-image`).
 - Datos estructurados (JSON-LD).
-- Contenido indexable por componente (todo vive en el cliente de `/showcase`).
+- Contenido indexable por componente en `/components/[kit]/[slug]`.
+
+Pendiente externo:
+- Verificar el dominio en Google Search Console y Bing Webmaster Tools.
 
 ## 2. Metadata base (`app/layout.tsx`)
 
@@ -169,14 +172,40 @@ Y en `/docs`, `FAQPage` si hay sección de preguntas frecuentes (la landing ya t
 - Publicar en: Product Hunt, Hacker News (Show HN), Reddit (r/webdev, r/reactjs), awesome-lists de UI kits y de Tailwind, directorios de componentes y de shadcn registries.
 - Un artículo corto de lanzamiento ("Building a Windows 3.1 UI kit with Tailwind") con enlace a la web.
 
-## 11. Search Console y medición
+## 11. Plan de lanzamiento
+
+### Antes de publicar
+
+- Confirmar el dominio final en `lib/site.ts` y comprobar que `/robots.txt` y `/sitemap.xml` responden con URLs absolutas.
+- Crear una release de cada paquete npm y verificar que `homepage`, `repository`, README e imágenes se muestran correctamente en npm.
+- Preparar tres enlaces de destino: landing, documentación y showcase.
+- Capturar una imagen del showcase y usarla como preview en las publicaciones.
+
+### Publicación recomendada
+
+1. **Product Hunt**: título "RetroKit — Windows 3.1 and System 7 UI kits", descripción breve, tres capturas y enlace a `/showcase`.
+2. **Hacker News / Show HN**: explicar el problema, enlazar el repositorio y pedir feedback técnico; evitar lenguaje promocional excesivo.
+3. **Reddit**: publicar versiones adaptadas para `r/webdev` y `r/reactjs`, con una demo visible y una pregunta concreta.
+4. **Awesome lists**: proponer RetroKit en listas de Tailwind, React UI, Web Components y retro computing respetando sus reglas.
+
+### Copy base
+
+> RetroKit is a free set of Windows 3.1 and Mac System 7 inspired UI kits for React, Tailwind CSS and Web Components. It includes reusable buttons, windows, menus, dialogs and form controls with accessible focus states and ready-to-copy examples.
+
+### Después de publicar
+
+- Responder comentarios con enlaces profundos a la documentación, no solo con el enlace de la home.
+- Registrar qué canal genera visitas y npm installs mediante parámetros UTM en enlaces de campaña.
+- Actualizar el README y la landing con las preguntas recurrentes que aparezcan.
+
+## 12. Search Console y medición
 
 1. Verificar el dominio en Google Search Console y Bing Webmaster Tools.
 2. Enviar `https://TU-DOMINIO/sitemap.xml`.
 3. Instalar analítica (Vercel Web Analytics es la opción más simple en Vercel).
 4. Revisar a las 2-4 semanas: páginas indexadas, consultas con impresiones, CTR.
 
-## 12. SEO de la ficha de npm
+## 13. SEO de la ficha de npm
 
 La búsqueda de npm usa nombre, descripción, `keywords` y README.
 
@@ -187,7 +216,7 @@ La búsqueda de npm usa nombre, descripción, `keywords` y README.
 - **`homepage`** y **`repository`** correctos para que la ficha enlace a la web y a GitHub.
 - Mantener las versiones actualizadas: npm penaliza paquetes sin releases en mucho tiempo.
 
-## 13. Checklist
+## 14. Checklist
 
 - [x] `metadataBase`, plantilla de título, Open Graph y Twitter en el layout
 - [x] Quitar `generator: 'v0.app'`
@@ -200,4 +229,5 @@ La búsqueda de npm usa nombre, descripción, `keywords` y README.
 - [x] Web Vitals de laboratorio revisados en `/` (localhost, 1280×800): TTFB 226 ms, FCP 716 ms, LCP 716 ms, CLS 0.00; INP pendiente de interacción real
 - [ ] Search Console y Bing: dominio verificado y sitemap enviado (requiere acceso a las cuentas)
 - [x] `keywords` y README de los paquetes npm revisados
-- [ ] Plan de lanzamiento (Product Hunt, Reddit, Show HN)
+- [x] Plan de lanzamiento documentado (Product Hunt, Reddit, Show HN)
+- [ ] Ejecutar lanzamiento y medir resultados
