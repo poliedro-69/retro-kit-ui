@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { RetroLinkButton } from '@/components/retro-ui'
 import { SiteHeader } from '@/components/landing/site-header'
 import { ComponentExplorer } from '@/components/showcase/explorer/component-explorer'
 import { getExplorerData } from '@/components/showcase/explorer/registry'
@@ -20,14 +19,6 @@ export default async function Page() {
       <ShowcaseThemeShell>
         <SiteHeader />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4">
-          <div className="flex items-center justify-between gap-3">
-            <h1 className="font-rt-mono text-[15px] font-semibold tracking-widest text-rt-desktop-ink uppercase">
-              RetroKit.exe
-            </h1>
-            <RetroLinkButton href="/" size="sm">
-              Back to home
-            </RetroLinkButton>
-          </div>
           <ComponentExplorer data={data} />
           <InstallPanel />
         </div>
