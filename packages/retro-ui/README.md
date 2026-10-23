@@ -1,6 +1,6 @@
 # RetroKit
 
-Free Windows 3.1 and Mac System 7 inspired UI kits for React and Tailwind CSS v4.
+Free Windows 3.1 and Mac System 7 inspired React + Tailwind CSS v4 UI kit. Build nostalgic Windows 3.1 and Mac System 7 interfaces with retro buttons, windows, dialogs, menus and forms.
 
 ## Install
 
@@ -76,11 +76,11 @@ Entry points: `@your-scope/retrokit` (both kits), `/windows`, `/mac` and `/style
 Copy the components into your project with the shadcn CLI:
 
 ```bash
-npx shadcn@latest add https://retrokit.example.com/r/retro-ui.json
-npx shadcn@latest add https://retrokit.example.com/r/mac-ui.json
+npx shadcn@latest add https://machinetix.com/r/retro-ui.json
+npx shadcn@latest add https://machinetix.com/r/mac-ui.json
 ```
 
 ## License
 
 MIT with Attribution. Free for personal and commercial use, as long as you show the credit
-"Built with RetroKit by Your Name" linking to https://example.com. See `LICENSE`.
+"Built with RetroKit by Poliedro69" linking to https://machinetix.com. See `LICENSE`.

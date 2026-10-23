@@ -1,6 +1,6 @@
 # @your-scope/retrokit-elements
 
-Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js and plain HTML with a bundler.
+Free Windows 3.1 and Mac System 7 inspired Web Components for Next.js and plain HTML. Build nostalgic retro interfaces with custom elements, Windows 3.1 controls, Mac System 7 controls and Tailwind CSS themes.
 
 Part of RetroKit. Looking for React components? Use `@your-scope/retrokit`.
 

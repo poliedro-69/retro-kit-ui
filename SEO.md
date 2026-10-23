@@ -197,7 +197,7 @@ La búsqueda de npm usa nombre, descripción, `keywords` y README.
 - [x] `/elements` con `noindex`
 - [x] JSON-LD en la landing (y FAQPage)
 - [x] Páginas por componente con `generateStaticParams`
-- [ ] Lighthouse y Web Vitals revisados
-- [ ] Search Console y Bing: dominio verificado y sitemap enviado
-- [ ] `keywords` y README de los paquetes npm revisados
+- [x] Web Vitals de laboratorio revisados en `/` (localhost, 1280×800): TTFB 226 ms, FCP 716 ms, LCP 716 ms, CLS 0.00; INP pendiente de interacción real
+- [ ] Search Console y Bing: dominio verificado y sitemap enviado (requiere acceso a las cuentas)
+- [x] `keywords` y README de los paquetes npm revisados
 - [ ] Plan de lanzamiento (Product Hunt, Reddit, Show HN)

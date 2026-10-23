@@ -2,10 +2,10 @@
 
 # retro-kit-ui
 
-### Interfaces retro para la web moderna
+### Retro interfaces for the modern web
 
-Componentes React con la personalidad visual de **Windows 3.1** y **Mac System 7**.
-Construye formularios, dashboards y bloques completos con estética de software clásico.
+React components inspired by **Windows 3.1** and **Mac System 7**.
+Build forms, dashboards, product cards, and complete interface blocks with the personality of classic desktop software.
 
 [![Windows 3.1](https://img.shields.io/badge/Windows_3.1-1f4e9e?style=for-the-badge&logoColor=white)](./packages/retro-ui)
 [![Mac System 7](https://img.shields.io/badge/Mac_System_7-111111?style=for-the-badge&logo=apple&logoColor=white)](./packages/retro-ui)
@@ -13,7 +13,7 @@ Construye formularios, dashboards y bloques completos con estética de software 
 
 <br />
 
-[Explorar la galería](https://retro-kit-ui.vercel.app) · [Ver componentes](./packages/retro-ui) · [Contribuir](#contribuir)
+[Explore the gallery](https://retro-kit-ui.vercel.app) · [View the components](./packages/retro-ui) · [Contribute](#contributing)
 
 </div>
 
@@ -21,33 +21,54 @@ Construye formularios, dashboards y bloques completos con estética de software 
 
 ## `C:\RETROKIT>`
 
-retro-kit-ui es una colección de componentes y bloques reutilizables para crear productos con una identidad retro auténtica, sin renunciar a React, TypeScript ni a una base accesible.
+retro-kit-ui is a collection of reusable components and interface blocks for building products with an authentic retro identity, while keeping React, TypeScript, and accessibility at the core.
 
-Incluye dos lenguajes visuales:
+It includes two visual languages:
 
-| Kit | Inspiración | Ideal para |
+| Kit | Inspiration | Best for |
 | --- | --- | --- |
-| **Windows 3.1** | Azul marino, superficies grises, bevels y pixel UI | Aplicaciones, herramientas y dashboards |
-| **Mac System 7** | Blanco y negro, ventanas compactas y controles 1-bit | Interfaces editoriales y experiencias nostálgicas |
+| **Windows 3.1** | Navy blue, gray surfaces, bevels, and pixel UI | Applications, tools, and dashboards |
+| **Mac System 7** | Black and white, compact windows, and 1-bit controls | Editorial interfaces and nostalgic experiences |
 
-## Incluido
+## Sample gallery
 
-- Controles básicos: botones, inputs, textarea, checkbox, radio, select y switch.
-- Navegación: menubar, tabs, dropdown menu, listbox, breadcrumbs y pagination.
-- Feedback: tooltip, toast, alert, progress y separator.
-- Data display: table, tree view, accordion y scroll area.
-- Bloques listos para usar, como tarjetas de producto y galerías de imágenes.
-- Previews interactivas para comparar ambos kits desde el explorador.
-- Paquetes para React y Web Components.
+The repository also includes ready-to-use visual assets for retro product interfaces:
 
-## Inicio rápido
+<table>
+  <tr>
+    <td align="center"><img src="./public/products/disquetes.png" alt="Retro floppy disk product sample" width="220" /></td>
+    <td align="center"><img src="./public/products/joystick.png" alt="Retro joystick product sample" width="220" /></td>
+    <td align="center"><img src="./public/products/teclado.png" alt="Retro keyboard product sample" width="220" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Floppy disks</strong></td>
+    <td align="center"><strong>Joystick</strong></td>
+    <td align="center"><strong>Keyboard</strong></td>
+  </tr>
+</table>
+
+Explore the live showcase for interactive component previews and both retro themes:
+
+**[Open the RetroKit showcase →](https://retro-kit-ui.vercel.app/showcase)**
+
+## Included
+
+- Basic controls: buttons, inputs, textarea, checkbox, radio, select, and switch.
+- Navigation: menubar, tabs, dropdown menu, listbox, breadcrumbs, and pagination.
+- Feedback: tooltip, toast, alert, progress, and separator.
+- Data display: table, tree view, accordion, and scroll area.
+- Ready-to-use blocks, including product cards and image galleries.
+- Interactive previews for comparing both kits in the explorer.
+- Packages for React and Web Components.
+
+## Quick start
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Abre `http://localhost:3000` para explorar la galería de componentes.
+Open `http://localhost:3000` to explore the component gallery.
 
 ### React
 
@@ -55,54 +76,54 @@ Abre `http://localhost:3000` para explorar la galería de componentes.
 import { RetroButton } from "@your-scope/retrokit-ui"
 
 export function Example() {
-  return <RetroButton>Ejecutar</RetroButton>
+  return <RetroButton>Run</RetroButton>
 }
 ```
 
-Consulta la documentación específica de cada paquete:
+See the package documentation for installation and usage details:
 
-- [`@your-scope/retrokit-ui`](./packages/retro-ui) — componentes React Windows 3.1.
-- [`@your-scope/retrokit-elements`](./packages/retro-elements) — Web Components.
+- [`@your-scope/retrokit-ui`](./packages/retro-ui) — Windows 3.1 React components.
+- [`@your-scope/retrokit-elements`](./packages/retro-elements) — framework-agnostic Web Components.
 
-## Filosofía visual
+## Visual philosophy
 
-retro-kit-ui no intenta suavizar el pasado: conserva bordes definidos, jerarquías claras, contrastes fuertes y controles reconocibles. Cada detalle está pensado para que el resultado parezca una aplicación de escritorio real de los años 90, pero funcione correctamente en una interfaz actual.
+retro-kit-ui does not try to smooth out the past. It keeps sharp borders, clear hierarchy, strong contrast, and recognizable controls. Every detail is designed to feel like a real desktop application from the 1990s while working correctly in a modern interface.
 
-## Estructura
+## Project structure
 
 ```text
 components/
-├── retro-ui/       # Kit Windows 3.1 para React
-├── mac-ui/         # Kit Mac System 7 para React
-└── showcase/       # Explorador y demos interactivas
+├── retro-ui/       # Windows 3.1 React kit
+├── mac-ui/         # Mac System 7 React kit
+└── showcase/       # Explorer and interactive demos
 
 packages/
-├── retro-ui/       # Paquete React
-├── retro-elements/ # Web Components
+├── retro-ui/       # React package
+└── retro-elements/ # Web Components package
 ```
 
-## Contribuir
+## Contributing
 
-Las contribuciones son bienvenidas. Antes de abrir un pull request:
+Contributions are welcome. Before opening a pull request:
 
-1. Crea una rama descriptiva para tu cambio.
-2. Mantén la estética y los patrones del kit correspondiente.
-3. Añade o actualiza el preview del componente.
-4. Ejecuta los checks del proyecto:
+1. Create a descriptive branch for your change.
+2. Preserve the visual language and patterns of the relevant kit.
+3. Add or update the component preview.
+4. Run the project checks:
 
 ```bash
 pnpm packages:check
 pnpm build
 ```
 
-Para nuevas ideas y tareas pendientes, consulta [`PENDING.md`](./PENDING.md).
+For new ideas and open tasks, see [`PENDING.md`](./PENDING.md).
 
-## Licencia
+## License
 
-Consulta los archivos de licencia incluidos en cada paquete.
+See the license files included with each package.
 
 <div align="center">
 
-[![Hecho con nostalgia](https://img.shields.io/badge/Hecho_con-nostalgia-f5c542?style=flat-square&labelColor=1f4e9e)](https://github.com/poliedro-69/retro-kit-ui)
+[![Made with nostalgia](https://img.shields.io/badge/Made_with-nostalgia-f5c542?style=flat-square&labelColor=1f4e9e)](https://github.com/poliedro-69/retro-kit-ui)
 
 </div>

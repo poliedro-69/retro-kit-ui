@@ -1,12 +1,18 @@
 {
   "name": "@your-scope/retrokit-elements",
   "version": "0.1.0",
-  "description": "Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js and plain HTML. Built with RetroKit by Your Name.",
+  "description": "Free Windows 3.1 and Mac System 7 inspired Web Components. Works in Next.js and plain HTML. Built with RetroKit by Poliedro69.",
   "keywords": [
     "web-components",
     "custom-elements",
     "nextjs",
+    "ui-kit",
+    "design-system",
     "retro",
+    "90s",
+    "nostalgia",
+    "vintage",
+    "pixel",
     "windows-3.1",
     "system-7"
   ],
