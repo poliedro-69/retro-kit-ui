@@ -8,15 +8,23 @@ __v0_jsx-dev-runtime.ts
 .vercel/
 
 # Environment variables
-.env*.local
+.env
+.env.*
+!.env.example
 
 # Common ignores
-node_modules
-.next
+node_modules/
+.next/
 .eve/
 agent/
 .output/
-.vercel//
+.vercel/
+.turbo/
+.cache/
+coverage/
+*.log
+*.tsbuildinfo
+next-env.d.ts
 .DS_Store
 # Generated package output
 packages/retro-ui/src
