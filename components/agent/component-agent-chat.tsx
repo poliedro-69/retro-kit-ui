@@ -10,7 +10,7 @@ export function ComponentAgentChat() {
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const value = input.trim()
-    if (!value || agent.status === 'running') return
+    if (!value || agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming') return
     setInput('')
     await agent.send(value)
   }
@@ -48,10 +48,10 @@ export function ComponentAgentChat() {
             }}
             placeholder="Create a Windows 3.1 calendar component..."
             className="rt-sunken min-h-12 flex-1 resize-y bg-rt-paper p-2"
-            disabled={agent.status === 'running'}
+            disabled={agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming'}
           />
-          <button type="submit" className="rt-raised self-end px-3 py-2 font-bold" disabled={!input.trim() || agent.status === 'running'}>
-            {agent.status === 'running' ? 'Working...' : 'Send'}
+          <button type="submit" className="rt-raised self-end px-3 py-2 font-bold" disabled={!input.trim() || agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming'}>
+            {agent.status === 'submitted' || agent.status === 'streaming' || agent.status === 'resuming' ? 'Working...' : 'Send'}
           </button>
         </form>
       </section>

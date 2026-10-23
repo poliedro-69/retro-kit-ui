@@ -51,7 +51,7 @@
   "homepage": "https://machinetix.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-name/retrokit.git",
+    "url": "git+https://github.com/poliedro-69/retro-kit-ui.git",
     "directory": "packages/retro-elements"
   }
 }
