@@ -1,6 +1,7 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { IBM_Plex_Mono, IBM_Plex_Sans, Press_Start_2P, VT323 } from 'next/font/google'
+import { site } from '@/lib/site'
 import './globals.css'
 
 const vt323 = VT323({
@@ -28,10 +29,36 @@ const plexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'RetroKit - Free retro UI kits for React and Tailwind CSS',
+  metadataBase: new URL(site.siteUrl),
+  title: {
+    default: 'RetroKit - Free retro UI kits for React and Tailwind',
+    template: '%s | RetroKit',
+  },
   description:
-    'Download free Windows 3.1 and Mac System 7 inspired UI kits. React + Tailwind CSS components with classic bevels and title bars, finished with modern focus states and smooth gradients.',
-  generator: 'v0.app',
+    'Free Windows 3.1 and Mac System 7 inspired UI kits. React and Web Components with Tailwind CSS, classic bevels and modern focus states.',
+  applicationName: site.productName,
+  authors: [{ name: site.author.name, url: site.author.url }],
+  keywords: [
+    'retro ui kit',
+    'windows 3.1 ui',
+    'system 7 ui',
+    'tailwind css components',
+    'react retro components',
+    'web components',
+    'free ui kit',
+    'pixel ui',
+    '90s ui',
+  ],
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    siteName: site.productName,
+    title: 'RetroKit - Free retro UI kits',
+    description: 'Windows 3.1 and Mac System 7 UI kits for React and Tailwind CSS.',
+    url: '/',
+  },
+  twitter: { card: 'summary_large_image' },
+  robots: { index: true, follow: true },
   icons: {
     icon: [
       {

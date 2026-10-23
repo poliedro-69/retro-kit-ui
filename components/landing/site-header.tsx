@@ -1,5 +1,3 @@
-import { RetroLinkButton } from '@/components/retro-ui'
-
 const links = [
   { href: '/#kits', label: 'Kits' },
   { href: '/#faq', label: 'FAQ' },
@@ -51,9 +49,6 @@ export function SiteHeader() {
             <span aria-hidden="true">$</span>
             Donate
           </a>
-          <RetroLinkButton href="/#kits" variant="primary" size="sm" className="ml-2">
-            Get free kits
-          </RetroLinkButton>
         </nav>
       </div>
     </header>

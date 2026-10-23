@@ -4,6 +4,7 @@ import { ElementsPlayground } from '@/components/elements-demo/elements-playgrou
 export const metadata: Metadata = {
   title: 'Web Components playground',
   description: 'RetroKit custom elements running inside a Next.js app.',
+  robots: { index: false, follow: false },
 }
 
 export default function ElementsPage() {

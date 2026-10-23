@@ -11,6 +11,7 @@ import { credit, site } from '@/lib/site'
 export const metadata: Metadata = {
   title: `License - ${site.productName}`,
   description: `${site.productName} is free for personal and commercial projects under an MIT license with a simple attribution clause: link back to ${site.author.name}.`,
+  alternates: { canonical: '/license' },
 }
 
 const canDo = [
