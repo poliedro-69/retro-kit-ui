@@ -39,7 +39,7 @@ export function ShowcaseThemeShell({ children }: { children: ReactNode }) {
 
   return (
     <ShowcaseThemeContext.Provider value={value}>
-      <RetroTheme theme={theme} font={font} className="rt-desktop min-h-screen px-4 py-8">
+      <RetroTheme theme={theme} font={font} className="rt-desktop min-h-screen px-4 pb-8 pt-0">
         {children}
       </RetroTheme>
     </ShowcaseThemeContext.Provider>
