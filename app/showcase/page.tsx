@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: 'Component Explorer | RetroKit',
   description:
     'Browse every Windows 3.1 and Mac System 7 component in a classic tree view, with live previews, copy-ready code and switchable color and font themes.',
+  alternates: { canonical: '/showcase' },
 }
 
 export default async function Page() {

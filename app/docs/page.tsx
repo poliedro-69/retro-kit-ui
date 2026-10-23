@@ -13,6 +13,7 @@ import { credit, site } from '@/lib/site'
 export const metadata: Metadata = {
   title: `Installation - ${site.productName}`,
   description: `Install ${site.productName} with npm, pnpm, yarn or bun, or copy the components with the shadcn registry. Guides for React, Next.js and Web Components, plus Tailwind CSS v4 setup, fonts, themes and a minimal example.`,
+  alternates: { canonical: '/docs' },
 }
 
 const pkg = site.packageName

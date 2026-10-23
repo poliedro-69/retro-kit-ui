@@ -189,13 +189,13 @@ La búsqueda de npm usa nombre, descripción, `keywords` y README.
 
 ## 13. Checklist
 
-- [ ] `metadataBase`, plantilla de título, Open Graph y Twitter en el layout
-- [ ] Quitar `generator: 'v0.app'`
-- [ ] `canonical` en cada página
-- [ ] `app/sitemap.ts` y `app/robots.ts`
+- [x] `metadataBase`, plantilla de título, Open Graph y Twitter en el layout
+- [x] Quitar `generator: 'v0.app'`
+- [x] `canonical` en cada página
+- [x] `app/sitemap.ts` y `app/robots.ts`
 - [ ] `opengraph-image`
-- [ ] `/elements` con `noindex`
-- [ ] JSON-LD en la landing (y FAQPage)
+- [x] `/elements` con `noindex`
+- [x] JSON-LD en la landing (y FAQPage)
 - [ ] Páginas por componente con `generateStaticParams`
 - [ ] Lighthouse y Web Vitals revisados
 - [ ] Search Console y Bing: dominio verificado y sitemap enviado
