@@ -16,6 +16,7 @@ export { RetroTreeView, type RetroTreeNode } from './retro-tree'
 export { RetroAccordion, type RetroAccordionItem } from './retro-accordion'
 export { RetroBreadcrumb, type RetroBreadcrumbItem } from './retro-breadcrumb'
 export { RetroPagination } from './retro-pagination'
+export { RetroCalendar, type RetroCalendarProps } from './retro-calendar'
 export { RetroDialog } from './retro-dialog'
 export {
   RetroTheme,

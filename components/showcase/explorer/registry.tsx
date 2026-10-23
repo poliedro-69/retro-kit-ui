@@ -50,6 +50,7 @@ const WIN_SOURCES = {
   accordion: 'components/retro-ui/retro-accordion.tsx',
   breadcrumb: 'components/retro-ui/retro-breadcrumb.tsx',
   pagination: 'components/retro-ui/retro-pagination.tsx',
+  calendar: 'components/retro-ui/retro-calendar.tsx',
   card: 'components/retro-ui/blocks/retro-product-card.tsx',
   gallery: 'components/retro-ui/blocks/retro-image-gallery.tsx',
 }
@@ -608,6 +609,28 @@ function winDefs(): ItemDef[] {
       sources: [WIN_SOURCES.breadcrumb],
     },
     {
+      id: 'win-calendar',
+      name: 'Calendar',
+      description: 'Keyboard-friendly month calendar with selectable dates and range constraints.',
+      exports: ['RetroCalendar'],
+      from,
+      preview: winPreviews.calendar,
+      props: [
+        { name: 'value', type: 'Date', description: 'Controlled selected date.' },
+        { name: 'defaultValue', type: 'Date', defaultValue: 'new Date(1993, 5, 15)', description: 'Initial selected date.' },
+        { name: 'onChange', type: '(date: Date) => void', description: 'Called when a date is selected.' },
+        { name: 'minDate / maxDate', type: 'Date', description: 'Optional selectable date boundaries.' },
+        { name: 'label', type: 'string', defaultValue: "'Calendar'", description: 'Accessible label for the month selector.' },
+      ],
+      usage: `<RetroCalendar
+  defaultValue={new Date(1993, 5, 15)}
+  minDate={new Date(1993, 5, 1)}
+  maxDate={new Date(1993, 5, 30)}
+  onChange={(date) => console.log(date)}
+/>`,
+      sources: [WIN_SOURCES.calendar],
+    },
+    {
       id: 'win-pagination',
       name: 'Pagination',
       description: 'Page buttons with ellipsis, previous and next. Works controlled or uncontrolled.',
@@ -1127,7 +1150,7 @@ const winGroups: [string, string, string[]][] = [
   [
     'navigation',
     'Navigation',
-    ['win-menubar', 'win-dropdown', 'win-tabs', 'win-scroll', 'win-accordion', 'win-breadcrumb', 'win-pagination'],
+    ['win-menubar', 'win-dropdown', 'win-tabs', 'win-scroll', 'win-accordion', 'win-breadcrumb', 'win-pagination', 'win-calendar'],
   ],
   ['feedback', 'Feedback', ['win-progress', 'win-badge', 'win-tooltip', 'win-toast']],
   ['blocks', 'Blocks', ['win-image-gallery', 'win-product-card']],

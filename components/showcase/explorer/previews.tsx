@@ -30,6 +30,7 @@ import {
   RetroBadge,
   RetroBreadcrumb,
   RetroButton,
+  RetroCalendar,
   RetroCheckbox,
   RetroDropdownMenu,
   RetroGroup,
@@ -363,6 +364,7 @@ export const winPreviews = {
       <RetroPagination pageCount={12} defaultPage={5} />
     </div>
   ),
+  calendar: <RetroCalendar defaultValue={new Date(1993, 5, 15)} />,
   checkbox: (
     <div className="rt-raised flex flex-col p-3">
       <RetroCheckbox label="Create program group" defaultChecked />
