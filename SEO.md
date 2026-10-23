@@ -193,10 +193,10 @@ La búsqueda de npm usa nombre, descripción, `keywords` y README.
 - [x] Quitar `generator: 'v0.app'`
 - [x] `canonical` en cada página
 - [x] `app/sitemap.ts` y `app/robots.ts`
-- [ ] `opengraph-image`
+- [x] `opengraph-image`
 - [x] `/elements` con `noindex`
 - [x] JSON-LD en la landing (y FAQPage)
-- [ ] Páginas por componente con `generateStaticParams`
+- [x] Páginas por componente con `generateStaticParams`
 - [ ] Lighthouse y Web Vitals revisados
 - [ ] Search Console y Bing: dominio verificado y sitemap enviado
 - [ ] `keywords` y README de los paquetes npm revisados
