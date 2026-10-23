@@ -1182,7 +1182,7 @@ async function buildCategories(
   )
 }
 
-export async function getExplorerData(): Promise<ExplorerData> {
+async function buildExplorerData(): Promise<ExplorerData> {
   const win = winDefs()
   const mac = macDefs()
   const paths = [...new Set([...win, ...mac].flatMap((def) => def.sources))]
@@ -1222,4 +1222,11 @@ export async function getExplorerData(): Promise<ExplorerData> {
       },
     ],
   }
+}
+
+let explorerDataPromise: Promise<ExplorerData> | undefined
+
+export function getExplorerData(): Promise<ExplorerData> {
+  explorerDataPromise ??= buildExplorerData()
+  return explorerDataPromise
 }
