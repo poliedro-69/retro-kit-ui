@@ -33,9 +33,11 @@ export function CodeBlock({ file }: { file: CodeFile }) {
           {copied ? 'Code copied to clipboard' : ''}
         </span>
       </figcaption>
-      <pre className="rt-code m-0 overflow-x-auto whitespace-pre-wrap p-3" aria-label={`Código de ${file.name}`}>
-        <code>{file.code}</code>
-      </pre>
+      <div
+        className="rt-code overflow-x-auto p-3"
+        aria-label={`Código de ${file.name}`}
+        dangerouslySetInnerHTML={{ __html: file.html }}
+      />
     </figure>
   )
 }

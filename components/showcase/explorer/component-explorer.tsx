@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { RetroBadge, RetroButton, RetroGroup, RetroTabs, RetroWindow } from '@/components/retro-ui'
 import { cn } from '@/lib/utils'
 import { CodeBlock } from './code-block'
@@ -42,9 +43,10 @@ function CodePanel({ usage, sources }: { usage: CodeFile; sources: CodeFile[] })
   )
 }
 
-export function ComponentExplorer({ data }: { data: ExplorerData }) {
+export function ComponentExplorer({ data, initialSelectedId }: { data: ExplorerData; initialSelectedId?: string }) {
+  const router = useRouter()
   const [expanded, setExpanded] = useState(() => initialExpanded(data))
-  const [selectedId, setSelectedId] = useState(data.defaultItemId)
+  const [selectedId, setSelectedId] = useState(initialSelectedId ?? data.defaultItemId)
   const [tab, setTab] = useState('preview')
 
   const index = useMemo(() => {
@@ -85,9 +87,11 @@ export function ComponentExplorer({ data }: { data: ExplorerData }) {
     const place = index.map.get(id)
     if (place) {
       setExpanded((current) => new Set(current).add(place.kitId).add(place.categoryId))
+      setSelectedId(id)
+      router.replace(`/showcase?component=${place.kitId}/${id.replace(/^(win|mac)-/, '')}`, { scroll: false })
     }
-    setSelectedId(id)
   }
+
 
   return (
     <RetroWindow
