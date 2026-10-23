@@ -1,5 +1,8 @@
 packages:
   - 'packages/*'
+overrides:
+  undici: '>=7.29.1'
+
 allowBuilds:
   '@mongodb-js/zstd': false
   node-liblzma: false

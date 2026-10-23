@@ -2,7 +2,7 @@ import { RetroElement } from './base';
 export declare class MacWindow extends RetroElement {
     static css: string;
     static props: {
-        heading: "string";
+        heading: 'string';
     };
     heading: string;
     protected template(): string;
@@ -12,9 +12,9 @@ export declare class MacButton extends RetroElement {
     static css: string;
     static formAssociated: boolean;
     static props: {
-        isDefault: "boolean";
-        type: "string";
-        disabled: "boolean";
+        isDefault: 'boolean';
+        type: 'string';
+        disabled: 'boolean';
     };
     isDefault: boolean;
     type: 'button' | 'submit' | 'reset';
@@ -27,14 +27,14 @@ export declare class MacInput extends RetroElement {
     static css: string;
     static formAssociated: boolean;
     static props: {
-        label: "string";
-        value: "string";
-        type: "string";
-        name: "string";
-        placeholder: "string";
-        disabled: "boolean";
-        required: "boolean";
-        readonly: "boolean";
+        label: 'string';
+        value: 'string';
+        type: 'string';
+        name: 'string';
+        placeholder: 'string';
+        disabled: 'boolean';
+        required: 'boolean';
+        readonly: 'boolean';
     };
     label: string;
     value: string;
@@ -53,10 +53,10 @@ export declare class MacCheckbox extends RetroElement {
     static css: string;
     static formAssociated: boolean;
     static props: {
-        checked: "boolean";
-        disabled: "boolean";
-        name: "string";
-        value: "string";
+        checked: 'boolean';
+        disabled: 'boolean';
+        name: 'string';
+        value: 'string';
     };
     checked: boolean;
     disabled: boolean;
@@ -71,10 +71,10 @@ export declare class MacRadio extends RetroElement {
     static css: string;
     static formAssociated: boolean;
     static props: {
-        checked: "boolean";
-        disabled: "boolean";
-        name: "string";
-        value: "string";
+        checked: 'boolean';
+        disabled: 'boolean';
+        name: 'string';
+        value: 'string';
     };
     checked: boolean;
     disabled: boolean;
@@ -89,7 +89,7 @@ export declare class MacRadio extends RetroElement {
 export declare class MacGroup extends RetroElement {
     static css: string;
     static props: {
-        legend: "string";
+        legend: 'string';
     };
     legend: string;
     protected template(): string;
@@ -98,8 +98,8 @@ export declare class MacGroup extends RetroElement {
 export declare class MacProgress extends RetroElement {
     static css: string;
     static props: {
-        value: "number";
-        label: "string";
+        value: 'number';
+        label: 'string';
     };
     value: number;
     label: string;
@@ -109,7 +109,7 @@ export declare class MacProgress extends RetroElement {
 export declare class MacAlert extends RetroElement {
     static css: string;
     static props: {
-        label: "string";
+        label: 'string';
     };
     label: string;
     protected template(): string;
