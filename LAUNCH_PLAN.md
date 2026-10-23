@@ -4,7 +4,11 @@
 
 - Confirm the final domain in `lib/site.ts` and verify that `/robots.txt` and `/sitemap.xml` return absolute URLs.
 - Publish a release for each npm package and verify that the homepage, repository, README, keywords, and images render correctly on npm.
+
 - Prepare three destination links: the landing page, documentation, and showcase.
+https://www.machinetix.com/
+https://www.machinetix.com/docs
+https://www.machinetix.com/showcase
 - Capture a showcase screenshot for launch posts and social previews.
 
 ## Recommended launch sequence
