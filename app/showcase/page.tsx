@@ -12,15 +12,26 @@ export const metadata: Metadata = {
   alternates: { canonical: '/showcase' },
 }
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ component?: string }>
+}) {
   const data = await getExplorerData()
+  const component = (await searchParams).component
+  const [kitId, slug] = component?.split('/') ?? []
+  const prefix = kitId === 'win31' ? 'win-' : kitId === 'mac7' ? 'mac-' : ''
+  const requestedId = prefix && slug ? `${prefix}${slug}` : undefined
+  const initialSelectedId = requestedId && data.kits.some((kit) => kit.categories.some((category) => category.items.some((item) => item.id === requestedId)))
+    ? requestedId
+    : undefined
 
   return (
     <main>
       <ShowcaseThemeShell>
         <SiteHeader />
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4">
-          <ComponentExplorer data={data} />
+          <ComponentExplorer data={data} initialSelectedId={initialSelectedId} />
           <InstallPanel />
         </div>
       </ShowcaseThemeShell>
