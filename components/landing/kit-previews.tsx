@@ -36,6 +36,13 @@ export function Win31Preview({ className }: { className?: string }) {
             </div>
           ))}
         </div>
+        <div className="flex items-center justify-center px-3 pt-1" aria-hidden="true">
+          <img
+            src="/retro-platformer-character.png"
+            alt=""
+            className="h-20 w-20 object-contain [image-rendering:pixelated] motion-safe:animate-bounce"
+          />
+        </div>
         <div className="flex flex-col gap-3 px-3 pb-3">
           <RetroProgress value={64} label="Install progress" />
           <div className="flex justify-end gap-2">
